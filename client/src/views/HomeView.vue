@@ -21,6 +21,12 @@
           >
             <a @click.prevent="setActiveTab('teacher-training')">Teacher Training</a>
           </li>
+          <li 
+            class="p-tabview-nav-content"
+            :class="{ 'p-highlight': activeTab === 'map' }"
+          >
+            <a @click.prevent="setActiveTab('map')">Map</a>
+          </li>
         </ul>
       </nav>
     </aside>
@@ -29,6 +35,7 @@
         <h1 class="p-title">Kansas State University: Cyber Pipeline Program</h1>
         <p class="p-text-secondary">Making quality computer science education available to all high school students at little or no cost.</p>
       </header>
+      
       <section v-if="activeTab === 'curriculum'" class="p-section">
         <h2 class="p-subtitle">Curriculum</h2>
         <p class="p-text">
@@ -52,18 +59,35 @@
           Finally, teachers engaging in the program have continuous access to mentoring by Computer Science and Pedagogy experts drawn from K-State faculty through instant messaging, email, and video collaboration.
         </p>
       </section>
+      <section v-if="activeTab === 'map'" class="p-section">
+        <h2 class="p-subtitle">District Map</h2>
+        <iframe :src="mapUrl" width="100%" height="600px"></iframe>
+      </section>
     </main>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useDistrictsStore } from '@/stores/Districts';
 
 const activeTab = ref('curriculum');
+const mapUrl = ref('');
 
 function setActiveTab(tab) {
   activeTab.value = tab;
 }
+
+const districtsStore = useDistrictsStore();
+onMounted(async () => {
+  await districtsStore.hydrate();
+  const districtNumbers = districtsStore.districts.map(district => district.number);
+  if (districtNumbers.length === 0) {
+    mapUrl.value = 'https://k12map.cs.ksu.edu/Map';
+  } else {
+    mapUrl.value = `https://k12map.cs.ksu.edu/Map?districts=${districtNumbers.join(",")}`;
+  }
+});
 </script>
 
 <style scoped>
