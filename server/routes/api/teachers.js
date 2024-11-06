@@ -48,7 +48,8 @@ router.get('/', userOrAdminOnly, async function (req, res, next) {
         'teachers.cert_status',
         'teachers.ms_status',
         'teachers.grade_level',
-        'teachers.notes'
+        'teachers.notes',
+        'teachers.email_opt_out'
       )
       .withGraphFetched('districts')
       .withGraphFetched('courses')
