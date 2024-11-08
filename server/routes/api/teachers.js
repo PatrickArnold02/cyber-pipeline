@@ -232,6 +232,8 @@ router.put('/', adminOnly, async function (req, res, next) {
  */
 router.post('/:id', adminOnly, async function (req, res, next) {
   try {
+
+    console.log(req.body.teacher)
     // strip out other data from districts
     const districts = req.body.teacher.districts.map(
       ({ id, notes, primary, ...next }) => {
@@ -269,6 +271,7 @@ router.post('/:id', adminOnly, async function (req, res, next) {
         cert_status: req.body.teacher.cert_status,
         ms_status: req.body.teacher.ms_status,
         grade_level: req.body.teacher.grade_level,
+        email_opt_out: req.body.teacher.email_opt_out,
         notes: req.body.teacher.notes,
         districts: districts,
         cohorts: cohorts,

@@ -68,6 +68,10 @@ const errors = ref({}) // form errors
 const dt = ref() // datatable reference
 const notesDialog = ref(false) // controls notes dialog
 const notes = ref('') // notes for selected item
+const emailOptions = [
+  { label: 'Opt In', id: 0 },
+  { label: 'Opt Out', id: 1 }
+]
 
 // Filters
 const filters = ref({
@@ -631,6 +635,15 @@ const exportFunction = (row) => {
         label="Grade Level"
         icon="pi pi-globe"
         :errors="errors"
+      />
+      <DropDownField 
+        v-model="teacher.email_opt_out"
+        field="email_opt_out"
+        label="Email?"
+        icon="pi pi-envelope"
+        :values="emailOptions"
+        valueLabel="label"
+        valueKey="id"
       />
       <div class="w-full flex flex-column row-gap-5 -mt-3">
         <div class="w-full flex flex-row align-items-center">

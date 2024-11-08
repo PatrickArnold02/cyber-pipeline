@@ -162,6 +162,7 @@ const searchTerm = ref('')
 const filteredTeachers = ref([])
 const cohorts = ref([])
 const selectedCohort = ref(null)
+const optInTeachers = ref([])
 
 const courses = ref([])
 const selectedCourse = ref(null)
@@ -171,7 +172,8 @@ const closeButton = ref(null)
 // Fetch the teachers list when the component is mounted
 onMounted(async () => {
   await teachersStore.hydrate()
-  filteredTeachers.value = teachersStore.teachers
+  optInTeachers.value = teachersStore.teachers.filter(teacher => !teacher.email_opt_out)
+  filteredTeachers.value = optInTeachers.value
 
   await cohortsStore.hydrate()
   cohorts.value = [{ id: null, name: "None" }, ...cohortsStore.cohorts]
@@ -189,8 +191,9 @@ const showRecipientDialog = () => {
 const filterTeachers = () => {
   const term = searchTerm.value.toLowerCase()
   filteredTeachers.value = teachersStore.teachers.filter(teacher =>
-    teacher.name.toLowerCase().includes(term) ||
-    teacher.email.toLowerCase().includes(term)
+    !teacher.email_opt_out &&
+    (teacher.name.toLowerCase().includes(term) ||
+    teacher.email.toLowerCase().includes(term))
   )
 }
 
@@ -205,7 +208,7 @@ const selectCourse = async () => {
     const courseData = await coursesStore.getCourse(selectedCourse.value)
     courseData.teachers.forEach(teacher => {
       const teacherDetails = teachersStore.getTeacher(teacher.id)
-      if(teacherDetails){
+      if(teacherDetails && !teacherDetails.email_opt_out){
         selectRecipient(teacherDetails)
       }
     })
@@ -224,7 +227,7 @@ const selectCohort = async () => {
     const cohortData = await cohortsStore.getCohort(selectedCohort.value)
     cohortData.teachers.forEach(teacher => {
       const teacherDetails = teachersStore.getTeacher(teacher.id)
-      if(teacherDetails){
+      if(teacherDetails && !teacherDetails.email_opt_out){
         selectRecipient(teacherDetails)
       }
     })
