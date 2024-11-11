@@ -8,8 +8,11 @@ import Toolbar from 'primevue/toolbar';
 import Panel from 'primevue/panel';
 import ConfirmDialog from 'primevue/confirmdialog';
 import { storeToRefs } from 'pinia'
+import { dt } from '@primevue/themes';
 
 const enrollmentStore = useEnrollmentStore();
+
+const dataTableRef = ref(null)
 
 const filters = ref({
     global: {
@@ -17,6 +20,10 @@ const filters = ref({
         matchMode: 'contains'
     }
 });
+
+const exportCSV = () => {
+    dataTableRef.value.exportCSV();
+}
 
 const { getAllCourses } = storeToRefs(enrollmentStore);
 
@@ -31,7 +38,7 @@ onMounted(() => {
 
     <Panel header="Current Student Enrollment">
         <DataTable
-            ref="dt"
+            ref="dataTableRef"
             :value="getAllCourses"
             stripedRows
             tableStyle="min-width: 50rem"
@@ -44,7 +51,12 @@ onMounted(() => {
                     style="border: none"
                 >
                     <template #start>
-                        
+                        <Button
+                            label="Export"
+                            icon="pi pi-upload"
+                            severity="help"
+                            @click="exportCSV($event)"
+                        />
                     </template>
                     <template #end>
                         <div class="flex justify-content-end">
@@ -74,7 +86,27 @@ onMounted(() => {
             <Column 
                 field="numStudents"
                 sortable
-                header="Students"
+                header="Total Enrollment"
+            />
+            <Column
+                field="numPassed"
+                sortable
+                header="Total Passed"
+            />
+            <Column
+                field="numNotPassed"
+                sortable
+                header="Total Not Passed"
+            />
+            <Column
+                field="numWithdrawn"
+                sortable 
+                header="Total Withdrawn"
+            />
+            <Column 
+                field="numIncompleteOrInProgress"
+                sortable 
+                header="Total Incomplete/In Progress"
             />
         </DataTable>
     </Panel>
