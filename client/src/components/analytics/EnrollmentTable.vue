@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import { useEnrollmentStore } from '@/stores/Enrollment';
@@ -8,11 +8,27 @@ import Toolbar from 'primevue/toolbar';
 import Panel from 'primevue/panel';
 import ConfirmDialog from 'primevue/confirmdialog';
 import { storeToRefs } from 'pinia'
+import Select from 'primevue/select'
 import { dt } from '@primevue/themes';
 
 const enrollmentStore = useEnrollmentStore();
 
+const currentYear = new Date().getFullYear()
+const academicYears = ref([
+    `${currentYear - 1}-${currentYear}`,
+    `${currentYear}-${currentYear + 1}`, 
+    `${currentYear + 1}-${currentYear + 2}`, 
+    `${currentYear + 2}-${currentYear + 3}`
+  ])
+
+const selectedAcademicYear = ref(`${currentYear}-${currentYear + 1}`)
+
 const dataTableRef = ref(null)
+
+const filteredCourses = computed(() => {
+  if (!selectedAcademicYear.value) return getAllCourses.value;
+  return getAllCourses.value.filter(course => course.academic_year === selectedAcademicYear.value);
+});
 
 const filters = ref({
     global: {
@@ -39,7 +55,7 @@ onMounted(() => {
     <Panel header="Current Student Enrollment">
         <DataTable
             ref="dataTableRef"
-            :value="getAllCourses"
+            :value="filteredCourses"
             stripedRows
             tableStyle="min-width: 50rem"
             v-model:filters="filters"
@@ -59,7 +75,7 @@ onMounted(() => {
                         />
                     </template>
                     <template #end>
-                        <div class="flex justify-content-end">
+                        <div class="flex justify-content-end gap-4">
                             <IconField iconPosition="left">
                             <InputIcon>
                                 <i class="pi pi-search"/>
@@ -68,14 +84,25 @@ onMounted(() => {
                                 v-model="filters['global'].value"
                                 placeholder="Keyword Search"
                             />
-                        </IconField>
+                            </IconField>
+
+                            <IconField iconPosition="left">
+                                <InputIcon>
+                                    <i class="pi pi-calendar"/>
+                                </InputIcon>
+                                <Select
+                                    v-model="selectedAcademicYear"
+                                    :options="academicYears"
+                                    placeholder="Academic Year"
+                                />
+                            </IconField>
                         </div>
                     </template>
                 </Toolbar>
             </template>
             <template #empty>
                 <div class="p-text-center">
-                    <p>No Teachers Found</p>
+                    <p>No Courses Found</p>
                 </div>
             </template>
             <Column 

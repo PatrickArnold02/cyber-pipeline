@@ -1,7 +1,8 @@
 <script setup>
 // Libraries
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
+
 
 // PrimeVue Components
 import ConfirmDialog from 'primevue/confirmdialog'
@@ -21,6 +22,7 @@ import Panel from 'primevue/panel'
 import Popover from 'primevue/popover'
 import Message from 'primevue/message'
 import Dialog from 'primevue/dialog'
+import Select from 'primevue/select'
 
 
 // Non-PrimeVue components
@@ -54,6 +56,15 @@ const dt = ref() // datatable reference
 const notesDialog = ref(false) // controls notes dialog
 const notes = ref('') // notes for selected item
 
+const currentYear = new Date().getFullYear()
+const academicYears = ref([
+    `${currentYear - 1}-${currentYear}`,
+    `${currentYear}-${currentYear + 1}`, 
+    `${currentYear + 1}-${currentYear + 2}`, 
+    `${currentYear + 2}-${currentYear + 3}`
+  ])
+  
+
 // Filters
 const filters = ref({
   global: {
@@ -80,7 +91,8 @@ const newCourse = () => {
   course.value = {
     name: '',
     notes: '',
-    teachers: []
+    teachers: [],
+    academic_year: `${currentYear}-${currentYear + 1}`
   }
   courseDialogHeader.value = 'New Course'
   courseDialog.value = true
@@ -419,6 +431,16 @@ const exportFunction = (row) => {
           </div>
         </div>
       </div>
+      <label class="w-11 flex-grow-1 text-center">Academic Year</label>
+      <Select 
+        v-model="course.academic_year"
+        field="academic_year"
+        label="Academic Year"
+        icon="pi pi-calendar"
+        :errors="errors"
+        :options="academicYears"
+        placeholder="Academic Year"
+      />
       <TextAreaField
         v-model="course.notes"
         field="notes"
@@ -426,6 +448,7 @@ const exportFunction = (row) => {
         icon="pi pi-file"
         :errors="errors"
       />
+      
       <Button
         label="Save"
         icon="pi pi-check"

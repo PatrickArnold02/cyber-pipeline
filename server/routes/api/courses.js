@@ -35,7 +35,7 @@ import Course from '../../models/course.js'
  */
 router.get('/', async function (req, res, next) {
   let courses = await Course.query()
-    .select('courses.id', 'courses.name', 'courses.notes')
+    .select('courses.id', 'courses.name', 'courses.notes', 'courses.academic_year')
     .withGraphFetched('teachers')
   res.json(courses)
 })
@@ -86,6 +86,7 @@ router.put('/', adminOnly, async function (req, res, next) {
         name: req.body.course.name,
         notes: req.body.course.notes,
         teachers: teachers,
+        academic_year: req.body.course.academic_year
       },
       {
         relate: true,
@@ -156,6 +157,7 @@ router.post('/:id', adminOnly, async (req, res) => {
         name: req.body.course.name,
         notes: req.body.course.notes,
         teachers: teachers,
+        academic_year: req.body.course.academic_year
       },
       {
         relate: true,

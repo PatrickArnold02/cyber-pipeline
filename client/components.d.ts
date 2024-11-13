@@ -26,6 +26,7 @@ declare module 'vue' {
     Message: typeof import('primevue/message')['default']
     Panel: typeof import('primevue/panel')['default']
     ProfileEdit: typeof import('./src/components/profile/ProfileEdit.vue')['default']
+    ReachTable: typeof import('./src/components/analytics/ReachTable.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TeacherDashboard: typeof import('./src/components/teacher/TeacherDashboard.vue')['default']
