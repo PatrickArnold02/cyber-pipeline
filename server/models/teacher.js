@@ -190,6 +190,7 @@ class Teacher extends Model {
         cert_status: { type: 'integer', minimum: 0, maximum: 3 },
         ms_status: { type: 'integer', minimum: 0, maximum: 3 },
         grade_level: { type: 'string' },
+        email_opt_out: {type: 'boolean', default: false }
       },
     }
   }

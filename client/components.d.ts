@@ -28,6 +28,7 @@ declare module 'vue' {
     MultiSelect: typeof import('primevue/multiselect')['default']
     Panel: typeof import('primevue/panel')['default']
     ProfileEdit: typeof import('./src/components/profile/ProfileEdit.vue')['default']
+    ReachTable: typeof import('./src/components/analytics/ReachTable.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Tag: typeof import('primevue/tag')['default']

@@ -1,7 +1,8 @@
 <script setup>
 // Libraries
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
+
 
 // PrimeVue Components
 import ConfirmDialog from 'primevue/confirmdialog'
@@ -21,6 +22,7 @@ import Panel from 'primevue/panel'
 import Popover from 'primevue/popover'
 import Message from 'primevue/message'
 import Dialog from 'primevue/dialog'
+import Select from 'primevue/select'
 
 
 // Non-PrimeVue components
@@ -54,12 +56,29 @@ const dt = ref() // datatable reference
 const notesDialog = ref(false) // controls notes dialog
 const notes = ref('') // notes for selected item
 
+const currentYear = new Date().getFullYear()
+const academicYears = ref([
+    'All',
+    `${currentYear - 1}-${currentYear}`,
+    `${currentYear}-${currentYear + 1}`, 
+    `${currentYear + 1}-${currentYear + 2}`, 
+    `${currentYear + 2}-${currentYear + 3}`
+  ])
+  
+
 // Filters
 const filters = ref({
   global: {
     value: '',
     matchMode: FilterMatchMode.CONTAINS
   }
+})
+
+const selectedAcademicYear = ref(`All`)
+
+const filteredCourses = computed(() => {
+  if (!selectedAcademicYear.value || selectedAcademicYear.value === 'All') return courses.value
+  return courses.value.filter(course => course.academic_year === selectedAcademicYear.value)
 })
 
 /**
@@ -80,7 +99,8 @@ const newCourse = () => {
   course.value = {
     name: '',
     notes: '',
-    teachers: []
+    teachers: [],
+    academic_year: `${currentYear}-${currentYear + 1}`
   }
   courseDialogHeader.value = 'New Course'
   courseDialog.value = true
@@ -212,7 +232,7 @@ const exportFunction = (row) => {
   <Panel header="Manage Courses">
     <DataTable
       ref="dt"
-      :value="courses"
+      :value="filteredCourses"
       stripedRows
       sortField="usd"
       :sortOrder="1"
@@ -242,15 +262,33 @@ const exportFunction = (row) => {
             />
           </template>
           <template #end>
-            <IconField iconPosition="left">
-              <InputIcon>
-                <i class="pi pi-search" />
-              </InputIcon>
-              <InputText
-                v-model="filters['global'].value"
-                placeholder="Keyword Search"
-              />
-            </IconField>
+            <div class="flex justify-content-end gap-4">
+              <IconField iconPosition="left">
+                <InputIcon>
+                  <i class="pi pi-search" />
+                </InputIcon>
+                <InputText
+                  v-model="filters['global'].value"
+                  placeholder="Keyword Search"
+                />
+              </IconField>
+
+              <div class="flex justify-content gap-2">
+                <label for="yearSelect" class="year-label">Academic Year:</label>
+                <IconField iconPosition="left">
+                  <InputIcon>
+                    <i class="pi pi-calendar"/>
+                  </InputIcon>
+                  <Select
+                    id="yearSelect"
+                    v-model="selectedAcademicYear"
+                    :options="academicYears"
+                    placeholder="Academic Year"
+                  />
+                </IconField>
+              </div>
+              
+            </div>
           </template>
         </Toolbar>
       </template>
@@ -264,6 +302,11 @@ const exportFunction = (row) => {
         sortable
         header="Name"
       ></Column>
+      <Column 
+        field="academic_year"
+        sortable
+        header="Academic Year"
+      />
       <!--
       <Column
         field="teachers"
@@ -419,6 +462,16 @@ const exportFunction = (row) => {
           </div>
         </div>
       </div>
+      <label class="w-11 flex-grow-1 text-center">Academic Year</label>
+      <Select 
+        v-model="course.academic_year"
+        field="academic_year"
+        label="Academic Year"
+        icon="pi pi-calendar"
+        :errors="errors"
+        :options="academicYears"
+        placeholder="Academic Year"
+      />
       <TextAreaField
         v-model="course.notes"
         field="notes"
@@ -426,6 +479,7 @@ const exportFunction = (row) => {
         icon="pi pi-file"
         :errors="errors"
       />
+      
       <Button
         label="Save"
         icon="pi pi-check"
@@ -439,5 +493,10 @@ const exportFunction = (row) => {
 <style scoped>
 :deep(.p-datatable-header) {
   padding: 0px !important;
+}
+
+.year-label{
+  font-size: 1.1rem;
+  line-height: 2;
 }
 </style>

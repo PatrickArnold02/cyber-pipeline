@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import { useEnrollmentStore } from '@/stores/Enrollment';
@@ -8,8 +8,27 @@ import Toolbar from 'primevue/toolbar';
 import Panel from 'primevue/panel';
 import ConfirmDialog from 'primevue/confirmdialog';
 import { storeToRefs } from 'pinia'
+import Select from 'primevue/select'
+import { dt } from '@primevue/themes';
 
 const enrollmentStore = useEnrollmentStore();
+
+const currentYear = new Date().getFullYear()
+const academicYears = ref([
+    `${currentYear - 1}-${currentYear}`,
+    `${currentYear}-${currentYear + 1}`, 
+    `${currentYear + 1}-${currentYear + 2}`, 
+    `${currentYear + 2}-${currentYear + 3}`
+  ])
+
+const selectedAcademicYear = ref(`${currentYear}-${currentYear + 1}`)
+
+const dataTableRef = ref(null)
+
+const filteredCourses = computed(() => {
+  if (!selectedAcademicYear.value) return getAllCourses.value;
+  return getAllCourses.value.filter(course => course.academic_year === selectedAcademicYear.value);
+});
 
 const filters = ref({
     global: {
@@ -17,6 +36,10 @@ const filters = ref({
         matchMode: 'contains'
     }
 });
+
+const exportCSV = () => {
+    dataTableRef.value.exportCSV();
+}
 
 const { getAllCourses } = storeToRefs(enrollmentStore);
 
@@ -31,8 +54,8 @@ onMounted(() => {
 
     <Panel header="Current Student Enrollment">
         <DataTable
-            ref="dt"
-            :value="getAllCourses"
+            ref="dataTableRef"
+            :value="filteredCourses"
             stripedRows
             tableStyle="min-width: 50rem"
             v-model:filters="filters"
@@ -44,10 +67,15 @@ onMounted(() => {
                     style="border: none"
                 >
                     <template #start>
-                        
+                        <Button
+                            label="Export"
+                            icon="pi pi-upload"
+                            severity="help"
+                            @click="exportCSV($event)"
+                        />
                     </template>
                     <template #end>
-                        <div class="flex justify-content-end">
+                        <div class="flex justify-content-end gap-4">
                             <IconField iconPosition="left">
                             <InputIcon>
                                 <i class="pi pi-search"/>
@@ -56,14 +84,25 @@ onMounted(() => {
                                 v-model="filters['global'].value"
                                 placeholder="Keyword Search"
                             />
-                        </IconField>
+                            </IconField>
+
+                            <IconField iconPosition="left">
+                                <InputIcon>
+                                    <i class="pi pi-calendar"/>
+                                </InputIcon>
+                                <Select
+                                    v-model="selectedAcademicYear"
+                                    :options="academicYears"
+                                    placeholder="Academic Year"
+                                />
+                            </IconField>
                         </div>
                     </template>
                 </Toolbar>
             </template>
             <template #empty>
                 <div class="p-text-center">
-                    <p>No Teachers Found</p>
+                    <p>No Courses Found</p>
                 </div>
             </template>
             <Column 
@@ -72,9 +111,34 @@ onMounted(() => {
                 header="Course"
             />
             <Column 
+                field="academic_year"
+                sortable
+                header="Academic Year"
+            />
+            <Column 
                 field="numStudents"
                 sortable
-                header="Students"
+                header="Total Enrollment"
+            />
+            <Column
+                field="numPassed"
+                sortable
+                header="Total Passed"
+            />
+            <Column
+                field="numNotPassed"
+                sortable
+                header="Total Not Passed"
+            />
+            <Column
+                field="numWithdrawn"
+                sortable 
+                header="Total Withdrawn"
+            />
+            <Column 
+                field="numIncompleteOrInProgress"
+                sortable 
+                header="Total Incomplete/In Progress"
             />
         </DataTable>
     </Panel>

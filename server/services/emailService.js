@@ -1,6 +1,6 @@
 import 'dotenv/config';
-import knex from 'knex';
 import nodemailer from 'nodemailer';
+import logger from '../configs/logger.js';
 
 const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-const sendEmail = async (to, subject, text, html, createdBy) => {
+const sendEmail = async (to, subject, text, html) => {
     try{
         const mailOptions = {
             from: process.env.SMTP_FROM,
@@ -22,32 +22,12 @@ const sendEmail = async (to, subject, text, html, createdBy) => {
             html: html,
         };
 
+        logger.email('Sending email to:  ' + to);
         const result = await transporter.sendMail(mailOptions);
-        console.log("Email sent: ", result);
-
-        // TODO: Add logging to the database
-        // await knex('emails').insert({
-        //    subject: subject,
-        //    text: text,
-        //    recipients: to.join(','),
-        //    status: 1, // success status
-        //    created_by: createdBy,
-        //    created_at: new Date(),
-        //    updated_at: new Date()
-        // });
+        logger.email('Email sent: '+ result.messageId);
 
     } catch(error){
-        console.log("Failed to send email: ", error);
-
-        // await knex('emails').insert({
-        //    subject: subject,
-        //    text: text,
-        //    recipients: to.join(','),
-        //    status: 2, // failing status
-        //    created_by: createdBy,
-        //    created_at: new Date(),
-        //    updated_at: new Date()
-        // });
+        console.info('Failed to send email: ' + error);
 
         throw error;
     }
