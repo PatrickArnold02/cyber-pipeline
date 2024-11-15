@@ -5,6 +5,7 @@ import 'dotenv/config'
 import db from '../configs/db.js'
 import Ajv from 'ajv'
 
+const numCohorts = 5
 // Set up environment variables
 process.env.FORCE_AUTH = 'true'
 let NotAdmin = {
@@ -45,13 +46,9 @@ const login = async (adminUser) => {
     db.migrate.latest()
     db.seed.run()
     adminUser.token = await login(adminUser)
-    NotAdmin.token = await login(NotAdmin)
   })
   
-  beforeEach(async () => {
-   adminUser.token = await login(adminUser)
-   NotAdmin.token = await login(NotAdmin)
-  })
+
 
   //Tests that get requests return a list of all cohorts
   const getAllCohorts = (adminUser) => {
@@ -61,7 +58,7 @@ const login = async (adminUser) => {
         .set('Authorization', `Bearer ${adminUser.token}`)
         .expect(200)
         expect(res.body).toBeInstanceOf(Array)
-        expect(res.body.length).toBe(3)
+        expect(res.body.length).toBe(numCohorts)
 
     })
   }
@@ -129,7 +126,7 @@ const putCohort = (adminUser) => {
       .set('Authorization', `Bearer ${adminUser.token}`)
       .expect(200)
       expect(res.body).toBeInstanceOf(Array)
-      expect(res.body.length).toBe(4)
+      expect(res.body.length).toBe(numCohorts + 1)
   })
 }
 
@@ -160,7 +157,7 @@ const addCohortIgnoresAdditionalProperties = (adminUser) => {
           .set('Authorization', `Bearer ${adminUser.token}`)
           .expect(200)
           expect(res.body).toBeInstanceOf(Array)
-          expect(res.body.length).toBe(5)
+          expect(res.body.length).toBe(numCohorts + 2)
             const addeduser = res.body.find((u) => u.name === "ignores additional properties" )
             expect(addeduser).not.toHaveProperty('extraProperty')
             expect(addeduser).not.toHaveProperty('extraProperty')
@@ -224,7 +221,7 @@ const addCohortFailsOnMissingName = (adminUser) => {
             .set('Authorization', `Bearer ${adminUser.token}`)
             .expect(200)
               expect(res.body).toBeInstanceOf(Array)
-              expect(res.body.length).toBe(5)
+              expect(res.body.length).toBe(numCohorts + 2)
               const addedCohort = res.body.find((u) => u.id === 1)
               expect(addedCohort.name).toBe("update cohort 1")
     })
@@ -254,7 +251,7 @@ const addCohortFailsOnMissingName = (adminUser) => {
             .set('Authorization', `Bearer ${adminUser.token}`)
             .expect(200)
               expect(res.body).toBeInstanceOf(Array)
-              expect(res.body.length).toBe(5)
+              expect(res.body.length).toBe(numCohorts + 2)
               const addedCohort = res.body.find((u) => u.id == 1)
               expect(addedCohort).not.toHaveProperty('extraProperty')
               expect(addedCohort).toHaveProperty('name')
@@ -306,7 +303,7 @@ const deleteCohort = (adminUser) => {
           .set('Authorization', `Bearer ${adminUser.token}`)
           .expect(200)
             expect(res.body).toBeInstanceOf(Array)
-            expect(res.body.length).toBe(4)
+            expect(res.body.length).toBe(numCohorts + 1)
             const deletedcohort = res.body.find((u) => u.id === 1)
             expect(deletedcohort).toBeUndefined
   })

@@ -31,12 +31,13 @@ let adminUser = {
 beforeAll(async () => {
     db.migrate.latest()
     db.seed.run()
-    adminUser.token = await login(adminUser)
+})
+
+beforeEach(async () => {
+  adminUser.token = await login(adminUser)
 })
         
-beforeEach(async () => {
-    adminUser.token = await login(adminUser)
-})
+
 
 const shouldSendEmailWithValidEmailFormat = (adminUser) => {
     it('should successfully send an email', async ()=> {
