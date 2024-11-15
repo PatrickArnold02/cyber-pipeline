@@ -1,6 +1,6 @@
 <script setup>
 // Libraries
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 
 // PrimeVue Components
@@ -23,6 +23,7 @@ import Message from 'primevue/message'
 import Panel from 'primevue/panel'
 import DataTable from 'primevue/datatable'
 import Dialog from 'primevue/dialog'
+import Select from 'primevue/select'
 
 
 // Custom Components
@@ -72,6 +73,23 @@ const emailOptions = [
   { label: 'Opt In', id: 0 },
   { label: 'Opt Out', id: 1 }
 ]
+
+const cohortOptions = computed(() => [
+  'All',
+  ...cohorts.value.map((cohort) => {
+    return cohort.name
+  })
+])
+
+const selectedCohort = ref('All')
+
+const filteredTeachers = computed(() => {
+  if(selectedCohort.value === 'All') return teachers.value
+  return teachers.value.filter((teacher) => {
+    return teacher.cohorts.find((cohort) => cohort.name === selectedCohort.value)
+  })
+})
+
 
 // Filters
 const filters = ref({
@@ -164,6 +182,27 @@ const toggleNotes = (aTeacher, event) => {
   notesDialog.value.toggle(event)
 }
 
+const toggleEmailStatus = async (teacher) => {
+  const updatedStatus = !teacher.email_opt_out 
+  try{
+    await teachersStore.update({ ...teacher, email_opt_out: updatedStatus })
+    teacher.email_opt_out = updatedStatus
+    toast.add({
+      severity: updatedStatus ? 'warn' : 'success',
+      summary: 'Email status updated.',
+      detail: `Teacher ${updatedStatus ? 'opted out of' : 'opted into'} emails.`,
+      life: 3000
+    })
+  } catch(error){
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Unable to update email status.',
+      life: 3000
+    })
+  }
+}
+
 /**
  * Save button handler in edit form dialog
  */
@@ -250,7 +289,7 @@ const exportFunction = (row) => {
   <Panel header="Manage Teachers">
     <DataTable
       ref="dt"
-      :value="teachers"
+      :value="filteredTeachers"
       stripedRows
       sortField="name"
       :sortOrder="1"
@@ -282,7 +321,7 @@ const exportFunction = (row) => {
             />
           </template>
           <template #end>
-            <div class="flex justify-content-end">
+            <div class="flex justify-content-end gap-4">
               <IconField iconPosition="left">
                 <InputIcon>
                   <i class="pi pi-search" />
@@ -292,6 +331,20 @@ const exportFunction = (row) => {
                   placeholder="Keyword Search"
                 />
               </IconField>
+              <div class="flex justify-content gap-2">
+                <label for="cohortSelect" class="cohort-label">Cohort:</label>
+                <IconField iconPosition="left">
+                <InputIcon>
+                  <i class="pi pi-users" />
+                </InputIcon>
+                <Select
+                  id="cohortSelect"
+                  v-model="selectedCohort"
+                  :options="cohortOptions"
+                  placeholder="Cohort"
+                />
+              </IconField>
+              </div>
             </div>
           </template>
         </Toolbar>
@@ -515,9 +568,20 @@ const exportFunction = (row) => {
             icon="pi pi-file"
             outlined
             rounded
+            class="mr-2"
             severity="info"
             @click="toggleNotes(slotProps.data, $event)"
             v-tooltip.bottom="'Notes'"
+          />
+          <Button
+            v-if="is_admin"
+            icon="pi pi-envelope"
+            :severity="slotProps.data.email_opt_out ? 'warn' : 'success'"
+            outlined
+            rounded
+            class="mr-2"
+            @click="toggleEmailStatus(slotProps.data)"
+            v-tooltip.bottom="'Toggle Email Status'"
           />
         </template>
       </Column>
@@ -819,5 +883,10 @@ const exportFunction = (row) => {
 <style scoped>
 :deep(.p-datatable-header) {
   padding: 0px !important;
+}
+
+.cohort-label{
+  font-size: 1.1rem;
+  line-height: 2;
 }
 </style>

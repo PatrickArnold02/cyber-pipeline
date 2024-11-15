@@ -58,6 +58,7 @@ const notes = ref('') // notes for selected item
 
 const currentYear = new Date().getFullYear()
 const academicYears = ref([
+    'All',
     `${currentYear - 1}-${currentYear}`,
     `${currentYear}-${currentYear + 1}`, 
     `${currentYear + 1}-${currentYear + 2}`, 
@@ -71,6 +72,13 @@ const filters = ref({
     value: '',
     matchMode: FilterMatchMode.CONTAINS
   }
+})
+
+const selectedAcademicYear = ref(`All`)
+
+const filteredCourses = computed(() => {
+  if (!selectedAcademicYear.value || selectedAcademicYear.value === 'All') return courses.value
+  return courses.value.filter(course => course.academic_year === selectedAcademicYear.value)
 })
 
 /**
@@ -224,7 +232,7 @@ const exportFunction = (row) => {
   <Panel header="Manage Courses">
     <DataTable
       ref="dt"
-      :value="courses"
+      :value="filteredCourses"
       stripedRows
       sortField="usd"
       :sortOrder="1"
@@ -254,15 +262,33 @@ const exportFunction = (row) => {
             />
           </template>
           <template #end>
-            <IconField iconPosition="left">
-              <InputIcon>
-                <i class="pi pi-search" />
-              </InputIcon>
-              <InputText
-                v-model="filters['global'].value"
-                placeholder="Keyword Search"
-              />
-            </IconField>
+            <div class="flex justify-content-end gap-4">
+              <IconField iconPosition="left">
+                <InputIcon>
+                  <i class="pi pi-search" />
+                </InputIcon>
+                <InputText
+                  v-model="filters['global'].value"
+                  placeholder="Keyword Search"
+                />
+              </IconField>
+
+              <div class="flex justify-content gap-2">
+                <label for="yearSelect" class="year-label">Academic Year:</label>
+                <IconField iconPosition="left">
+                  <InputIcon>
+                    <i class="pi pi-calendar"/>
+                  </InputIcon>
+                  <Select
+                    id="yearSelect"
+                    v-model="selectedAcademicYear"
+                    :options="academicYears"
+                    placeholder="Academic Year"
+                  />
+                </IconField>
+              </div>
+              
+            </div>
           </template>
         </Toolbar>
       </template>
@@ -276,6 +302,11 @@ const exportFunction = (row) => {
         sortable
         header="Name"
       ></Column>
+      <Column 
+        field="academic_year"
+        sortable
+        header="Academic Year"
+      />
       <!--
       <Column
         field="teachers"
@@ -462,5 +493,10 @@ const exportFunction = (row) => {
 <style scoped>
 :deep(.p-datatable-header) {
   padding: 0px !important;
+}
+
+.year-label{
+  font-size: 1.1rem;
+  line-height: 2;
 }
 </style>

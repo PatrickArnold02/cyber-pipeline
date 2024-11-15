@@ -111,6 +111,11 @@ onMounted(() => {
                 header="Course"
             />
             <Column 
+                field="academic_year"
+                sortable
+                header="Academic Year"
+            />
+            <Column 
                 field="numStudents"
                 sortable
                 header="Total Enrollment"
