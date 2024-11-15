@@ -571,7 +571,7 @@ const exportFunction = (row) => {
             class="mr-2"
             severity="info"
             @click="toggleNotes(slotProps.data, $event)"
-            v-tooltip.bottom="'Notes'"
+            v-tooltip.bottom="{ value: slotProps.data.notes.substring(0, 30) + '...', showDelay: 200 }"
           />
           <Button
             v-if="is_admin"
