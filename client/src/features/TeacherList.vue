@@ -1,6 +1,6 @@
 <script setup>
 // Libraries
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
 // PrimeVue Components
@@ -23,7 +23,6 @@ import Message from 'primevue/message'
 import Panel from 'primevue/panel'
 import DataTable from 'primevue/datatable'
 import Dialog from 'primevue/dialog'
-import Select from 'primevue/select'
 
 
 // Custom Components
@@ -31,6 +30,7 @@ import DropDownField from '@/components/forms/DropDownField.vue'
 import TextField from '@/components/forms/TextField.vue'
 import BooleanField from '@/components/forms/BooleanField.vue'
 import TextAreaField from '@/components/forms/TextAreaField.vue'
+import TeacherColumn from '@/components/teacher/TeacherColumn.vue';
 
 // Token
 import { useTokenStore } from '@/stores/Token'
@@ -69,32 +69,6 @@ const errors = ref({}) // form errors
 const dt = ref() // datatable reference
 const notesDialog = ref(false) // controls notes dialog
 const notes = ref('') // notes for selected item
-
-// Options for the email opt in/out select dropdown
-const emailOptions = [
-  { label: 'Opt In', id: 0 },
-  { label: 'Opt Out', id: 1 }
-]
-
-// The options for the cohort select dropdown, including 'All' option
-const cohortOptions = computed(() => [
-  'All',
-  ...cohorts.value.map((cohort) => {
-    return cohort.name
-  })
-])
-
-// The current cohort to filter by
-const selectedCohort = ref('All')
-
-// Filtered teachers based on selected cohort
-const filteredTeachers = computed(() => {
-  if(selectedCohort.value === 'All') return teachers.value
-  return teachers.value.filter((teacher) => {
-    return teacher.cohorts.find((cohort) => cohort.name === selectedCohort.value)
-  })
-})
-
 
 // Filters
 const filters = ref({
@@ -188,32 +162,6 @@ const toggleNotes = (aTeacher, event) => {
 }
 
 /**
- * Toggles the email_opt_out status of a teacher to the opposite of what is currently set
- * 
- * @param teacher 
- */
-const toggleEmailStatus = async (teacher) => {
-  const updatedStatus = !teacher.email_opt_out 
-  try{
-    await teachersStore.update({ ...teacher, email_opt_out: updatedStatus })
-    teacher.email_opt_out = updatedStatus
-    toast.add({
-      severity: updatedStatus ? 'warn' : 'success',
-      summary: 'Email status updated.',
-      detail: `Teacher ${updatedStatus ? 'opted out of' : 'opted into'} emails.`,
-      life: 3000
-    })
-  } catch(error){
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Unable to update email status.',
-      life: 3000
-    })
-  }
-}
-
-/**
  * Save button handler in edit form dialog
  */
 const save = async () => {
@@ -299,7 +247,7 @@ const exportFunction = (row) => {
   <Panel header="Manage Teachers">
     <DataTable
       ref="dt"
-      :value="filteredTeachers"
+      :value="teachers"
       stripedRows
       sortField="name"
       :sortOrder="1"
@@ -331,7 +279,7 @@ const exportFunction = (row) => {
             />
           </template>
           <template #end>
-            <div class="flex justify-content-end gap-4">
+            <div class="flex justify-content-end">
               <IconField iconPosition="left">
                 <InputIcon>
                   <i class="pi pi-search" />
@@ -341,20 +289,6 @@ const exportFunction = (row) => {
                   placeholder="Keyword Search"
                 />
               </IconField>
-              <div class="flex justify-content gap-2">
-                <label for="cohortSelect" class="cohort-label">Cohort:</label>
-                <IconField iconPosition="left">
-                <InputIcon>
-                  <i class="pi pi-users" />
-                </InputIcon>
-                <Select
-                  id="cohortSelect"
-                  v-model="selectedCohort"
-                  :options="cohortOptions"
-                  placeholder="Cohort"
-                />
-              </IconField>
-              </div>
             </div>
           </template>
         </Toolbar>
@@ -378,130 +312,36 @@ const exportFunction = (row) => {
         field="eid"
         sortable
         header="eID"
-        v-if="is_admin"
       ></Column>
       <Column
         field="wid"
         sortable
         header="WID"
-        v-if="is_admin"
       ></Column>
-      <Column
+      <TeacherColumn
         v-if="is_admin"
-        header="Status"
-        field="status"
-        sortable
-      >
-        <template #body="slotProps">
-          <Tag
-            :value="statuses[slotProps.data.status].label"
-            :severity="statuses[slotProps.data.status].severity"
-            :icon="statuses[slotProps.data.status].icon"
-            v-if="statuses[slotProps.data.status].hidden != 'true'"
-            class="m-1"
-          />
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <MultiSelect
-            v-model="filterModel.value"
-            @change="filterCallback()"
-            :options="statuses"
-            optionLabel="label"
-            optionValue="id"
-            placeholder="Any"
-            class="p-column-filter"
-            :maxSelectedLabels="2"
-          >
-          </MultiSelect>
-        </template>
-      </Column>
-      <Column
+        :header="'Status'"
+        :field="'status'"
+        :statuses="statuses"
+      />
+      <TeacherColumn
         v-if="is_admin"
-        header="PD"
-        field="pd_status"
-        sortable
-      >
-        <template #body="slotProps">
-          <Tag
-            :value="statuses[slotProps.data.pd_status].label"
-            :severity="statuses[slotProps.data.pd_status].severity"
-            :icon="statuses[slotProps.data.pd_status].icon"
-            v-if="statuses[slotProps.data.pd_status].hidden != 'true'"
-            class="m-1"
-          />
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <MultiSelect
-            v-model="filterModel.value"
-            @change="filterCallback()"
-            :options="statuses"
-            optionLabel="label"
-            optionValue="id"
-            placeholder="Any"
-            class="p-column-filter"
-            :maxSelectedLabels="2"
-          >
-          </MultiSelect>
-        </template>
-      </Column>
-      <Column
+        :header="'PD'"
+        :field="'pd_status'"
+        :statuses="statuses"
+      />
+      <TeacherColumn
         v-if="is_admin"
-        header="Cert"
-        field="cert_status"
-        sortable
-      >
-        <template #body="slotProps">
-          <Tag
-            :value="statuses[slotProps.data.cert_status].label"
-            :severity="statuses[slotProps.data.cert_status].severity"
-            :icon="statuses[slotProps.data.cert_status].icon"
-            v-if="statuses[slotProps.data.cert_status].hidden != 'true'"
-            class="m-1"
-          />
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <MultiSelect
-            v-model="filterModel.value"
-            @change="filterCallback()"
-            :options="statuses"
-            optionLabel="label"
-            optionValue="id"
-            placeholder="Any"
-            class="p-column-filter"
-            :maxSelectedLabels="2"
-          >
-          </MultiSelect>
-        </template>
-      </Column>
-      <Column
+        :header="'Cert'"
+        :field="'cert_status'"
+        :statuses="statuses"
+      />
+      <TeacherColumn
         v-if="is_admin"
-        header="MS"
-        field="ms_status"
-        sortable
-      >
-        <template #body="slotProps">
-          <Tag
-            :value="statuses[slotProps.data.ms_status].label"
-            :severity="statuses[slotProps.data.ms_status].severity"
-            :icon="statuses[slotProps.data.ms_status].icon"
-            v-if="statuses[slotProps.data.ms_status].hidden != 'true'"
-            class="m-1"
-          />
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <MultiSelect
-            v-model="filterModel.value"
-            @change="filterCallback()"
-            :options="statuses"
-            optionLabel="label"
-            optionValue="id"
-            placeholder="Any"
-            class="p-column-filter"
-            :maxSelectedLabels="2"
-          >
-          </MultiSelect>
-        </template>
-      </Column>
+        :header="'MS'"
+        :field="'ms_status'"
+        :statuses="statuses"
+      />
       <Column
         field="grade_level"
         header="Grade Level"
@@ -580,20 +420,9 @@ const exportFunction = (row) => {
             icon="pi pi-file"
             outlined
             rounded
-            class="mr-2"
             severity="info"
             @click="toggleNotes(slotProps.data, $event)"
-            v-tooltip.bottom="{ value: slotProps.data.notes.substring(0, 50) + '...', showDelay: 200 }"
-          />
-          <Button
-            v-if="is_admin"
-            icon="pi pi-envelope"
-            :severity="slotProps.data.email_opt_out ? 'warn' : 'success'"
-            outlined
-            rounded
-            class="mr-2"
-            @click="toggleEmailStatus(slotProps.data)"
-            v-tooltip.bottom="'Toggle Email Status'"
+            v-tooltip.bottom="'Notes'"
           />
         </template>
       </Column>
@@ -711,15 +540,6 @@ const exportFunction = (row) => {
         label="Grade Level"
         icon="pi pi-globe"
         :errors="errors"
-      />
-      <DropDownField 
-        v-model="teacher.email_opt_out"
-        field="email_opt_out"
-        label="Email?"
-        icon="pi pi-envelope"
-        :values="emailOptions"
-        valueLabel="label"
-        valueKey="id"
       />
       <div class="w-full flex flex-column row-gap-5 -mt-3">
         <div class="w-full flex flex-row align-items-center">
@@ -895,10 +715,5 @@ const exportFunction = (row) => {
 <style scoped>
 :deep(.p-datatable-header) {
   padding: 0px !important;
-}
-
-.cohort-label{
-  font-size: 1.1rem;
-  line-height: 2;
 }
 </style>
