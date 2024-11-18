@@ -16,6 +16,7 @@ declare module 'vue' {
     CourseList: typeof import('./src/components/course/CourseList.vue')['default']
     DataTable: typeof import('primevue/datatable')['default']
     DistrictList: typeof import('./src/components/district/DistrictList.vue')['default']
+    DistrictTable: typeof import('./src/components/analytics/DistrictTable.vue')['default']
     DropDownField: typeof import('./src/components/forms/DropDownField.vue')['default']
     EnrollmentTable: typeof import('./src/components/analytics/EnrollmentTable.vue')['default']
     IconField: typeof import('primevue/iconfield')['default']
