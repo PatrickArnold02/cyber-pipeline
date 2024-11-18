@@ -73,9 +73,8 @@ import { onMounted, ref, watch } from 'vue';
 import { useDistrictsStore } from '../stores/Districts.js'
 import { storeToRefs } from 'pinia'
 
-const districtsStore = useDistrictsStore()
 
-districtsStore.hydrate()
+const districtsStore = useDistrictsStore()
 
 const { getAllDistrictsUsd } = storeToRefs(districtsStore)
 

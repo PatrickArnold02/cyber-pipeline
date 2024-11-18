@@ -171,14 +171,14 @@ const closeButton = ref(null)
 
 // Fetch the teachers list when the component is mounted
 onMounted(async () => {
-  await teachersStore.hydrate()
+  // await teachersStore.hydrate()
   optInTeachers.value = teachersStore.teachers.filter(teacher => !teacher.email_opt_out)
   filteredTeachers.value = optInTeachers.value
 
-  await cohortsStore.hydrate()
+  // await cohortsStore.hydrate()
   cohorts.value = [{ id: null, name: "None" }, ...cohortsStore.cohorts]
 
-  await coursesStore.hydrate()
+  // await coursesStore.hydrate()
   courses.value = [{ id: null, name: "None" }, ...coursesStore.courses]
 })
 
