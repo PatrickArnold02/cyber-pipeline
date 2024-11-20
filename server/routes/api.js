@@ -91,6 +91,7 @@ router.use('/emails', emailRouter)
  *         $ref: '#/components/responses/UnauthorizedError'
  */
 router.get('/', function (req, res, next) {
+
   res.json({
     version: 1.0,
     user_id: req.user_id,

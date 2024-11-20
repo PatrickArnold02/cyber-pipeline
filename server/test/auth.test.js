@@ -1,6 +1,6 @@
 import request from 'supertest'
 import app from '../app.js'
-import { describe, it} from 'vitest'
+import { describe, it, beforeAll,  } from 'vitest'
 import 'dotenv/config'
 
 const shouldAllowLogin = (user) => {

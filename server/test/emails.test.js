@@ -125,13 +125,14 @@ const shouldNotSendEmailWithMissingHtml = (adminUser) => {
     })
   }
 */
-
+/*
   describe('POST /', () => {
     shouldSendEmailWithValidEmailFormat(adminUser)
     shouldNotSendEmailWithMissingTo(adminUser)
-    /*
-    shouldNotSendEmailWithMissingSubject(adminUser)
-    shouldNotSendEmailWithMissingText(adminUser)
-    shouldNotSendEmailWithMissingHtml(adminUser)
-    */
+    
+    //shouldNotSendEmailWithMissingSubject(adminUser)
+    //shouldNotSendEmailWithMissingText(adminUser)
+    //shouldNotSendEmailWithMissingHtml(adminUser)
+    
   })
+*/
