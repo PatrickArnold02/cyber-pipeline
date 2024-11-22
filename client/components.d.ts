@@ -7,6 +7,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    ActionsColumn: typeof import('./src/components/ActionsColumn.vue')['default']
     AutocompleteMultiple: typeof import('./src/components/forms/AutocompleteMultiple.vue')['default']
     BooleanField: typeof import('./src/components/forms/BooleanField.vue')['default']
     Button: typeof import('primevue/button')['default']
@@ -18,6 +19,8 @@ declare module 'vue' {
     Dialog: typeof import('primevue/dialog')['default']
     DistrictList: typeof import('./src/components/district/DistrictList.vue')['default']
     DropDownField: typeof import('./src/components/forms/DropDownField.vue')['default']
+    EditTeacherDialog: typeof import('./src/components/teacher/EditTeacherDialog.vue')['default']
+    EditTeacherDialogOrig: typeof import('./src/components/teacher/EditTeacherDialogOrig.vue')['default']
     EnrollmentTable: typeof import('./src/components/analytics/EnrollmentTable.vue')['default']
     IconField: typeof import('primevue/iconfield')['default']
     InputIcon: typeof import('primevue/inputicon')['default']
@@ -26,6 +29,8 @@ declare module 'vue' {
     MailingList: typeof import('./src/components/mailing/MailingList.vue')['default']
     Message: typeof import('primevue/message')['default']
     MultiSelect: typeof import('primevue/multiselect')['default']
+    NotesButton: typeof import('./src/components/NotesButton.vue')['default']
+    NotesDialog: typeof import('./src/components/NotesDialog.vue')['default']
     Panel: typeof import('primevue/panel')['default']
     ProfileEdit: typeof import('./src/components/profile/ProfileEdit.vue')['default']
     ReachTable: typeof import('./src/components/analytics/ReachTable.vue')['default']
