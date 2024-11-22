@@ -2,6 +2,7 @@
 async function adminOnly(req, res, next) {
   console.log("admin-only: " + req.roles)
   if (req.roles.includes('admin')) {
+    console.log("Entered if statement")
     next()
   } else {
     res.status(403)

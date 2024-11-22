@@ -3,7 +3,9 @@ import app from '../app.js'
 import { describe, it, beforeAll, expect} from 'vitest'
 import 'dotenv/config'
 import Ajv from 'ajv'
+
 const numUsers = 5
+
 const login = async (adminUser) => {
   const agent = request.agent(app)
   return agent
@@ -83,6 +85,7 @@ const apiShouldReturnUserDataWithAdmin = (user) => {
     describe('user: test-api', () => {
       let user = {
         eid: 'test-student',
+        token: null,
         id: 3
       }
       beforeAll(async () => {
