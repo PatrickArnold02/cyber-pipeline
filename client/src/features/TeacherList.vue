@@ -48,14 +48,14 @@ import { useCoursesStore } from '@/stores/Courses'
 const coursesStore = useCoursesStore()
 
 // Setup Stores
-teachersStore.hydrate()
+// teachersStore.hydrate()
 const { teachers } = storeToRefs(teachersStore)
-districtsStore.hydrate()
+// districtsStore.hydrate()
 const { districts } = storeToRefs(districtsStore)
 const { cohorts } = storeToRefs(cohortsStore)
 if (is_admin.value) {
-  cohortsStore.hydrate()
-  coursesStore.hydrate()
+  // cohortsStore.hydrate()
+  // coursesStore.hydrate()
 }
 const { courses } = storeToRefs(coursesStore)
 

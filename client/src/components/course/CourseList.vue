@@ -40,9 +40,9 @@ import { useTeachersStore } from '@/stores/Teachers'
 const teachersStore = useTeachersStore()
 
 // Setup Stores
-coursesStore.hydrate()
+// coursesStore.hydrate()
 const { courses } = storeToRefs(coursesStore)
-teachersStore.hydrate()
+// teachersStore.hydrate()
 const { teachers } = storeToRefs(teachersStore)
 
 // Variables
@@ -240,6 +240,7 @@ const exportFunction = (row) => {
       v-model:filters="filters"
       :globalFilterFields="['name']"
       :exportFunction="exportFunction"
+      paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50, 100]" :paginatorPosition="'top'"
     >
       <template #header>
         <Toolbar

@@ -1,42 +1,46 @@
 <template>
   <div class="p-layout">
     <aside class="p-sidebar">
-      <nav class="p-tabview-nav-container">
-        <ul>
-          <li 
-            class="p-tabview-nav-content" 
-            :class="{ 'p-highlight': activeTab === 'curriculum' }"
-          >
-            <a @click.prevent="setActiveTab('curriculum')">Curriculum</a>
-          </li>
-          <li 
-            class="p-tabview-nav-content" 
-            :class="{ 'p-highlight': activeTab === 'online-instruction' }"
-          >
-            <a @click.prevent="setActiveTab('online-instruction')">Online Instruction</a>
-          </li>
-          <li 
-            class="p-tabview-nav-content" 
-            :class="{ 'p-highlight': activeTab === 'teacher-training' }"
-          >
-            <a @click.prevent="setActiveTab('teacher-training')">Teacher Training</a>
-          </li>
-        </ul>
-      </nav>
+      <Menu :model="items" class="w-full md:w-60">
+        <template #start>
+            <span class="inline-flex items-center gap-1 px-2 py-2">
+              <img
+                src="../assets/logo.png"
+                height="20px"
+                alt="CyberPipeline Logo"
+              />
+                <span class="text-xl">Cyber <span class="text-primary">Pipeline</span></span>
+            </span>
+        </template>
+        <template #submenulabel="{ item }">
+            <span class="text-primary font-bold">{{ item.label }}</span>
+        </template>
+        <template #item="{ item, props }">
+            <a class="flex items-center" v-bind="props.action">
+                <span :class="item.icon"></span> 
+                <span>{{ item.label }}</span>
+                <Badge v-if="item.badge" class="ml-auto" :value="item.badge" />
+                <span v-if="item.shortcut" class="ml-auto border border-surface rounded bg-emphasis text-muted-color text-xs p-1">{{ item.shortcut }}</span>
+            </a>
+        </template>
+      </Menu>
     </aside>
     <main class="p-main-content">
       <header class="mb-2">
-        <h1 class="p-title">Kansas State University: Cyber Pipeline Program</h1>
+        <h1 id="top" class="p-title">Kansas State University: Cyber Pipeline Program</h1>
         <p class="p-text-secondary">Making quality computer science education available to all high school students at little or no cost.</p>
         
         <div class="p-map-and-text-container">
           <div class="p-map-container">
             <div v-if="svgUrl" class="map-container">
-              <img id="svg-image" :src="svgUrl" alt="Failed to load map" />
+              <img id="svg-image" :src="svgUrl" alt="Failed font-semiboldto load map" />
+              <div>
+                <label class="label-text">Map of districts involved in the Cyber Pipeline Program</label>
+              </div>
             </div>
           </div>
           <div class="p-text-container">
-            <section v-if="activeTab === 'curriculum'" class="p-section">
+            <section id="curriculum" class="p-section">
               <h2 class="p-subtitle">Curriculum</h2>
               <p class="p-text">
                 The Cyber Pipeline Curriculum contains several courses from K-State's Computational Core that have been aligned with AP curriculum standards. 
@@ -44,13 +48,13 @@
                 so students are getting the real college experience!
               </p>
             </section>
-            <section v-if="activeTab === 'online-instruction'" class="p-section">
+            <section id="online-instruction" class="p-section">
               <h2 class="p-subtitle">Online Instruction</h2>
               <p class="p-text">
                 Innovative online instruction that includes video, text, and automatically graded hands-on exercises and projects. The curriculum is designed to use lectures and text from K-State faculty, as well as in-class activities and examples led by high school teachers.
               </p>
             </section>
-            <section v-if="activeTab === 'teacher-training'" class="p-section">
+            <section id="teacher-training" class="p-section">
               <h2 class="p-subtitle">Teacher Training</h2>
               <p class="p-text">
                 The Cyber Pipeline program includes an engaging and robust professional development program designed to prepare a teacher with no background in computer science to teach the CC 110 and/or CC 210 courses in under a year. 
@@ -60,9 +64,7 @@
               </p>
             </section>
           </div>
-        </div>
-
-        
+        </div>       
      </header>
     </main>
   </div>
@@ -72,18 +74,14 @@
 import { onMounted, ref, watch } from 'vue';
 import { useDistrictsStore } from '../stores/Districts.js'
 import { storeToRefs } from 'pinia'
+import Menu from 'primevue/menu';
+import Badge from 'primevue/badge';
+
+const items = ref([])
 
 const districtsStore = useDistrictsStore()
 
-districtsStore.hydrate()
-
 const { getAllDistrictsUsd } = storeToRefs(districtsStore)
-
-const activeTab = ref('curriculum');
-
-function setActiveTab(tab) {
-  activeTab.value = tab;
-}
 
 const districts = ref('');
 const svgUrl = ref('');
@@ -94,8 +92,36 @@ const getDistrictList = async () => {
   console.log(svgUrl.value)
 }
 
+const scrollToSection = (sectionId) => {
+  const element = document.getElementById(sectionId)
+  element.scrollIntoView({ behavior: 'smooth' })
+}
+
 
 onMounted(() => {
+  items.value = [
+    {
+      label: 'Home',
+      icon: 'pi pi-fw pi-home',
+      command: () => window.scrollTo({ top: 0, behavior: 'smooth' })
+    },
+    {
+      label: 'Curriculum',
+      icon: 'pi pi-fw pi-book',
+      command: () => scrollToSection('curriculum')
+    },
+    {
+      label: 'Online Instruction',
+      icon: 'pi pi-fw pi-video',
+      command: () => scrollToSection('online-instruction')
+    },
+    {
+      label: 'Teacher Training',
+      icon: 'pi pi-fw pi-users',
+      command: () => scrollToSection('teacher-training')
+    }
+  ]
+
   watch(
     () => districtsStore.districts,
     (newDistricts) => {
@@ -115,9 +141,15 @@ onMounted(() => {
 }
 
 .p-sidebar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  height: 100vh;
   width: 250px;
-  background-color: var(--sidebar-bg-color);
-  padding: 20px;
+  z-index: 1000;
+  background-color: var(--surface-card);
+  padding-right: 20px;
+  padding-top: 20px;
 }
 
 .p-main-content {
@@ -149,6 +181,12 @@ onMounted(() => {
   flex-direction: column; /* Stacks map on top of text */
 }
 
+.p-map-container img{
+  width: 100%;
+  max-width: 1200px;
+  height: auto;
+}
+
 .p-map-container,
 .p-text-container {
   width: 50%; /* Full width when stacked */
@@ -174,6 +212,11 @@ onMounted(() => {
 
 .p-text-secondary {
   font-size: 1.2em;
+  color: var(--text-secondary-color, #666);
+}
+
+.label-text{
+  font-size: 0.8em;
   color: var(--text-secondary-color, #666);
 }
 

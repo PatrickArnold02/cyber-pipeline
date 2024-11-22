@@ -43,7 +43,7 @@ const districtsStore = useDistrictsStore()
 // const teachersStore = useTeachersStore()
 
 // Setup Stores
-districtsStore.hydrate()
+// districtsStore.hydrate()
 const { districts } = storeToRefs(districtsStore)
 // teachersStore.hydrate()
 // const { teachers } = storeToRefs(teachersStore)
@@ -231,6 +231,7 @@ const exportFunction = (row) => {
       filterDisplay="row"
       :globalFilterFields="['name', 'url', 'usd']"
       :exportFunction="exportFunction"
+      paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50, 100]" :paginatorPosition="'top'"
     >
       <template #header>
         <Toolbar
