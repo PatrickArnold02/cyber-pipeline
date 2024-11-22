@@ -33,6 +33,9 @@
           <div class="p-map-container">
             <div v-if="svgUrl" class="map-container">
               <img id="svg-image" :src="svgUrl" alt="Failed to load map" />
+              <div>
+                <label class="label-text">Map of districts involved in the Cyber Pipeline Program</label>
+              </div>
             </div>
           </div>
           <div class="p-text-container">
@@ -148,6 +151,12 @@ onMounted(() => {
   flex-direction: column; /* Stacks map on top of text */
 }
 
+.p-map-container img{
+  width: 100%;
+  max-width: 1200px;
+  height: auto;
+}
+
 .p-map-container,
 .p-text-container {
   width: 50%; /* Full width when stacked */
@@ -173,6 +182,11 @@ onMounted(() => {
 
 .p-text-secondary {
   font-size: 1.2em;
+  color: var(--text-secondary-color, #666);
+}
+
+.label-text{
+  font-size: 0.8em;
   color: var(--text-secondary-color, #666);
 }
 

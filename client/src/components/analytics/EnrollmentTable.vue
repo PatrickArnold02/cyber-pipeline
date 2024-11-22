@@ -18,6 +18,7 @@ const currentYear = new Date().getFullYear()
 
 // The academic years to display in the select dropdown
 const academicYears = ref([
+    'NOT DEFINED', // This will not be used in prod, but is a placeholder to demonstrate the filter on the seed data with default values
     `${currentYear - 1}-${currentYear}`,
     `${currentYear}-${currentYear + 1}`, 
     `${currentYear + 1}-${currentYear + 2}`, 
