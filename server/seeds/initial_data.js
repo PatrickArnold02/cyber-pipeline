@@ -16,7 +16,7 @@ export async function seed (knex) {
   var numCourses = 15             
   var numCohorts = 5              
   const showPercentage = false
-  const showData = true
+  const showData = false
 
   if (useRecommended) {
     numUsers = 5; numDistricts = 100; numTeachers = 150; numCourses = 15; numCohorts = 5;
