@@ -69,11 +69,14 @@ const errors = ref({}) // form errors
 const dt = ref() // datatable reference
 const notesDialog = ref(false) // controls notes dialog
 const notes = ref('') // notes for selected item
+
+// Options for the email opt in/out select dropdown
 const emailOptions = [
   { label: 'Opt In', id: 0 },
   { label: 'Opt Out', id: 1 }
 ]
 
+// The options for the cohort select dropdown, including 'All' option
 const cohortOptions = computed(() => [
   'All',
   ...cohorts.value.map((cohort) => {
@@ -81,8 +84,10 @@ const cohortOptions = computed(() => [
   })
 ])
 
+// The current cohort to filter by
 const selectedCohort = ref('All')
 
+// Filtered teachers based on selected cohort
 const filteredTeachers = computed(() => {
   if(selectedCohort.value === 'All') return teachers.value
   return teachers.value.filter((teacher) => {
@@ -182,6 +187,11 @@ const toggleNotes = (aTeacher, event) => {
   notesDialog.value.toggle(event)
 }
 
+/**
+ * Toggles the email_opt_out status of a teacher to the opposite of what is currently set
+ * 
+ * @param teacher 
+ */
 const toggleEmailStatus = async (teacher) => {
   const updatedStatus = !teacher.email_opt_out 
   try{
