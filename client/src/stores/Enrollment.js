@@ -9,7 +9,7 @@ export const useEnrollmentStore = defineStore('enrollment', {
     state: () => ({
         enrollments: {
             courses: [],     // list of courses
-            teachers: []  // students enrolled in each course
+            enrollmentData: []  // students enrolled in each course
         }
     }),
     getters: {
@@ -24,9 +24,15 @@ export const useEnrollmentStore = defineStore('enrollment', {
          */
         getAllCourses: (state) => {
             return state.enrollments.courses.map(course => {
+                const courseEnrollment = state.enrollments.enrollmentData.find(data => data.id === course.id) || {}
+                
                 return {
                     ...course,
-                    numStudents: course.teachers.length
+                    numStudents: courseEnrollment.enrolled,
+                    numPassed: courseEnrollment.pass,
+                    numNotPassed: courseEnrollment.fail,
+                    numWithdrawn: courseEnrollment.withdrawn,
+                    numIncompleteOrInProgress: courseEnrollment.incomplete 
                 }
             })
         }
@@ -36,6 +42,10 @@ export const useEnrollmentStore = defineStore('enrollment', {
             Logger.info('enrollment:hydrate')
             await api.get('api/v1/courses').then((response) => {
                 this.enrollments.courses = response.data
+            })
+
+            await api.get('api/v1/dashboard/course/grade').then((response) => {
+                this.enrollments.enrollmentData = response.data
             })
 
         }

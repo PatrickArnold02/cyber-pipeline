@@ -16,7 +16,7 @@ export async function seed (knex) {
   var numCourses = 15             
   var numCohorts = 5              
   const showPercentage = false
-  const showData = true
+  const showData = false
 
   if (useRecommended) {
     numUsers = 5; numDistricts = 100; numTeachers = 150; numCourses = 15; numCohorts = 5;
@@ -544,10 +544,12 @@ export async function seed (knex) {
   for (let i = 0; i < numCourses; i++) {
     const local_name = `Course ${i}`;
     const local_notes = `Course ${i} notes`;
+    const local_academic_year = `202${i % 4}-202${(i % 4) + 1}`;
     initialCourses.push({
       id: i+1,
       name: local_name,
       notes: local_notes,
+      academic_year: local_academic_year,
       created_at: now,
       updated_at: now,
       created_by: 'test-admin',

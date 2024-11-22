@@ -33,9 +33,9 @@ import { useRolesStore } from '@/stores/Roles'
 const rolesStore = useRolesStore()
 
 // Setup Stores
-usersStore.hydrate()
+// usersStore.hydrate()
 const { users } = storeToRefs(usersStore)
-rolesStore.hydrate()
+// rolesStore.hydrate()
 const { roles } = storeToRefs(rolesStore)
 
 // Variables
@@ -190,6 +190,7 @@ const exportFunction = (row) => {
       :exportFunction="exportFunction"
       scrollable
       scrollHeight="800px"
+      paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50, 100]" :paginatorPosition="'top'"
     >
       <template #header>
         <Toolbar

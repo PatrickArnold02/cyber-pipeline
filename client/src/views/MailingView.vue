@@ -32,21 +32,11 @@
           placeholder="Enter subject"
         />
       </TextField>
-      <TextField
-        label="Text"
-        field="text"
-        icon="pi pi-align-left"
+      <Editor
         v-model="text"
-        class="form-field"
-        :errors="[]"
-      >
-        <InputText
-          id="text"
-          v-model="text"
-          rows="5"
-          placeholder="Enter email text"
-        />
-      </TextField>
+        class="editor"
+        :placeholder="''"
+      />
       <Button
         label="Send"
         icon="pi pi-check"
@@ -71,12 +61,34 @@
       @show="focusCloseButton" 
     >
       <div>
-        <div class="p-inputgroup">
-          <InputText
-            v-model="searchTerm"
-            placeholder="Search by name or email"
-            @input="filterTeachers"
+        <div class="search-container">
+          <Select 
+            v-model="selectedCohort"
+            :options="cohorts"
+            option-label="name"
+            option-value="id"
+            placeholder="Select a cohort"
+            class="cohort-select"
+            @change="selectCohort"
           />
+
+          <Select 
+            v-model="selectedCourse"
+            :options="courses"
+            option-label="name"
+            option-value="id"
+            placeholder="Select a course"
+            class="course-select"
+            @change="selectCourse"
+          />
+
+          <div class="p-inputgroup">
+            <InputText
+              v-model="searchTerm"
+              placeholder="Search by name or email"
+              @input="filterTeachers"
+            />
+          </div>
         </div>
         <DataTable
           :value="filteredTeachers"
@@ -123,6 +135,8 @@
 import { ref, onMounted } from 'vue'
 import { useEmailsStore } from '../stores/Emails.js'
 import { useTeachersStore } from '@/stores/Teachers.js'
+import { useCohortsStore } from '@/stores/Cohorts.js'
+import { useCoursesStore } from '@/stores/Courses.js'
 import InputText from 'primevue/inputtext'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
@@ -130,27 +144,42 @@ import Button from 'primevue/button'
 import Dialog from 'primevue/dialog'
 import Message from 'primevue/message'
 import TextField from '@/components/forms/TextField.vue'
-//import TextAreaField from '@/components/forms/TextAreaField'
-
+import Editor from 'primevue/editor'
+import Select from 'primevue/select'
 
 const emailStore = useEmailsStore()
 const teachersStore = useTeachersStore()
+const cohortsStore = useCohortsStore()
+const coursesStore = useCoursesStore()
 
-const recipient = ref([])
-const recipientDisplay = ref('')
-const subject = ref('')
-const text = ref('')
+const recipient = ref([]) // Array of recipients email addresses
+const recipientDisplay = ref('') 
+const subject = ref('') // Email subject
+const text = ref('') // Email body
 const message = ref('')
 const recipientDialog = ref(false)
-const searchTerm = ref('')
-const filteredTeachers = ref([])
+const searchTerm = ref('') // Search term for filtering recipients
+const filteredTeachers = ref([]) // Filtered teachers based on search term
+const cohorts = ref([]) // List of all cohorts for recipient selection
+const selectedCohort = ref(null) // Selected cohort for recipient selection
+const optInTeachers = ref([]) // All teachers that are opted in to receive emails
+
+const courses = ref([])
+const selectedCourse = ref(null)
 
 const closeButton = ref(null)
 
 // Fetch the teachers list when the component is mounted
 onMounted(async () => {
-  await teachersStore.hydrate()
-  filteredTeachers.value = teachersStore.teachers
+  // await teachersStore.hydrate()
+  optInTeachers.value = teachersStore.teachers.filter(teacher => !teacher.email_opt_out)
+  filteredTeachers.value = optInTeachers.value
+
+  // await cohortsStore.hydrate()
+  cohorts.value = [{ id: null, name: "None" }, ...cohortsStore.cohorts]
+
+  // await coursesStore.hydrate()
+  courses.value = [{ id: null, name: "None" }, ...coursesStore.courses]
 })
 
 // Show dialog for recipient selection
@@ -162,9 +191,53 @@ const showRecipientDialog = () => {
 const filterTeachers = () => {
   const term = searchTerm.value.toLowerCase()
   filteredTeachers.value = teachersStore.teachers.filter(teacher =>
-    teacher.name.toLowerCase().includes(term) ||
-    teacher.email.toLowerCase().includes(term)
+    !teacher.email_opt_out &&
+    (teacher.name.toLowerCase().includes(term) ||
+    teacher.email.toLowerCase().includes(term))
   )
+}
+
+// Select a course and update the recipient list to include all opted in teachers within the course
+const selectCourse = async () => {
+  if(selectedCourse.value === null){
+    recipient.value = []
+    updateRecipientDisplay()
+    return
+  }
+
+  if(selectedCourse.value){
+    recipient.value = []
+    updateRecipientDisplay()
+    const courseData = await coursesStore.getCourse(selectedCourse.value)
+    courseData.teachers.forEach(teacher => {
+      const teacherDetails = teachersStore.getTeacher(teacher.id)
+      if(teacherDetails && !teacherDetails.email_opt_out){
+        selectRecipient(teacherDetails)
+      }
+    })
+  }
+
+}
+
+// Select a cohort and update the recipient list to include all opted in teachers within the cohort
+const selectCohort = async () => {
+  if(selectedCohort.value === null){
+    recipient.value = []
+    updateRecipientDisplay()
+    return
+  }
+
+  if(selectedCohort.value){
+    recipient.value = []
+    updateRecipientDisplay()
+    const cohortData = await cohortsStore.getCohort(selectedCohort.value)
+    cohortData.teachers.forEach(teacher => {
+      const teacherDetails = teachersStore.getTeacher(teacher.id)
+      if(teacherDetails && !teacherDetails.email_opt_out){
+        selectRecipient(teacherDetails)
+      }
+    })
+  }
 }
 
 // Select a recipient and update the display
@@ -172,6 +245,7 @@ const selectRecipient = (teacher) => {
   if (!recipient.value.includes(teacher.email)) {
     recipient.value.push(teacher.email)
     recipientDisplay.value = recipient.value.join(', ')
+    updateRecipientDisplay()
   }
 }
 
@@ -188,6 +262,7 @@ const updateRecipientDisplay = () => {
   recipientDisplay.value = recipient.value.join(', ')
 }
 
+// Changes focus to the close button of the dialog to prevent the user from typing in the recipient text field after closing the dialog
 const focusCloseButton = () => {
   if(closeButton.value){
     closeButton.value.$el.focus()
@@ -222,18 +297,33 @@ const sendEmail = async () => {
 
 <style scoped>
 .mailing-view {
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 20px;
 }
 
 .form-field {
   margin-bottom: 30px;
+  text-align: left;
+  width: 100%;
 }
 
 .form-field-recipient {
   margin-bottom: 30px;
   cursor: pointer;
+}
+
+.editor{
+  width:100%;
+  text-align: left;
+  height: 320px;
+  margin-bottom: 70px;
+}
+
+.search-container{
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
 }
 
 
