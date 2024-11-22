@@ -33,7 +33,7 @@
         <div class="p-map-and-text-container">
           <div class="p-map-container">
             <div v-if="svgUrl" class="map-container">
-              <img id="svg-image" :src="svgUrl" alt="Failed to load map" />
+              <img id="svg-image" :src="svgUrl" alt="Failed font-semiboldto load map" />
               <div>
                 <label class="label-text">Map of districts involved in the Cyber Pipeline Program</label>
               </div>
@@ -147,8 +147,9 @@ onMounted(() => {
   height: 100vh;
   width: 250px;
   z-index: 1000;
-  background-color: var(--sidebar-bg-color);
-  padding: 20px;
+  background-color: var(--surface-card);
+  padding-right: 20px;
+  padding-top: 20px;
 }
 
 .p-main-content {
