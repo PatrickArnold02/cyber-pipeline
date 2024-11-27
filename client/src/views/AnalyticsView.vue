@@ -36,6 +36,12 @@
               <MainTable />
           </div>
         </section>
+        <section v-if="activeTab === 'tab2'" class="p-section">
+          <h2 class="p-subtitle">Program Reach</h2>
+          <div class="table-container">
+              <ReachTable />
+          </div>
+        </section>
       </main>
     </div>
   </template>
@@ -47,6 +53,7 @@
   import { useCoursesStore } from '../stores/Courses.js'
   import { useCohortsStore } from '../stores/Cohorts.js'
   import MainTable from '@/components/analytics/EnrollmentTable.vue'
+  import ReachTable from '@/components/analytics/ReachTable.vue'
   import Menu from 'primevue/menu'
   import Badge from 'primevue/badge'
 
@@ -85,6 +92,11 @@
         label: 'Enrollment',
         icon: 'pi pi-fw pi-user',
         command: () => setActiveTab('tab1')
+      },
+      {
+        label: 'Reach',
+        icon: 'pi pi-fw pi-chart-line',
+        command: () => setActiveTab('tab2')
       }
     ]
 
