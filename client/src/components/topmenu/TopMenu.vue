@@ -34,6 +34,9 @@ const teacherStore = useTeachersStore()
 const enrollmentStore = useEnrollmentStore()
 const rolesStore = useRolesStore()
 
+/**
+ * Rehydrates all the stores, slightly faster than fully refreshing the page
+ */
 const syncWithDatabase = async () => {
   try{
     await cohortsStore.hydrate()
