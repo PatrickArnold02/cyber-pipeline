@@ -47,43 +47,19 @@
   </template>
   
   <script setup>
-  import { onMounted, ref, watch } from 'vue'
-  import { storeToRefs } from 'pinia'
-  import { useDistrictsStore } from '../stores/Districts.js'
-  import { useCoursesStore } from '../stores/Courses.js'
-  import { useCohortsStore } from '../stores/Cohorts.js'
+  import { onMounted, ref } from 'vue'
   import MainTable from '@/components/analytics/EnrollmentTable.vue'
   import ReachTable from '@/components/analytics/ReachTable.vue'
   import Menu from 'primevue/menu'
   import Badge from 'primevue/badge'
 
-  const districtsStore = useDistrictsStore()
-  const coursesStore = useCoursesStore()
-  const cohortsStore = useCohortsStore()
-
   const items = ref([])
-  
-  // districtsStore.hydrate()
-  // coursesStore.hydrate()
-  // cohortsStore.hydrate()
-  
-  const { getAllDistrictsUsd } = storeToRefs(districtsStore)
- 
-  
   const activeTab = ref('tab1');
   
   function setActiveTab(tab) {
     activeTab.value = tab;
   }
   
-  const districts = ref('');
-  const svgUrl = ref('');
-  
-  const getDistrictList = async () => {
-    districts.value = getAllDistrictsUsd.value
-    svgUrl.value = 'https://k12map.cs.ksu.edu/Map?districts=' + districts.value
-    console.log(svgUrl.value)
-  }
   
   
   onMounted(() => {
@@ -99,26 +75,16 @@
         command: () => setActiveTab('tab2')
       }
     ]
-
-    watch(
-      () => districtsStore.districts,
-      (newDistricts) => {
-        if(newDistricts.length > 0) {
-          getDistrictList()
-        }
-      },
-      { immediate: true }
-    )
-  })
+})
   
   </script>
   
   <style scoped>
-  .p-layout {
-    display: flex;
-  }
+.p-layout {
+  display: flex;
+}
   
-  .p-sidebar {
+.p-sidebar {
   position: sticky;
   top: 0;
   left: 0;
@@ -181,16 +147,7 @@
     font-size: 1.2em;
     line-height: 1.6;
   }
-  
-  .map-container{
-    width: 700px;
-    height: 400px;
-    
-  }
-  
-  .map-container iframe{
-    width: 100%;
-    height: 100%;
-  }
+
+
   </style>
   

@@ -113,12 +113,12 @@ const tableData = computed(() => [
             </template>
             <Column
                 field="label"
-                header="Categories"
+                header="Group"
                 sortable
             />
             <Column
                 field="count"
-                header="Number of Districts"
+                header="Total"
                 sortable
             />
         </DataTable>
