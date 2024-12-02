@@ -16,6 +16,32 @@ import LoginProfile from '@/components/topmenu/LoginProfile.vue'
 import { useTokenStore } from '@/stores/Token'
 const tokenStore = useTokenStore()
 
+import { useCohortsStore } from '@/stores/Cohorts.js'
+import { useCoursesStore } from '@/stores/Courses.js'
+import { useUsersStore } from '@/stores/Users.js'
+import { useDistrictsStore } from '@/stores/Districts.js'
+import { useTeachersStore } from '@/stores/Teachers.js'
+import { useEnrollmentStore } from '@/stores/Enrollment.js'
+import { useRolesStore } from '@/stores/Roles.js'
+
+const cohortsStore = useCohortsStore()
+const coursesStore = useCoursesStore()
+const usersStore = useUsersStore()
+const districtsStore = useDistrictsStore()
+const teacherStore = useTeachersStore()
+const enrollmentStore = useEnrollmentStore()
+const rolesStore = useRolesStore()
+
+const syncWithDatabase = async () => {
+  cohortsStore.hydrate()
+  coursesStore.hydrate()
+  usersStore.hydrate()
+  districtsStore.hydrate()
+  teacherStore.hydrate()
+  enrollmentStore.hydrate()
+  rolesStore.hydrate()
+}
+
 // Menu items
 const items = ref([
   {
@@ -88,6 +114,13 @@ tokenStore.$subscribe(() => {
         icon: 'pi pi-sliders-h',
         command: () => {
           router.push({ name: 'analytics' })  
+        }
+      },
+      {
+        label: 'Sync',
+        icon: 'pi pi-refresh',
+        command: () => {
+          syncWithDatabase()
         }
       }
     ]

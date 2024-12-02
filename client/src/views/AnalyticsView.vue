@@ -46,35 +46,35 @@
     </div>
   </template>
   
-  <script setup>
-  import { onMounted, ref } from 'vue'
-  import MainTable from '@/components/analytics/EnrollmentTable.vue'
-  import ReachTable from '@/components/analytics/ReachTable.vue'
-  import Menu from 'primevue/menu'
-  import Badge from 'primevue/badge'
+<script setup>
+import { onMounted, ref } from 'vue'
+import MainTable from '@/components/analytics/EnrollmentTable.vue'
+import ReachTable from '@/components/analytics/ReachTable.vue'
+import Menu from 'primevue/menu'
+import Badge from 'primevue/badge'
 
-  const items = ref([])
-  const activeTab = ref('tab1');
+const items = ref([])
+const activeTab = ref('tab1');
   
-  function setActiveTab(tab) {
-    activeTab.value = tab;
-  }
+function setActiveTab(tab) {
+  activeTab.value = tab;
+}
   
   
   
-  onMounted(() => {
-    items.value = [
-      {
-        label: 'Enrollment',
-        icon: 'pi pi-fw pi-user',
-        command: () => setActiveTab('tab1')
-      },
-      {
-        label: 'Reach',
-        icon: 'pi pi-fw pi-chart-line',
-        command: () => setActiveTab('tab2')
-      }
-    ]
+onMounted(() => {
+  items.value = [
+    {
+      label: 'Enrollment',
+      icon: 'pi pi-fw pi-user',
+      command: () => setActiveTab('tab1')
+    },
+    {
+      label: 'Reach',
+      icon: 'pi pi-fw pi-chart-line',
+      command: () => setActiveTab('tab2')
+    }
+  ]
 })
   
   </script>
