@@ -11,6 +11,8 @@ import Menubar from 'primevue/menubar'
 // Custom Components
 import ThemeToggle from '@/components/topmenu/ThemeToggle.vue'
 import LoginProfile from '@/components/topmenu/LoginProfile.vue'
+import { useToast } from 'primevue/usetoast'
+const toast = useToast()
 
 // Stores
 import { useTokenStore } from '@/stores/Token'
@@ -33,13 +35,29 @@ const enrollmentStore = useEnrollmentStore()
 const rolesStore = useRolesStore()
 
 const syncWithDatabase = async () => {
-  cohortsStore.hydrate()
-  coursesStore.hydrate()
-  usersStore.hydrate()
-  districtsStore.hydrate()
-  teacherStore.hydrate()
-  enrollmentStore.hydrate()
-  rolesStore.hydrate()
+  try{
+    await cohortsStore.hydrate()
+    await coursesStore.hydrate()
+    await usersStore.hydrate()
+    await districtsStore.hydrate()
+    await teacherStore.hydrate()
+    await enrollmentStore.hydrate()
+    await rolesStore.hydrate()
+
+    toast.add({
+      severity: 'success',
+      summary: 'Synced with Database',
+      detail: 'All stores have been hydrated',
+      life: 3000
+    })
+  } catch(error){
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Unable to sync with database',
+      life: 3000
+    })
+  }  
 }
 
 // Menu items

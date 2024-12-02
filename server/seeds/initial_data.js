@@ -8,7 +8,7 @@ export async function seed (knex) {
   then.setMinutes(then.getMinutes() - 5)
 
   //#region ADD TESTING DATA -- FIELDS CREATION
-  const useRecommended = false
+  const useRecommended = true
 
   var numUsers = 5
   var numDistricts = 286      
@@ -543,8 +543,18 @@ export async function seed (knex) {
   const initialCourses = [];
 
   for (let i = 0; i < numCourses; i++) {
-    const local_name = allCourses[i].name;
-    const local_notes = `Course ${i} notes`;
+    var local_name
+    var local_notes = ''
+
+    if(i < allCourses.length){
+      local_name = allCourses[i].name;
+      local_notes = allCourses[i].notes;
+    }
+    else{
+      local_name = `Course ${i}`;
+      local_notes = `Course ${i} notes`;
+    }
+
     initialCourses.push({
       id: i+1,
       name: local_name,
