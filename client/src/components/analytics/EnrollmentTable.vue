@@ -51,7 +51,7 @@ const exportCSV = () => {
 const { getAllCourses } = storeToRefs(enrollmentStore);
 
 onMounted(() => {
-    enrollmentStore.hydrate();
+    //enrollmentStore.hydrate();
 });
 
 </script>

@@ -7,12 +7,25 @@ import Toolbar from 'primevue/toolbar';
 import Panel from 'primevue/panel';
 import ConfirmDialog from 'primevue/confirmdialog';
 import { useDistrictsStore } from '@/stores/Districts';
+import { useTeachersStore } from '@/stores/Teachers';
 
 const districtStore = useDistrictsStore();
+const teacherStore = useTeachersStore();
 
 const dataTableRef = ref(null)
 
 const districts = districtStore.districts
+const teachers = teacherStore.teachers
+
+const teachersPassedOneClass = (computed(() => {
+    return teachers.filter(teacher => 
+        teacher.courses.some(course => course.status === 1)).length
+}))
+
+const teachersCompleted10CreditHours = (computed(() => {
+    return teachers.filter(teacher =>
+        teacher.cert_status === 3).length
+}))
 
 const districtCount = (computed(() => {
     return districts.length
@@ -38,9 +51,11 @@ const filters = ref({
 });
 
 const tableData = computed(() => [
+  { label: 'Teachers that passed one class', count: teachersPassedOneClass.value },
+  { label: 'Teachers that completed 10 credit hours', count: teachersCompleted10CreditHours.value },
   { label: 'Total Districts', count: districtCount.value },
   { label: 'Urban/Suburban Districts', count: urbanSuburbanDistricts.value },
-  { label: 'Town/Rural Districts', count: townRuralDistricts.value }
+  { label: 'Town/Rural Districts', count: townRuralDistricts.value },
 ]);
 
 
