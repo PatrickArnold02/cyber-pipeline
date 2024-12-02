@@ -19,7 +19,8 @@ const teachers = teacherStore.teachers
 
 const teachersPassedOneClass = (computed(() => {
     return teachers.filter(teacher => 
-        teacher.courses.some(course => course.status === 1)).length
+        teacher.courses.some(course => 
+            course.status === 1)).length
 }))
 
 const teachersCompleted10CreditHours = (computed(() => {
@@ -32,11 +33,25 @@ const districtCount = (computed(() => {
 }))
 
 const townRuralDistricts = (computed(() => {
-    return districts.filter(district => district.locale === 31 || district.locale === 32 || district.locale === 33 || district.locale === 41 || district.locale === 42 || district.locale === 43).length
+    return districts.filter(district => 
+        district.locale === 31 || 
+        district.locale === 32 || 
+        district.locale === 33 || 
+        district.locale === 41 || 
+        district.locale === 42 || 
+        district.locale === 43
+    ).length
 }))
 
 const urbanSuburbanDistricts = (computed(() => {
-    return districts.filter(district => district.locale === 11 || district.locale === 12 || district.locale === 13 || district.locale === 21 || district.locale === 22 || district.locale === 23).length
+    return districts.filter(district => 
+        district.locale === 11 || 
+        district.locale === 12 || 
+        district.locale === 13 || 
+        district.locale === 21 || 
+        district.locale === 22 || 
+        district.locale === 23
+    ).length
 }))
 
 const exportCSV = () => {
