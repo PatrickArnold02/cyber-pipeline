@@ -23,9 +23,17 @@ const teachersPassedOneClass = (computed(() => {
             course.status === 1)).length
 }))
 
-const teachersCompleted10CreditHours = (computed(() => {
-    return teachers.filter(teacher =>
-        teacher.cert_status === 3).length
+
+const teachersPassedCertClasses = (computed(() => {
+    const requiredCourses = ['CC 710', 'CC 711', 'CC 730', 'EDCI 765']
+
+    return teachers.filter(teacher => 
+        requiredCourses.every(courseName => 
+            teacher.courses.some(course => 
+                course.name === courseName && course.status === 1
+            )
+        )
+    ).length
 }))
 
 const districtCount = (computed(() => {
@@ -67,7 +75,7 @@ const filters = ref({
 
 const tableData = computed(() => [
   { label: 'Teachers that passed one class', count: teachersPassedOneClass.value },
-  { label: 'Teachers that completed 10 credit hours', count: teachersCompleted10CreditHours.value },
+  { label: 'Teachers that completed 10 credit hours', count: teachersPassedCertClasses.value },
   { label: 'Total Districts', count: districtCount.value },
   { label: 'Urban/Suburban Districts', count: urbanSuburbanDistricts.value },
   { label: 'Town/Rural Districts', count: townRuralDistricts.value },

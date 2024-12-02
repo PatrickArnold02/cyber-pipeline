@@ -8,12 +8,12 @@ export async function seed (knex) {
   then.setMinutes(then.getMinutes() - 5)
 
   //#region ADD TESTING DATA -- FIELDS CREATION
-  const useRecommended = true
+  const useRecommended = false
 
   var numUsers = 5
   var numDistricts = 286      
   var numTeachers = 150      
-  var numCourses = 15             
+  var numCourses = 8            
   var numCohorts = 5              
   const showPercentage = false
   const showData = false
@@ -536,13 +536,14 @@ export async function seed (knex) {
     { name: 'CC 750', notes: 'Data Structures and Algorithms for Educators I' },
     { name: 'CC 755', notes: 'Data Structures and Algorithms for Educators II' },
     { name: 'CC 760', notes: 'Advanced Computing for Educators' },
-    { name: 'CC 798', notes: 'Topics in Computing for Educators' }
+    { name: 'CC 798', notes: 'Topics in Computing for Educators' },
+    { name: 'EDCI 765', notes: 'Placeholder'}
   ]
 
   const initialCourses = [];
 
   for (let i = 0; i < numCourses; i++) {
-    const local_name = `Course ${i}`;
+    const local_name = allCourses[i].name;
     const local_notes = `Course ${i} notes`;
     initialCourses.push({
       id: i+1,
@@ -552,6 +553,7 @@ export async function seed (knex) {
       updated_at: now,
       created_by: 'test-admin',
       updated_by: 'test-admin',
+      academic_year: '2024-2025'
     });
   }
 
