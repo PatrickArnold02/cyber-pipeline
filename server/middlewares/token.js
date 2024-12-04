@@ -30,18 +30,18 @@ async function authenticateToken(req, res, next) {
     // See below for a DB method for this - less efficient.
     req.roles = user.roles
 
-
     // // check if admin
     // const roles = await User.relatedQuery('roles')
     //   .for(req.user_id)
     //   .select('name')
     // //Roles for current user
     // //console.log(roles)
-    // if (roles.some((r) => r.name === 'admin')) {
-    //   req.is_admin = true
-    // } else {
-    //   req.is_admin = false
-    // }
+    if (user.roles.some((r) => r === 'admin')) {
+       req.is_admin = true
+       console.log("is_admin is true")
+     } else {
+       req.is_admin = false
+     }
 
     next()
   })
