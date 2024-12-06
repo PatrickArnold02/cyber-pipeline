@@ -19,7 +19,7 @@ declare module 'vue' {
     Dialog: typeof import('primevue/dialog')['default']
     DistrictList: typeof import('./src/components/district/DistrictList.vue')['default']
     DropDownField: typeof import('./src/components/forms/DropDownField.vue')['default']
-    EditTeacherDialog: typeof import('./src/components/teacher/EditTeacherDialog.vue')['default']
+    EditTeacherDialog: typeof import('./src/features/EditTeacherDialog.vue')['default']
     EditTeacherDialogOrig: typeof import('./src/components/teacher/EditTeacherDialogOrig.vue')['default']
     EnrollmentTable: typeof import('./src/components/analytics/EnrollmentTable.vue')['default']
     IconField: typeof import('primevue/iconfield')['default']

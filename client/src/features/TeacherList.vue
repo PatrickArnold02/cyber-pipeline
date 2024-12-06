@@ -32,7 +32,7 @@ import BooleanField from '@/components/forms/BooleanField.vue'
 import TextAreaField from '@/components/forms/TextAreaField.vue'
 import TeacherColumn from '@/components/teacher/TeacherColumn.vue';
 import ActionsColumn from '@/components/ActionsColumn.vue';
-import EditTeacherDialog from '@/components/teacher/EditTeacherDialog.vue';
+import EditTeacherDialog from '@/features/EditTeacherDialog.vue';
 
 // Token
 import { useTokenStore } from '@/stores/Token'
@@ -436,7 +436,6 @@ const exportFunction = (row) => {
           />
         </template>
       </Column>
-      <ActionsColumn/>
     </DataTable>
   </Panel>
 
@@ -459,7 +458,13 @@ const exportFunction = (row) => {
     :teacher="teacher"
     :errors="errors"
     :statuses="statuses"
+    :districts="districts"
+    :cohorts="cohorts"
+    :courses="courses"
+    :grades="grades"
+    :loading="loading"
     @close-modal="closeModal"
+    @save="save"
   />
 </template>
 
