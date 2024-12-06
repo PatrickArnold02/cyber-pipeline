@@ -182,7 +182,7 @@
           </div>
         </div>
       </div>
-      <div class="w-full flex flex-column row-gap-5 -mt-3">\
+      <div class="w-full flex flex-column row-gap-5 -mt-3">
         <div class="w-full flex flex-row align-items-center">
           <label class="w-11 flex-grow-1 text-center">Cohorts</label>
           <div class="pl-1">
