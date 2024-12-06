@@ -1,6 +1,6 @@
 import { describe, it, beforeEach, expect, vi, afterEach } from 'vitest';
 import { mount } from '@vue/test-utils';
-import TeacherList from '../src/components/teacher/TeacherList.vue';
+import TeacherList from '../src/features/TeacherList.vue';
 import { useTokenStore } from '../src/stores/Token.js';
 import { useTeachersStore } from '../src/stores/Teachers.js';
 import { useDistrictsStore } from '../src/stores/Districts.js';
