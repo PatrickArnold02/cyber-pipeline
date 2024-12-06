@@ -20,9 +20,8 @@ let NotAdmin = {
 
 //Creates a mock user
 let adminUser = {
-  id: 1,
-  eid:'test-admin',
-  name:'Test Administrator',
+  id: 2,
+  eid:'russfeld',
   is_admin: true,
   token: null,
   }
@@ -43,8 +42,8 @@ const login = async (adminUser) => {
   
 
   beforeAll(async () => {
-    db.migrate.latest()
-    db.seed.run()
+    await db.migrate.latest()
+    await db.seed.run()
     adminUser.token = await login(adminUser)
   })
   
