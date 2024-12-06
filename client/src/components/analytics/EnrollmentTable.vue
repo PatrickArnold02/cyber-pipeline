@@ -13,18 +13,24 @@ import { dt } from '@primevue/themes';
 
 const enrollmentStore = useEnrollmentStore();
 
+// Current year used to generate academic years
 const currentYear = new Date().getFullYear()
+
+// The academic years to display in the select dropdown
 const academicYears = ref([
+    'NOT DEFINED', // This will not be used in prod, but is a placeholder to demonstrate the filter on the seed data with default values
     `${currentYear - 1}-${currentYear}`,
     `${currentYear}-${currentYear + 1}`, 
     `${currentYear + 1}-${currentYear + 2}`, 
     `${currentYear + 2}-${currentYear + 3}`
-  ])
+])
 
+// The current acacdemic year to filter by
 const selectedAcademicYear = ref(`${currentYear}-${currentYear + 1}`)
 
 const dataTableRef = ref(null)
 
+// The courses filtered by academic year
 const filteredCourses = computed(() => {
   if (!selectedAcademicYear.value) return getAllCourses.value;
   return getAllCourses.value.filter(course => course.academic_year === selectedAcademicYear.value);
@@ -37,6 +43,7 @@ const filters = ref({
     }
 });
 
+// Exports the current data table to CSV
 const exportCSV = () => {
     dataTableRef.value.exportCSV();
 }

@@ -152,17 +152,17 @@ const teachersStore = useTeachersStore()
 const cohortsStore = useCohortsStore()
 const coursesStore = useCoursesStore()
 
-const recipient = ref([])
-const recipientDisplay = ref('')
-const subject = ref('')
-const text = ref('')
+const recipient = ref([]) // Array of recipients email addresses
+const recipientDisplay = ref('') 
+const subject = ref('') // Email subject
+const text = ref('') // Email body
 const message = ref('')
 const recipientDialog = ref(false)
-const searchTerm = ref('')
-const filteredTeachers = ref([])
-const cohorts = ref([])
-const selectedCohort = ref(null)
-const optInTeachers = ref([])
+const searchTerm = ref('') // Search term for filtering recipients
+const filteredTeachers = ref([]) // Filtered teachers based on search term
+const cohorts = ref([]) // List of all cohorts for recipient selection
+const selectedCohort = ref(null) // Selected cohort for recipient selection
+const optInTeachers = ref([]) // All teachers that are opted in to receive emails
 
 const courses = ref([])
 const selectedCourse = ref(null)
@@ -171,14 +171,14 @@ const closeButton = ref(null)
 
 // Fetch the teachers list when the component is mounted
 onMounted(async () => {
-  await teachersStore.hydrate()
+  // await teachersStore.hydrate()
   optInTeachers.value = teachersStore.teachers.filter(teacher => !teacher.email_opt_out)
   filteredTeachers.value = optInTeachers.value
 
-  await cohortsStore.hydrate()
+  // await cohortsStore.hydrate()
   cohorts.value = [{ id: null, name: "None" }, ...cohortsStore.cohorts]
 
-  await coursesStore.hydrate()
+  // await coursesStore.hydrate()
   courses.value = [{ id: null, name: "None" }, ...coursesStore.courses]
 })
 
@@ -197,6 +197,7 @@ const filterTeachers = () => {
   )
 }
 
+// Select a course and update the recipient list to include all opted in teachers within the course
 const selectCourse = async () => {
   if(selectedCourse.value === null){
     recipient.value = []
@@ -205,6 +206,8 @@ const selectCourse = async () => {
   }
 
   if(selectedCourse.value){
+    recipient.value = []
+    updateRecipientDisplay()
     const courseData = await coursesStore.getCourse(selectedCourse.value)
     courseData.teachers.forEach(teacher => {
       const teacherDetails = teachersStore.getTeacher(teacher.id)
@@ -216,6 +219,7 @@ const selectCourse = async () => {
 
 }
 
+// Select a cohort and update the recipient list to include all opted in teachers within the cohort
 const selectCohort = async () => {
   if(selectedCohort.value === null){
     recipient.value = []
@@ -224,6 +228,8 @@ const selectCohort = async () => {
   }
 
   if(selectedCohort.value){
+    recipient.value = []
+    updateRecipientDisplay()
     const cohortData = await cohortsStore.getCohort(selectedCohort.value)
     cohortData.teachers.forEach(teacher => {
       const teacherDetails = teachersStore.getTeacher(teacher.id)
@@ -256,6 +262,7 @@ const updateRecipientDisplay = () => {
   recipientDisplay.value = recipient.value.join(', ')
 }
 
+// Changes focus to the close button of the dialog to prevent the user from typing in the recipient text field after closing the dialog
 const focusCloseButton = () => {
   if(closeButton.value){
     closeButton.value.$el.focus()

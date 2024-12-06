@@ -25,9 +25,11 @@ onMounted(() => {
   {
     case 'dark': 
       themeDark.value = true;
+      updateTheme()
       break;
     case 'light':
       themeDark.value = false;
+      updateTheme()
       break;
     default:
       // if we fall through, check for preference in matchMedia
