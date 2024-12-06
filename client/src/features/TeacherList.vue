@@ -31,7 +31,6 @@ import TextField from '@/components/forms/TextField.vue'
 import BooleanField from '@/components/forms/BooleanField.vue'
 import TextAreaField from '@/components/forms/TextAreaField.vue'
 import TeacherColumn from '@/components/teacher/TeacherColumn.vue';
-import ActionsColumn from '@/components/ActionsColumn.vue';
 import EditTeacherDialog from '@/features/EditTeacherDialog.vue';
 
 // Token
@@ -50,14 +49,14 @@ import { useCoursesStore } from '@/stores/Courses'
 const coursesStore = useCoursesStore()
 
 // Setup Stores
-// teachersStore.hydrate()
+teachersStore.hydrate()
 const { teachers } = storeToRefs(teachersStore)
-// districtsStore.hydrate()
+districtsStore.hydrate()
 const { districts } = storeToRefs(districtsStore)
 const { cohorts } = storeToRefs(cohortsStore)
 if (is_admin.value) {
-  // cohortsStore.hydrate()
-  // coursesStore.hydrate()
+  cohortsStore.hydrate()
+  coursesStore.hydrate()
 }
 const { courses } = storeToRefs(coursesStore)
 
@@ -266,6 +265,7 @@ const exportFunction = (row) => {
       filterDisplay="row"
       :globalFilterFields="['name', 'email', 'eid', 'wid', 'all_districts', 'grade_level']"
       :exportFunction="exportFunction"
+      paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50, 100]" :paginatorPosition="'top'"
     >
       <template #header>
         <Toolbar
