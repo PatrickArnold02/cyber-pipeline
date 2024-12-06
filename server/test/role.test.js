@@ -4,15 +4,18 @@ import { describe, it, beforeEach, beforeAll, expect} from 'vitest'
 import 'dotenv/config'
 import db from '../configs/db.js'
 import Ajv from 'ajv'
-import { Client } from 'pg'
 
 // Set up environment variables
 process.env.FORCE_AUTH = 'true'
 
 
 //Creates a mock user
-const adminUserToken = null
-var adminUser
+const adminUser = {
+  id: 2,
+  eid: "russfeld",
+  is_admin: true,
+  token: null
+}
 
   const login = async (adminUser) => {
     const agent = request.agent(app)
@@ -29,27 +32,9 @@ var adminUser
     }
 
   beforeAll(async () => {
-    db.migrate.latest()
-    db.seed.run()
-    const client = new Client({
-      user: 'cyberpipeline',
-      host: 'mysql',
-      database: 'cyberpipeline',
-      password: 'password',
-      port: 5432,
-    })
-
-    await client.connect()
-    const res = await client.query('SELECT * FROM users WHERE username = $1', ['testuser'])
-    if (res.rows.length === 0) {
-      throw new Error('Test user not found!');
-    }
-
-    adminUser = res.rows[0]  // Store the user for later use
-
-    await client.end()
-    adminUserToken = await login(adminUser)
-    console.log("eid: " + adminUser.eid)
+    await db.migrate.latest()
+    await db.seed.run()
+    adminUser.token = await login(adminUser)
   })
 
 
@@ -58,7 +43,7 @@ var adminUser
     it('should list all roles', async () => {
       const res = await request(app)
         .get('/api/v1/roles/')
-        .set('Authorization', `Bearer ${adminUserToken}`)
+        .set('Authorization', `Bearer ${adminUser.token}`)
         .expect(200)
          expect(res.body).toBeInstanceOf(Array)
          expect(res.body.length).toBe(2)
@@ -88,7 +73,7 @@ var adminUser
     const validate = ajv.compile(schema)
     const res = await request(app)
       .get('/api/v1/roles/')
-      .set('Authorization', `Bearer ${adminUserToken}`)
+      .set('Authorization', `Bearer ${adminUser.token}`)
       .expect(200)
       const isValid = validate(res.body)
       expect(isValid).toBe(true)
