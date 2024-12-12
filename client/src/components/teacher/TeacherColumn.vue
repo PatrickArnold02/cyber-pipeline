@@ -34,10 +34,6 @@
   <script>
   export default {
     props: {
-      is_admin: {
-        type: Boolean,
-        required: true
-      },
       header: {
         type: String,
         required: true
