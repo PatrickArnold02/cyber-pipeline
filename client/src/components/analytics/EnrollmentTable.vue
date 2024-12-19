@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, pushScopeId } from 'vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import { useEnrollmentStore } from '@/stores/Enrollment';
@@ -15,28 +15,39 @@ const enrollmentStore = useEnrollmentStore();
 
 // Current year used to generate academic years
 const currentYear = new Date().getFullYear()
-const academicYears = ref([]) // Stores available academic years
-const selectedYear = ref(null) // Stores the selected academic year
+const academicYears = ref([
+  'All',
+]);
+const selectedAcademicYear = ref(null);
+const { getAllCourses } = storeToRefs(enrollmentStore);
 
 
-// The academic years to display in the select dropdown
-//const academicYears = ref([
-//    'NOT DEFINED', // This will not be used in prod, but is a placeholder to demonstrate the filter on the seed data with default values
-//    `${currentYear - 1}-${currentYear}`,
-//    `${currentYear}-${currentYear + 1}`, 
-//    `${currentYear + 1}-${currentYear + 2}`, 
-//    `${currentYear + 2}-${currentYear + 3}`
-//])
-
-// The current acacdemic year to filter by
-const selectedAcademicYear = ref(`${currentYear}-${currentYear + 1}`)
 
 const dataTableRef = ref(null)
 
-// The courses filtered by academic year
+const populateAcademicYears = () => {
+  const uniqueYears = new Set();
+  getAllCourses.value.forEach((course) => {
+    if (course.academic_year) {
+      uniqueYears.add(course.academic_year); // Collect unique academic_year values
+    }
+  });
+
+  // Add sorted unique years to the academicYears array
+  academicYears.value = ['All', ...Array.from(uniqueYears).sort((a, b) => {
+    const [aStart] = a.split('-').map(Number); // Extract the starting year as a number
+    const [bStart] = b.split('-').map(Number); // Extract the starting year as a number
+    return bStart - aStart; // Sort descending by the starting year
+  })];
+};
+
 const filteredCourses = computed(() => {
-  if (!selectedAcademicYear.value) return getAllCourses.value;
-  return getAllCourses.value.filter(course => course.academic_year === selectedAcademicYear.value);
+  if (!selectedAcademicYear.value || selectedAcademicYear.value === 'All') {
+    return getAllCourses.value;
+  }
+  return getAllCourses.value.filter(
+    (course) => course.academic_year === selectedAcademicYear.value
+  );
 });
 
 const filters = ref({
@@ -51,19 +62,13 @@ const exportCSV = () => {
     dataTableRef.value.exportCSV();
 }
 
-const { getAllCourses } = storeToRefs(enrollmentStore);
+onMounted(async () => {
+  // Ensure data is loaded into the store
+  await enrollmentStore.hydrate();
 
-onMounted(() => {
-    enrollmentStore.hydrate();
+  populateAcademicYears();
+  selectedAcademicYear = ref(`All`);
 
-    // Extract unique academic years from the cohorts data
-    academicYears.value = [
-        ...new Set(
-        cohortsStore.cohorts
-            .filter((cohort) => cohort.academicYear) // Ensure valid years
-            .map((cohort) => cohort.academicYear)
-        ),
-    ]
 });
 
 // Handle selection changes (optional)
@@ -85,6 +90,7 @@ const handleYearChange = (year) => {
             tableStyle="min-width: 50rem"
             v-model:filters="filters"
             filterDisplay="row"
+            :sort-field="'academic_year'"
         >
             <template #header>
                 <Toolbar
@@ -116,10 +122,9 @@ const handleYearChange = (year) => {
                                     <i class="pi pi-calendar"/>
                                 </InputIcon>
                                 <Select
-                                    v-model="selectedYear"
-                                    :options="academicYears"
-                                    placeholder="Academic Year"
-                                    @change="handleYearChange"
+                                  v-model="selectedAcademicYear"
+                                  :options="academicYears"
+                                  placeholder="Academic Year"
                                 />
                             </IconField>
                         </div>

@@ -11,10 +11,57 @@ import Menubar from 'primevue/menubar'
 // Custom Components
 import ThemeToggle from '@/components/topmenu/ThemeToggle.vue'
 import LoginProfile from '@/components/topmenu/LoginProfile.vue'
+import { useToast } from 'primevue/usetoast'
+const toast = useToast()
 
 // Stores
 import { useTokenStore } from '@/stores/Token'
 const tokenStore = useTokenStore()
+
+import { useCohortsStore } from '@/stores/Cohorts.js'
+import { useCoursesStore } from '@/stores/Courses.js'
+import { useUsersStore } from '@/stores/Users.js'
+import { useDistrictsStore } from '@/stores/Districts.js'
+import { useTeachersStore } from '@/stores/Teachers.js'
+import { useEnrollmentStore } from '@/stores/Enrollment.js'
+import { useRolesStore } from '@/stores/Roles.js'
+
+const cohortsStore = useCohortsStore()
+const coursesStore = useCoursesStore()
+const usersStore = useUsersStore()
+const districtsStore = useDistrictsStore()
+const teacherStore = useTeachersStore()
+const enrollmentStore = useEnrollmentStore()
+const rolesStore = useRolesStore()
+
+/**
+ * Rehydrates all the stores, slightly faster than fully refreshing the page
+ */
+const syncWithDatabase = async () => {
+  try{
+    await cohortsStore.hydrate()
+    await coursesStore.hydrate()
+    await usersStore.hydrate()
+    await districtsStore.hydrate()
+    await teacherStore.hydrate()
+    await enrollmentStore.hydrate()
+    await rolesStore.hydrate()
+
+    toast.add({
+      severity: 'success',
+      summary: 'Synced with Database',
+      detail: 'All stores have been hydrated',
+      life: 3000
+    })
+  } catch(error){
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Unable to sync with database',
+      life: 3000
+    })
+  }  
+}
 
 // Menu items
 const items = ref([
@@ -92,6 +139,13 @@ tokenStore.$subscribe(() => {
         icon: 'pi pi-sliders-h',
         command: () => {
           router.push({ name: 'analytics' })  
+        }
+      },
+      {
+        label: 'Sync',
+        icon: 'pi pi-refresh',
+        command: () => {
+          syncWithDatabase()
         }
       }
     )

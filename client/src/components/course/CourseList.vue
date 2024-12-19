@@ -63,7 +63,7 @@ const academicYears = ref([
     `${currentYear}-${currentYear + 1}`, 
     `${currentYear + 1}-${currentYear + 2}`, 
     `${currentYear + 2}-${currentYear + 3}`
-  ])
+])
   
 
 // Filters
