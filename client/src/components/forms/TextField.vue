@@ -4,6 +4,7 @@ import FloatLabel from 'primevue/floatlabel'
 import IconField from 'primevue/iconfield'
 import InputIcon from 'primevue/inputicon'
 import InputText from 'primevue/inputtext'
+import IftaLabel  from 'primevue/iftalabel'
 
 // Props
 const props = defineProps({
@@ -45,7 +46,7 @@ console.log(model.value)
 <template>
   <div class="w-full">
     <!-- Floating Label-->
-    <FloatLabel class="w-full">
+    <IftaLabel class="w-full">
       <!-- Icon -->
       <IconField
         iconPosition="left"
@@ -71,7 +72,7 @@ console.log(model.value)
         class="ml-5"
         >{{ props.label }}</label
       >
-    </FloatLabel>
+    </IftaLabel>
 
     <!-- Error Text -->
     <small

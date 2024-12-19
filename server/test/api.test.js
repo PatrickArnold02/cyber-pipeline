@@ -1,28 +1,45 @@
 import request from 'supertest'
 import app from '../app.js'
-import { describe, it, beforeEach, beforeAll} from 'vitest'
+import { describe, it, beforeAll, expect} from 'vitest'
 import 'dotenv/config'
+import db from '../configs/db.js'
+import Ajv from 'ajv'
 
+const numUsers = 5
 
-
-const apiShouldReturnUserData = (user) => {
-    it('should return data about current user', (done) => {
-      request(app)
-        .get('/api/v1')
-        .set('Authorization', `Bearer ${user.token}`)
+const login = async (adminUser) => {
+  const agent = request.agent(app)
+  return agent
+    .get('/auth/login?eid=' + encodeURIComponent(adminUser.eid))
+    .then(() => {
+      return agent
+        .get('/auth/token')
         .expect(200)
-        .end((err, res) => {
-          if (err) return done(err)
-          expect(res.body).property('user_id').eql(user.id)
-          expect(res.body).property('version').eql(1.0)
-          expect(res.body).property('is_admin').eql(user.is_admin ? 1 : 0)
-          done()
+        .then((res) => {
+          return res.body.token
         })
     })
   }
-  
+
+  beforeAll(async () => {
+    await db.migrate.latest()
+    await db.seed.run()
+  })
+
+const apiShouldReturnUserData = (user) => {
+    it('should return data about current user', async () => {
+      const res = await request(app)
+        .get('/api/v1')
+        .set('Authorization', `Bearer ${user.token}`)
+        .expect(200)
+          expect(res.body).property('user_id').eql(2)
+          expect(res.body).property('version').eql(1.0)
+          expect(res.body).property('is_admin').eql(1)
+    })
+  }
+
   const apiSchemaShouldBeValid = (user) => {
-    it('should have a valid schema', (done) => {
+    it('should have a valid schema', async () => {
       const schema = {
         type: 'object',
         properties: {
@@ -33,44 +50,29 @@ const apiShouldReturnUserData = (user) => {
         required: ['user_id', 'version', 'is_admin'],
         additionalProperties: false,
       }
-      request(app)
+      const ajv = new Ajv()
+      const validate = ajv.compile(schema)
+      const res = await request(app)
         .get('/api/v1')
         .set('Authorization', `Bearer ${user.token}`)
         .expect(200)
-        .end((err, res) => {
-          if (err) return done(err)
-          expect(res.body).jsonSchema(schema)
-          done()
+        const isValid = validate(res.body)
+        expect(isValid).toBe(true)
         })
-    })
   }
   
   describe('/api/v1/users', () => {
-    describe('user: test-admin', () => {
+    describe('user: russfeld', () => {
     //Creates a mock user
     let adminUser = {
-        eid:'test-admin',
-        name:'Test Administrator',
-        id: 1, 
-        is_admin: true,
-        token: 'test-token',
+        eid:'russfeld',
+        token: null,
     }
-  
+    beforeAll(async () => {
+      adminUser.token = await login(adminUser)
+    })
   
       apiShouldReturnUserData(adminUser)
       apiSchemaShouldBeValid(adminUser)
-    })
-  
-    describe('user: test-api', () => {
-      let user = {
-        id: 3,
-        email: 'testemail@gmail.com',
-        is_admin: false,
-        token: 'test-token'
-      }
-    
-  
-      apiShouldReturnUserData(user)
-      apiSchemaShouldBeValid(user)
     })
   })

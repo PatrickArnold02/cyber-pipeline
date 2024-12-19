@@ -22,6 +22,7 @@ const selectedAcademicYear = ref(null);
 const { getAllCourses } = storeToRefs(enrollmentStore);
 
 
+
 const dataTableRef = ref(null)
 
 const populateAcademicYears = () => {
@@ -67,7 +68,14 @@ onMounted(async () => {
 
   populateAcademicYears();
   selectedAcademicYear = ref(`All`);
+
 });
+
+// Handle selection changes (optional)
+const handleYearChange = (year) => {
+  selectedYear.value = year
+  console.log('Selected Year:', year)
+}
 
 </script>
 

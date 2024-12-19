@@ -559,6 +559,7 @@ export async function seed (knex) {
       id: i+1,
       name: local_name,
       notes: local_notes,
+      academic_year: local_academic_year,
       created_at: now,
       updated_at: now,
       created_by: 'test-admin',

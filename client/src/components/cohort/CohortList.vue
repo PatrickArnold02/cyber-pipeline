@@ -209,7 +209,7 @@ const exportFunction = (row) => {
       v-model:filters="filters"
       :globalFilterFields="['name']"
       :exportFunction="exportFunction"
-      paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50, 100]" :paginatorPosition="'top'"
+      paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50, 100]" :paginatorPosition="'top'"
     >
       <template #header>
         <Toolbar

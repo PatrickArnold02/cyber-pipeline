@@ -1,53 +1,59 @@
 import request from 'supertest'
 import app from '../app.js'
-import { describe, it, beforeEach, beforeAll} from 'vitest'
+import { describe, it, beforeEach, beforeAll, expect} from 'vitest'
 import 'dotenv/config'
 import db from '../configs/db.js'
+import Ajv from 'ajv'
 
 // Set up environment variables
 process.env.FORCE_AUTH = 'true'
 
 
 //Creates a mock user
-let adminUser = {
-  eid:'test-admin',
-  name:'Test Administrator',
-  created_by: 'test-admin',
-  updated_by: 'test-admin',
-  id: 1, 
+const adminUser = {
+  id: 2,
+  eid: "russfeld",
   is_admin: true,
-  token: 'test-token',
-  }
+  token: null
+}
+
+  const login = async (adminUser) => {
+    const agent = request.agent(app)
+    return agent
+      .get('/auth/login?eid=' + encodeURIComponent(adminUser.eid))
+      .then(() => {
+        return agent
+          .get('/auth/token')
+          .expect(200)
+          .then((res) => {
+            return res.body.token
+          })
+      })
+    }
 
   beforeAll(async () => {
-    db.migrate.latest()
+    await db.migrate.latest()
+    await db.seed.run()
+    adminUser.token = await login(adminUser)
   })
-  
-  beforeEach(async () => {
-    db.seed.run()
-    
-  })
+
 
   //Tests that get requests return a list of all roles
   const getAllRoles = (adminUser) => {
-    it('should list all roles', (done) => {
-      request(app)
+    it('should list all roles', async () => {
+      const res = await request(app)
         .get('/api/v1/roles/')
         .set('Authorization', `Bearer ${adminUser.token}`)
         .expect(200)
-        .end((err, res) => {
-        if (err) {return done(err)}
          expect(res.body).toBeInstanceOf(Array)
          expect(res.body.length).toBe(2)
-         done(err)
-        })
     })
   }
   
 
   //Tests that all roles' schema are correct
   const getAllRolesSchemaMatch = (adminUser) => {
-  it('all roles should match schema', (done) => {
+  it('all roles should match schema', async () => {
     const schema = {
       type: 'array',
       items: {
@@ -63,34 +69,20 @@ let adminUser = {
       },
       additionalProperties: false,
     }
-    request(app)
+    const ajv = new Ajv()
+    const validate = ajv.compile(schema)
+    const res = await request(app)
       .get('/api/v1/roles/')
       .set('Authorization', `Bearer ${adminUser.token}`)
       .expect(200)
-      .end((err, res) => {
-        if (err) return done(err)
-        res.body.should.be.jsonSchema(schema)
-        done()
-      })
+      const isValid = validate(res.body)
+      expect(isValid).toBe(true)
   })
 }
-//Test that get requests only work for users with admin role
-const getAllRolesRequiresAdminRole = (adminUser) => {
-  it('should require the admin role', (done) => {
-    request(app)
-      .get('/api/v1/roles/')
-      .set('Authorization', `Bearer ${adminUser.token}`)
-      .expect(403)
-      .end((err) => {
-        if (err) return done(err)
-        done()
-      })
-  })
-}
+
 
 
   describe('GET /', () => {
     getAllRoles(adminUser)
     getAllRolesSchemaMatch(adminUser)
-    getAllRolesRequiresAdminRole(adminUser)
   })

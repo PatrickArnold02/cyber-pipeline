@@ -102,7 +102,7 @@ describe('Mailing List', () => {
         }
         await wrapper.vm.selectRecipient(teacher)
         expect(spy).toHaveBeenCalled(teacher)
-        expect(wrapper.vm.recipent).toContain("russell@gmail.com")
+        expect(wrapper.vm.recipient).toContain("russell@gmail.com")
         expect(wrapper.vm.recipientDisplay).toBe("russell@gmail.com")
         
     })
@@ -128,11 +128,14 @@ describe('Mailing List', () => {
         const sender = { name: 'Test sender', email: "sender@gmail.com" }
         const spy = vi.spyOn(wrapper.vm, 'sendEmail')
         await wrapper.vm.sendEmail()
+        await wrapper.vm.$nextTick()
         expect(spy).toHaveBeenCalled()
         expect(wrapper.vm.message).toBe('At least one recipient is required')
         wrapper.vm.subject = 'test subject'
         wrapper.vm.text = 'test text'
+        wrapper.vm.selectRecipient(recipient)
         await wrapper.vm.sendEmail()
+        await wrapper.vm.$nextTick()
         expect(spy).toHaveBeenCalled()
         expect(wrapper.vm.recipient.length).toBe(0)
         expect(wrapper.vm.recipientDisplay).toBe('')
