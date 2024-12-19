@@ -49,8 +49,6 @@
   const { getAllDistrictsUsd } = storeToRefs(districtsStore)
  
   const activeTab = ref('tab1');
-  const academicYears = ref([])
-  const selectedYears = ref(null)
   
   function setActiveTab(tab) {
     activeTab.value = tab;
@@ -64,10 +62,6 @@
     svgUrl.value = 'https://k12map.cs.ksu.edu/Map?districts=' + districts.value
     console.log(svgUrl.value)
   }
-
-  const handleYearChange = (year) => {
-    selectedYears.value = year
-  }
   
   
   onMounted(async () => {
@@ -80,15 +74,6 @@
       },
       { immediate: true }
     )
-
-    // Extract unique academic years from the cohorts data
-    academicYears.value = [
-      ...new Set(
-        cohortsStore.cohorts
-          .filter((cohort) => cohort.academicYear) // Ensure valid years
-          .map((cohort) => cohort.academicYear)
-      ),
-    ]
   })
   
   </script>
