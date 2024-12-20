@@ -71,11 +71,6 @@ onMounted(async () => {
 
 });
 
-// Handle selection changes (optional)
-const handleYearChange = (year) => {
-  selectedYear.value = year
-  console.log('Selected Year:', year)
-}
 
 </script>
 
@@ -90,7 +85,6 @@ const handleYearChange = (year) => {
             tableStyle="min-width: 50rem"
             v-model:filters="filters"
             filterDisplay="row"
-            :sort-field="'academic_year'"
         >
             <template #header>
                 <Toolbar
