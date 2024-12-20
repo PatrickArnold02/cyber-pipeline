@@ -559,12 +559,11 @@ export async function seed (knex) {
       id: i+1,
       name: local_name,
       notes: local_notes,
-      academic_year: local_academic_year,
       created_at: now,
       updated_at: now,
       created_by: 'test-admin',
       updated_by: 'test-admin',
-      academic_year: '2024-2025'
+      academic_year: 2018+(i%7) + "-" + (2018+(i%7)+1),  
     });
   }
 
