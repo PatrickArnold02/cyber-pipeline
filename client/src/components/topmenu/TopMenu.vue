@@ -78,8 +78,8 @@ const items = ref([
  * Watch for changes in token and update menu
  */
 tokenStore.$subscribe(() => {
-  // If the user is an admin, display full menu
-  if (tokenStore.is_admin) {
+  // All users render these fields
+  if (tokenStore.is_user || tokenStore.is_admin) {
     items.value = [
       {
         label: 'Home',
@@ -101,7 +101,11 @@ tokenStore.$subscribe(() => {
         command: () => {
           router.push({ name: 'districts' })
         }
-      },
+      }
+    ]
+  }
+  if (tokenStore.is_admin) {
+    items.value.push(
       {
         label: 'Cohorts',
         icon: 'pi pi-users',
@@ -144,43 +148,7 @@ tokenStore.$subscribe(() => {
           syncWithDatabase()
         }
       }
-    ]
-  } else if (tokenStore.is_user) {
-    items.value = [
-      {
-        label: 'Home',
-        icon: 'pi pi-home',
-        command: () => {
-          router.push({ name: 'home' })
-        }
-      },
-      {
-        label: 'Teachers',
-        icon: 'pi pi-users',
-        command: () => {
-          router.push({ name: 'teachers' })
-        }
-      },
-      {
-        label: 'Districts',
-        icon: 'pi pi-building',
-        command: () => {
-          router.push({ name: 'districts' })
-        }
-      }
-    ]
-
-    // If user is not admin, show simple menu only
-  } else {
-    items.value = [
-      {
-        label: 'Home',
-        icon: 'pi pi-home',
-        command: () => {
-          router.push({ name: 'home' })
-        }
-      }
-    ]
+    )
   }
 })
 </script>

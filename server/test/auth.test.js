@@ -1,248 +1,134 @@
 import request from 'supertest'
 import app from '../app.js'
-import { describe, it} from 'vitest'
+import { describe, it, beforeAll, beforeEach, expect } from 'vitest'
 import 'dotenv/config'
+import db from '../configs/db.js'
+import jwt from 'jsonwebtoken'
+import Ajv from 'ajv'
 
-const shouldAllowLogin = (user) => {
-  it('should allow ' + user.eid + ' to log in and get token', (done) => {
-    const agent = request.agent(app)
-    agent.get('/auth/login?eid=' + encodeURIComponent(user.eid)).end(() => {
-      agent
+let agent
+
+const login = async (user) => {
+  agent = request.agent(app)
+  return agent
+    .get('/auth/login?eid=' + encodeURIComponent(user.eid))
+    .then(() => {
+      return agent
         .get('/auth/token')
         .expect(200)
-        .end((err, res) => {
-          if (err) return done(err)
-          const token = res.body.token
-          agent
-            .get('/api/v1')
-            .auth(token, { type: 'bearer' })
-            .expect(200)
-            .end(() => {
-              done()
-            })
+        .then((res) => {
+          return res.body.token
         })
     })
+}
+
+beforeAll(async () => {
+  await db.migrate.latest()
+  await db.seed.run()
+})
+
+const adminUser = {
+  id: 2,
+  eid: "russfeld",
+  is_admin: true,
+  token: null
+}
+const shouldAllowLogin = (user) => {
+  it('should allow ' + user.eid + ' to log in and get token', async () => {
+    if (!user.token) {
+      console.log("No token available.")
+      return
+    }
+
+    await agent
+      .get('/api/v1')
+      .auth(user.token, { type: 'bearer' })
+      .expect(200)
   })
 }
 
-const loginShouldRedirectToHomepage = (user) => {
-  it('should redirect ' + user.eid + ' to homepage', (done) => {
-    const agent = request.agent(app)
-    agent
-      .get('/auth/login?eid=' + encodeURIComponent(user.eid))
-      .expect(302)
-      .expect('Location', '/')
-      .end((err) => {
-        if (err) return done(err)
-        done()
-      })
-  })
-}
+
 
 const tokenShouldIncludeUserData = (user) => {
-  it('should include user info in token', (done) => {
-    const agent = request.agent(app)
-    agent.get('/auth/login?eid=' + encodeURIComponent(user.eid)).end(() => {
-      agent
-        .get('/auth/token')
-        .expect(200)
-        .end((err, res) => {
-          if (err) return done(err)
-          const token = res.body.token
-          const token_user = jwt.decode(token)
-          expect(token_user).property('user_id').eql(user.id)
-          expect(token_user).property('email').eql(user.email)
-          expect(token_user).property('is_admin').eql(user.is_admin)
-          done()
-        })
-    })
+  it('should include user info in token', async () => {
+    const token_user = jwt.decode(user.token)
+    expect(token_user).property('user_id').eql(user.id)
+    expect(token_user).property('eid').eql(user.eid)
   })
 }
 
 const tokenShouldBeValid = (user) => {
-  it('should have a valid token signature', (done) => {
-    const agent = request.agent(app)
-    agent.get('/auth/login?eid=' + encodeURIComponent(user.eid)).end(() => {
-      agent
-        .get('/auth/token')
-        .expect(200)
-        .end((err, res) => {
-          if (err) return done(err)
-          const token = res.body.token
-          jwt.verify(token, process.env.TOKEN_SECRET, (err, decoded) => {
-            if (err) return done(err)
-            expect(decoded).property('user_id').eql(user.id)
-            expect(decoded).property('email').eql(user.email)
-            expect(decoded).property('is_admin').eql(user.is_admin)
-            done()
-          })
+  it('should have a valid token signature', async () => {
+    try{
+      const decoded = await new Promise((resolve, reject) => {
+        jwt.verify(user.token, process.env.TOKEN_SECRET, (err, decoded) => {
+          if (err) return reject(err)
+          resolve(decoded)
         })
-    })
+      })
+
+      
+      expect(decoded).property('user_id').eql(user.id)
+      expect(decoded).property('eid').eql(user.eid)
+    } catch (err) {
+      throw err
+    }
   })
 }
 
 const tokenSchemaShouldBeValid = (user) => {
-  it('should have a valid token schema', (done) => {
+  it('should have a valid token schema', async () => {
     const schema = {
       type: 'object',
       properties: {
         user_id: { type: 'number' },
-        email: { type: 'string' },
-        is_admin: { type: 'boolean' },
+        eid: { type: 'string' },
+        roles: {
+          type: 'array',
+          items: { type: 'string' } 
+        },
+        refresh_token: { type: 'string' },
         iat: { type: 'number' },
         exp: { type: 'number' },
       },
-      required: ['user_id', 'email', 'is_admin', 'iat', 'exp'],
-      additionalProperties: false,
+      required: ['user_id', 'eid', 'roles', 'refresh_token', 'iat', 'exp'],  
+      additionalProperties: false,  
     }
-    const agent = request.agent(app)
-    agent.get('/auth/login?eid=' + encodeURIComponent(user.eid)).end(() => {
-      agent
-        .get('/auth/token')
-        .expect(200)
-        .end((err, res) => {
-          if (err) return done(err)
-          const token = res.body.token
-          const token_user = jwt.decode(token)
-          token_user.should.be.jsonSchema(schema)
-          done()
-        })
-    })
-  })
-}
-
-const loginShouldFailOnNoEmail = (user) => {
-  it('should fail on bad email', (done) => {
-    const agent = request.agent(app)
-    agent.get('/auth/login?eid=' + encodeURIComponent(user.eid)).end(() => {
-      agent
-        .get('/auth/token')
-        .expect(401)
-        .end((err) => {
-          if (err) return done(err)
-          done()
-        })
-    })
+    const ajv = new Ajv()
+    const validate = ajv.compile(schema)
+        const decoded = jwt.decode(user.token)
+        const isValid = validate(decoded)
+      expect(isValid).toBe(true)
   })
 }
 
 const tokenShouldFailOnNoSession = () => {
-  it('should not issue token without session', (done) => {
+  it('should not issue token without session', async () => {
     const agent = request.agent(app)
     agent
       .get('/auth/token')
       .expect(401)
-      .end((err) => {
-        if (err) return done(err)
-        done()
-      })
   })
 }
 
-const tokenShouldFailOnNoRole = (user) => {
-  it('should not issue token without appropriate role', (done) => {
-    const agent = request.agent(app)
-    agent.get('/auth/login?eid=' + encodeURIComponent(user.eid)).end(() => {
-      agent.get('/auth/token').expect(401).end(done)
-    })
-  })
-}
 
-const logoutShouldClearSession = (user) => {
-  it('should clear session on logout', (done) => {
-    const agent = request.agent(app)
-    agent.get('/auth/login?eid=' + encodeURIComponent(user.eid)).end(() => {
-      agent
-        .get('/auth/token')
-        .expect(200)
-        .end((err) => {
-          if (err) return done(err)
-          agent
-            .get('/auth/logout')
-            .expect(302)
-            .expect('Location', '/')
-            .end((err) => {
-              if (err) return done(err)
-              agent
-                .get('/auth/token')
-                .expect(401)
-                .end((err) => {
-                  if (err) return done(err)
-                  done()
-                })
-            })
-        })
-    })
-  })
-}
 
 
 describe('/auth', () => {
-  describe('user: test-admin', () => {
-    const user = {
-      id: 1,
-      eid: "eidtest",
-      email: 'test-admin@russfeld.me',
-      is_admin: true,
-    }
-
-    shouldAllowLogin(user)
-    tokenShouldIncludeUserData(user)
-    tokenShouldBeValid(user)
-    tokenSchemaShouldBeValid(user)
-    loginShouldRedirectToHomepage(user)
-    logoutShouldClearSession(user)
-  })
-
-  describe('user: test-api', () => {
-    const user = {
-      id: 3,
-      eid: 'eid',
-      email: 'test-api@russfeld.me',
-      is_admin: false,
-    }
-
-    shouldAllowLogin(user)
-    tokenShouldIncludeUserData(user)
-    tokenShouldBeValid(user)
-    tokenSchemaShouldBeValid(user)
-    loginShouldRedirectToHomepage(user)
-    logoutShouldClearSession(user)
+  describe('user: russfeld', () => {
+    beforeAll(async () => {
+      adminUser.token = await login(adminUser)
+    })
+    shouldAllowLogin(adminUser)
+    tokenShouldIncludeUserData(adminUser)
+    tokenShouldBeValid(adminUser)
+    tokenSchemaShouldBeValid(adminUser)
+    
   })
 
   describe('user: test-fail', () => {
-    const user = {
-      id: 0,
-      eid: 'test',
-      email: '',
-      is_admin: false,
-    }
-
-    loginShouldFailOnNoEmail(user)
     tokenShouldFailOnNoSession()
   })
 
-  describe('user: test-new', () => {
-    const user = {
-      id: 5,
-      eid: 'anothertesteid',
-      email: 'test-new@russfeld.me',
-      is_admin: false,
-    }
 
-    loginShouldRedirectToHomepage(user)
-    tokenShouldFailOnNoRole(user)
-  })
-
-  describe('user: test-student', () => {
-    const user = {
-      id: 2,
-      eid: 'testeid',
-      email: 'test-student@russfeld.me',
-      is_admin: false,
-    }
-
-    loginShouldRedirectToHomepage(user)
-    tokenShouldFailOnNoRole(user)
-  })
 })

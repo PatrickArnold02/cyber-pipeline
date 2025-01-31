@@ -563,7 +563,7 @@ export async function seed (knex) {
       updated_at: now,
       created_by: 'test-admin',
       updated_by: 'test-admin',
-      academic_year: '2024-2025'
+      academic_year: 2018+(i%7) + "-" + (2018+(i%7)+1),  
     });
   }
 
