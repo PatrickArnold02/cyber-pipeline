@@ -7,7 +7,7 @@ describe('ThemeToggle.vue', () => {
   beforeEach(() => {
     global.localStorage.clear();
   })
-  
+
   afterEach(() => {
     global.localStorage.clear();
   })
@@ -18,7 +18,7 @@ describe('ThemeToggle.vue', () => {
 
     // Should render the moon icon, as we default to light mode
     const toggle = wrapper.find('span.pi-moon')
-    expect(toggle.exists()).toBe(true) 
+    expect(toggle.exists()).toBe(true)
   })
 
   it('renders correctly with light theme in localStorage', async () => {
@@ -32,7 +32,7 @@ describe('ThemeToggle.vue', () => {
 
     // Should render the moon icon, as we are in light mode
     const toggle = wrapper.find('span.pi-moon')
-    expect(toggle.exists()).toBe(true) 
+    expect(toggle.exists()).toBe(true)
   })
 
   it('renders correctly with dark theme in localStorage', async () => {
@@ -45,13 +45,13 @@ describe('ThemeToggle.vue', () => {
 
     // Should render the sun icon, as we are in dark mode
     const toggle = wrapper.find('span.pi-sun')
-    expect(toggle.exists()).toBe(true) 
+    expect(toggle.exists()).toBe(true)
   })
 
   it('renders correctly when dark theme is toggled', async () => {
     const wrapper = mount(ThemeToggle)
     await wrapper.vm.$nextTick()
-    
+
     // We should start in light mode, so clicking will put us into dark mode
     console.log(wrapper.html())
     wrapper.find('a.p-menuitem-link').trigger('click')
@@ -59,7 +59,7 @@ describe('ThemeToggle.vue', () => {
 
     // Should render the sun icon, as we are in dark mode
     const toggle = wrapper.find('span.pi-sun')
-    expect(toggle.exists()).toBe(true) 
+    expect(toggle.exists()).toBe(true)
 
     // Clicking once more should put us back into light mode 
     wrapper.find('a.p-menuitem-link').trigger('click')
@@ -67,7 +67,7 @@ describe('ThemeToggle.vue', () => {
 
     // Should render the moon icon, as we are once again in dark mode
     const toggle2 = wrapper.find('span.pi-moon')
-    expect(toggle2.exists()).toBe(true) 
+    expect(toggle2.exists()).toBe(true)
 
   })
 
@@ -87,7 +87,7 @@ describe('ThemeToggle.vue', () => {
   it('should set user-theme in localstorage when dark theme is toggled', async () => {
     const wrapper = mount(ThemeToggle)
     await wrapper.vm.$nextTick()
-    
+
     // We should start in light mode, so clicking will put us into dark mode
     console.log(wrapper.html())
     wrapper.find('a.p-menuitem-link').trigger('click')
@@ -95,7 +95,7 @@ describe('ThemeToggle.vue', () => {
 
     // localStorage should now contain 'dark' as 'user-theme'
     const theme = global.localStorage.getItem('user-theme')
-    expect(theme).toBe('dark') 
+    expect(theme).toBe('dark')
 
     // Clicking once more should put us back into light mode 
     wrapper.find('a.p-menuitem-link').trigger('click')
@@ -103,7 +103,7 @@ describe('ThemeToggle.vue', () => {
 
     // localStorage should now contain 'light' as 'user-theme'
     const theme2 = global.localStorage.getItem('user-theme')
-    expect(theme2).toBe('light') 
+    expect(theme2).toBe('light')
 
   })
 
@@ -132,7 +132,7 @@ describe('ThemeToggle.vue', () => {
 
     // Should render the sun icon, as we are in dark mode
     const toggle = wrapper.find('span.pi-sun')
-    expect(toggle.exists()).toBe(true) 
+    expect(toggle.exists()).toBe(true)
   })
 
   it('should render in light theme when media preference is for light mode', async () => {
@@ -160,7 +160,7 @@ describe('ThemeToggle.vue', () => {
 
     // Should render the moon icon, as we are in light mode
     const toggle = wrapper.find('span.pi-moon')
-    expect(toggle.exists()).toBe(true) 
+    expect(toggle.exists()).toBe(true)
   })
 
   it('should render in light theme when local storage calls for it, even if media preference is for dark mode', async () => {
@@ -190,7 +190,7 @@ describe('ThemeToggle.vue', () => {
 
     // Should render the moon icon, as we are in light mode
     const toggle = wrapper.find('span.pi-moon')
-    expect(toggle.exists()).toBe(true) 
+    expect(toggle.exists()).toBe(true)
   })
-    
+
 })

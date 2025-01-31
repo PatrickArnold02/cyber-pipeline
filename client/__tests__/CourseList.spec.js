@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
-import { describe, it, expect, beforeEach, vi, afterEach} from 'vitest'
+import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { useCoursesStore } from '../src/stores/Courses.js'
 import { useTeachersStore } from '../src/stores/Teachers.js'
 import PrimeVue from 'primevue/config'

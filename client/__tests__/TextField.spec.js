@@ -12,12 +12,12 @@ describe('TextField', () => {
         disabled: false,
         modelValue: '',
         errors: {
-            testField: [{message:'Field is required'}]
+            testField: [{ message: 'Field is required' }]
         }
     }
 
     it('renders a text field', () => {
-        const wrapper = mount(TextField, {props})
+        const wrapper = mount(TextField, { props })
 
         expect(wrapper.findComponent(InputText).exists()).toBe(true)
     })

@@ -118,7 +118,7 @@ describe('TeacherList', () => {
             accept: expect.any(Function),
             reject: expect.any(Function)
         })
-        
+
     })
 
     it('saves a teacher', async () => {

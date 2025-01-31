@@ -99,7 +99,7 @@ describe('CohortList', () => {
 
   it('calls the save method', async () => {
     const cohort = { id: 2, name: 'New Cohort', teachers: [] }; // Providing teachers
-    wrapper.vm.cohort = cohort; 
+    wrapper.vm.cohort = cohort;
 
     const spy = vi.spyOn(wrapper.vm, 'save');
     await wrapper.vm.save(cohort);
