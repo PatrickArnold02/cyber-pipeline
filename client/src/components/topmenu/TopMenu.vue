@@ -25,6 +25,7 @@ import { useDistrictsStore } from '@/stores/Districts.js'
 import { useTeachersStore } from '@/stores/Teachers.js'
 import { useEnrollmentStore } from '@/stores/Enrollment.js'
 import { useRolesStore } from '@/stores/Roles.js'
+import { useCanvasStore } from '@/stores/Canvas.js'
 
 const cohortsStore = useCohortsStore()
 const coursesStore = useCoursesStore()
@@ -33,6 +34,34 @@ const districtsStore = useDistrictsStore()
 const teacherStore = useTeachersStore()
 const enrollmentStore = useEnrollmentStore()
 const rolesStore = useRolesStore()
+const canvasStore = useCanvasStore()
+
+const testCanvasAPI = async () => {
+  try {
+    toast.add({
+      severity: 'info',
+      summary: 'Testing API Connection',
+      detail: 'Trying to pull all courses from the Canvas API',
+      life: 3000
+    })
+
+    await canvasStore.getCourses()
+
+    toast.add({
+      severity: 'success',
+      summary: 'API Connection Successful',
+      detail: 'Successfully pulled all courses from the Canvas API',
+      life: 3000
+    })
+  } catch (error) {
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Unable to communicate with the Canvas API',
+      life: 3000
+    })
+  }
+}
 
 /**
  * Rehydrates all the stores, slightly faster than fully refreshing the page
@@ -153,6 +182,13 @@ tokenStore.$subscribe(() => {
         icon: 'pi pi-refresh',
         command: () => {
           syncWithDatabase()
+        }
+      },
+      {
+        label: 'Test API Connection',
+        icon: 'pi pi-cloud',
+        command: () => {
+          testCanvasAPI()
         }
       }
     )
