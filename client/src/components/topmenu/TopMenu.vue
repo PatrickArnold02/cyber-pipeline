@@ -39,6 +39,13 @@ const rolesStore = useRolesStore()
  */
 const syncWithDatabase = async () => {
   try{
+    toast.add({
+      severity: 'info',
+      summary: 'Syncing with Database',
+      detail: 'Please wait...',
+      life: 3000
+    })
+
     await cohortsStore.hydrate()
     await coursesStore.hydrate()
     await usersStore.hydrate()

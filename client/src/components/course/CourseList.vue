@@ -308,6 +308,11 @@ const exportFunction = (row) => {
         sortable
         header="Academic Year"
       />
+      <Column 
+        field="course_id"
+        sortable
+        header="Course ID"
+      />
       <!--
       <Column
         field="teachers"
@@ -472,6 +477,16 @@ const exportFunction = (row) => {
         :errors="errors"
         :options="academicYears"
         placeholder="Academic Year"
+      />
+      
+      <label class="w-11 flex-grow-1 text-center">Canvas Course ID</label>
+      <InputText 
+        v-model="course.course_id"
+        field="course_id"
+        label="Course ID"
+        icon="pi pi-id-card"
+        :errors="errors"
+        readonly
       />
       <TextAreaField
         v-model="course.notes"
