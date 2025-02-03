@@ -63,7 +63,7 @@ const academicYears = ref([
     `${currentYear}-${currentYear + 1}`, 
     `${currentYear + 1}-${currentYear + 2}`, 
     `${currentYear + 2}-${currentYear + 3}`
-  ])
+])
   
 
 // Filters
@@ -240,7 +240,7 @@ const exportFunction = (row) => {
       v-model:filters="filters"
       :globalFilterFields="['name']"
       :exportFunction="exportFunction"
-      paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50, 100]" :paginatorPosition="'top'"
+      paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50, 100]" :paginatorPosition="'top'"
     >
       <template #header>
         <Toolbar
@@ -307,6 +307,11 @@ const exportFunction = (row) => {
         field="academic_year"
         sortable
         header="Academic Year"
+      />
+      <Column 
+        field="course_id"
+        sortable
+        header="Course ID"
       />
       <!--
       <Column
@@ -472,6 +477,16 @@ const exportFunction = (row) => {
         :errors="errors"
         :options="academicYears"
         placeholder="Academic Year"
+      />
+      
+      <label class="w-11 flex-grow-1 text-center">Canvas Course ID</label>
+      <InputText 
+        v-model="course.course_id"
+        field="course_id"
+        label="Course ID"
+        icon="pi pi-id-card"
+        :errors="errors"
+        readonly
       />
       <TextAreaField
         v-model="course.notes"
