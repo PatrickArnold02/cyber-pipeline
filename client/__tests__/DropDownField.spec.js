@@ -17,7 +17,7 @@ describe('DropDownField', () => {
     disabled: false,
     modelValue: [],
     errors: {
-        testField: [{ message: 'Field is required' }]
+      testField: [{ message: 'Field is required' }]
     }
   }
 
@@ -26,10 +26,10 @@ describe('DropDownField', () => {
   })
 
   it('renders correctly', () => {
-    
-     // Check if the dropdown is rendered with correct options
-     const dropdown = wrapper.findComponent(Select)
-     expect(dropdown.exists()).toBe(true)
-     expect(dropdown.props('options')).toEqual(props.values)
+
+    // Check if the dropdown is rendered with correct options
+    const dropdown = wrapper.findComponent(Select)
+    expect(dropdown.exists()).toBe(true)
+    expect(dropdown.props('options')).toEqual(props.values)
   })
 })

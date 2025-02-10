@@ -55,7 +55,7 @@ describe('LoginProfile', () => {
     expect(avatar.exists()).toBe(true);
   });
 
-  it.todo('should route you to profile page when profile clicked', async () =>{
+  it.todo('should route you to profile page when profile clicked', async () => {
     const tokenStore = useTokenStore();
     tokenStore.token = 'some-token';
 

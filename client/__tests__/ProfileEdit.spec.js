@@ -39,17 +39,17 @@ describe('ProfileEdit', () => {
 
   it('should have eid textfield disabled and name textfield enabled', () => {
 
-     // Get the TextField component for name
-     const textFieldComponents = wrapper.findAllComponents(TextField);
-    
-     const eidTextField = textFieldComponents[0]; //grab eid text field
-     const nameTextField = textFieldComponents[1]; //grab name text field
+    // Get the TextField component for name
+    const textFieldComponents = wrapper.findAllComponents(TextField);
 
-     expect(eidTextField.props('field')).toBe('eid');//check that textfield is actually for eid
-     expect(nameTextField.props('field')).toBe('name'); //check that texfield is actually for name
+    const eidTextField = textFieldComponents[0]; //grab eid text field
+    const nameTextField = textFieldComponents[1]; //grab name text field
 
-     expect(eidTextField.props('disabled')).toBe(true);
-     expect(nameTextField.props('disabled')).toBe(false);
+    expect(eidTextField.props('field')).toBe('eid');//check that textfield is actually for eid
+    expect(nameTextField.props('field')).toBe('name'); //check that texfield is actually for name
+
+    expect(eidTextField.props('disabled')).toBe(true);
+    expect(nameTextField.props('disabled')).toBe(false);
   })
 
   it('save method should save data correctly', async () => {

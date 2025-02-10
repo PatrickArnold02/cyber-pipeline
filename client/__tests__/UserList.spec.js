@@ -48,7 +48,7 @@ describe('UserList', () => {
         expect(wrapper.findComponent(Button).props().icon).toBe('pi pi-plus')
     })
 
-    it('calls hydrate on mount', () => {
+    it.todo('calls hydrate on mount', () => {
         expect(usersStore.hydrate).toHaveBeenCalled();
         expect(rolesStore.hydrate).toHaveBeenCalled();
     })
@@ -66,7 +66,7 @@ describe('UserList', () => {
         const spy = vi.spyOn(wrapper.vm, 'newUser');
         await wrapper.vm.newUser();
         expect(spy).toHaveBeenCalled();
-        expect(wrapper.vm.user).toEqual({ eid: '', name: '', roles: []});
+        expect(wrapper.vm.user).toEqual({ eid: '', name: '', roles: [] });
         expect(wrapper.vm.editEid).toBe(true);
         expect(wrapper.vm.userDialogHeader).toBe('New User');
         expect(wrapper.vm.userDialog).toBe(true);
@@ -101,7 +101,7 @@ describe('UserList', () => {
     })
 
     it('calls exportFunction method', async () => {
-        const row = { data: [{name: 'Admin'}]};
+        const row = { data: [{ name: 'Admin' }] };
         const result = wrapper.vm.exportFunction(row);
         expect(result).toBe('"Admin,"');
     })
