@@ -22,8 +22,11 @@ Upon cloning the repository, copy `.env-local.example` to `server/.env` and cust
 1. Copy code FROM `.env.example` TO `server/.env`
 2. [OPTIONAL] Copy your Canvas token into the `.env`
 3. [OPTIONAL] Set `CANVAS_ENABLED` to true
-4. Press `ctrl+shift+p`, find `Tasks: Run Task`
-5. Navigate to the url and append `/auth/login?eid=test-admin`
+4. Press `ctrl+shift+p`, find `Tasks: Run Task`, and run the `Watch All` task
+5. Go to the `Ports` tab and `ctrl+click` on the port 3001 codespace URL
+6. Navigate to the newly opened site and append either of the following URLs
+- Student View: `/auth/login?eid=test-student`
+- Admin View: `/auth/login?eid=test-admin`
 
 
 ## Running the application:
