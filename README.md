@@ -19,7 +19,11 @@ Upon cloning the repository, copy `.env-local.example` to `server/.env` and cust
 
 ## Developing in Github Codespaces
 
-Upon cloning the repository, copy '.env.example' to 'server/.env', this is configured to use the CODESPACE_NAME rather than a local host.
+1. Copy code FROM `.env.example` TO `server/.env`
+2. [OPTIONAL] Copy your Canvas token into the `.env`
+3. [OPTIONAL] Set `CANVAS_ENABLED` to true
+4. Press `ctrl+shift+p`, find `Tasks: Run Task`
+5. Navigate to the url and append `/auth/login?eid=test-admin`
 
 
 ## Running the application:
