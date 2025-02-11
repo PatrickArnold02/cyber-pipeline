@@ -4,13 +4,15 @@ import logger from '../configs/logger.js';
 
 const canvasService = {
     async getCourses(){
-        try{
-            const response = await axios.get(`${process.env.CANVAS_URL}/api/v1/courses`, {
-                headers: { Authorization: `Bearer ${process.env.CANVAS_TOKEN}`}
-            });
-            return response.data;
-        } catch(error){
-            logger.error('Failed to get courses: ' + error);
+        if (env.CANVAS_ENABLED) {
+            try{
+                const response = await axios.get(`${process.env.CANVAS_URL}/api/v1/courses`, {
+                    headers: { Authorization: `Bearer ${process.env.CANVAS_TOKEN}`}
+                });
+                return response.data;
+            } catch(error){
+                logger.error('Failed to get courses: ' + error);
+            }
         }
     }
 }
