@@ -46,17 +46,20 @@ const testCanvasAPI = async () => {
     })
 
     await canvasStore.getCourses()
-
-    toast.add({
-      severity: 'success',
-      summary: 'API Connection Successful',
-      detail: 'Successfully pulled all courses from the Canvas API',
-      life: 3000
-    })
+    if (canvasStore.courses.length > 0) {
+      toast.add({
+        severity: 'success',
+        summary: 'API Connection Successful',
+        detail: `Successfully pulled courses from the Canvas API`,
+        life: 3000
+      })
+    } else {
+      throw new Error("Couldn't pull courses from the Canvas API")
+    }
   } catch (error) {
     toast.add({
       severity: 'error',
-      summary: 'Error',
+      summary: error.message,
       detail: 'Unable to communicate with the Canvas API',
       life: 3000
     })
