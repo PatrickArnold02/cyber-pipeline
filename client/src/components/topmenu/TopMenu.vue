@@ -37,27 +37,27 @@ const rolesStore = useRolesStore()
 const canvasStore = useCanvasStore()
 
 const testCanvasAPI = async () => {
-  try {
+  toast.add({
+    severity: 'info',
+    summary: 'Testing API Connection',
+    detail: 'Trying to pull all courses from the Canvas API',
+    life: 3000
+  })
+
+  const response = await canvasStore.getCourses()
+
+  if(response.status != 200){
     toast.add({
-      severity: 'info',
-      summary: 'Testing API Connection',
-      detail: 'Trying to pull all courses from the Canvas API',
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Unable to pull all courses from the Canvas API',
       life: 3000
     })
-
-    await canvasStore.getCourses()
-
+  } else if(response.status == 200) {
     toast.add({
       severity: 'success',
       summary: 'API Connection Successful',
       detail: 'Successfully pulled all courses from the Canvas API',
-      life: 3000
-    })
-  } catch (error) {
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Unable to communicate with the Canvas API',
       life: 3000
     })
   }

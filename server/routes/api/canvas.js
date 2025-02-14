@@ -5,11 +5,14 @@ import logger from '../../configs/logger.js';
 const router = express.Router();
 
 router.get('/courses', async function (req, res){
-    try{
-        const courses = await canvasService.getCourses();
-        res.json(courses);
-    } catch(error){
-        logger.error('Failed to get courses: ' + error);
+    const response = await canvasService.getCourses();
+    
+    if(response.status === 200){
+        res.json(response.data);
+    }
+    else{
+        res.status(503).json({message: 'Failed to get courses (check api connection?)'});
+        logger.error('Failed to get courses');
     }
 })
 
