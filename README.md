@@ -42,3 +42,10 @@ If any changes are made to the seed file found in "server > seeds > initial_data
 
 If 'knex' is an unknown command, simply install it globally through the node command 'npm install knex -g' and re-do Step 2.
 
+## Testing
+
+To test the program, follow these steps:
+1. Press `ctrl+shift+p`
+2. Find `Tasks: Run Task`
+3. Run the `Run Tests` task
+
