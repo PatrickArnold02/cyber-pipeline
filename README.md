@@ -47,5 +47,7 @@ If 'knex' is an unknown command, simply install it globally through the node com
 To test the program, follow these steps:
 1. Press `ctrl+shift+p`
 2. Find `Tasks: Run Task`
-3. Run the `Run Tests` task
+3. Run the `Test Client` task to test the client
+4. Run the `Test Server` task to test the server
+5. Run the `Test All` task to run all tests
 
