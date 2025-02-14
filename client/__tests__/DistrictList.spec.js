@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
-import { describe, it, expect, beforeEach, vi, afterEach} from 'vitest'
+import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import Panel from 'primevue/panel'
 import DataTable from 'primevue/datatable'
 import Button from 'primevue/button'
