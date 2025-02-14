@@ -32,6 +32,6 @@ describe('MyComponent', () => {
     console.log(wrapper.vm.items)
 
     // Assert that the admin menu items are rendered
-    expect(wrapper.vm.items).toHaveLength(8);
+    expect(wrapper.vm.items).toHaveLength(10);
   });
 });
