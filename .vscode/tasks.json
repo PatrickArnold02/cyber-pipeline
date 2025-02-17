@@ -35,9 +35,9 @@
             "Watch Client"
         ],
         "group": "build",
-        "runOptions": {
-            "runOn": "folderOpen"
-        }
+        // "runOptions": {
+        //     "runOn": "folderOpen"
+        // }
     },
     {
         "label": "Lint and Format",
