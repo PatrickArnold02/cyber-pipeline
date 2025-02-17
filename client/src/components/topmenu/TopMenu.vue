@@ -46,21 +46,34 @@ const testCanvasAPI = async () => {
 
   const response = await canvasStore.getCourses()
 
-  if(response.status != 200){
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Unable to pull all courses from the Canvas API',
-      life: 3000
-    })
-  } else if(response.status == 200) {
+  if(response.status == 200){
     toast.add({
       severity: 'success',
       summary: 'API Connection Successful',
       detail: 'Successfully pulled all courses from the Canvas API',
       life: 3000
     })
+  } else if(response.status == 401) {
+    toast.add({
+      severity: 'error',
+      summary: 'Canvas Token not defined.',
+      detail: 'See README for instructions on configuring server/.env',
+      life: 3000
+    })
+  } else if(response.status == 500){
+    toast.add({
+      severity: 'error',
+      summary: 'Canvas is NOT enabled!', 
+      detail: 'Canvas API must be defined and enabled in the environment variables.',
+    })
+  } else {
+    toast.add({
+      severity: 'error',
+      summary: 'API Connection Failed',
+      detail: 'Unable to communicate with Canvas.'
+    })
   }
+
 }
 
 /**
