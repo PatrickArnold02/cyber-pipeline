@@ -9,6 +9,8 @@
 		"ghcr.io/devcontainers-contrib/features/vue-cli:2": {}
 	},
 
+	"postCreateCommand": "npm install && npm install --prefix client && npm install --prefix server",
+
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 
