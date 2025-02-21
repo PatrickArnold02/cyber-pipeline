@@ -67,8 +67,7 @@ onMounted(async () => {
   await enrollmentStore.hydrate();
 
   populateAcademicYears();
-  selectedAcademicYear = ref(`All`);
-
+  selectedAcademicYear.value = `All`;
 });
 
 
