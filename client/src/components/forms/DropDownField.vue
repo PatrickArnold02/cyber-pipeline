@@ -1,6 +1,6 @@
 <script setup>
 // PrimeVue Components
-// import IftaLabel from 'primevue/iftalabel'
+import IftaLabel from 'primevue/iftalabel'
 import FloatLabel from 'primevue/floatlabel'
 import IconField from 'primevue/iconfield'
 import InputIcon from 'primevue/inputicon'

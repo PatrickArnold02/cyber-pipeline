@@ -27,9 +27,6 @@ describe('ThemeToggle.vue', () => {
     //await flushPromises()
     await wrapper.vm.$nextTick()
 
-    console.log("local storage light", global.localStorage.getItem('user-theme'))
-    console.log("html", wrapper.html())
-
     // Should render the moon icon, as we are in light mode
     const toggle = wrapper.find('span.pi-moon')
     expect(toggle.exists()).toBe(true)
@@ -39,9 +36,6 @@ describe('ThemeToggle.vue', () => {
     window.localStorage.setItem('user-theme', 'dark')
     const wrapper = mount(ThemeToggle)
     await wrapper.vm.$nextTick()
-
-    console.log("local storage dark", global.localStorage.getItem('user-theme'))
-    console.log("html", wrapper.html())
 
     // Should render the sun icon, as we are in dark mode
     const toggle = wrapper.find('span.pi-sun')
@@ -53,7 +47,6 @@ describe('ThemeToggle.vue', () => {
     await wrapper.vm.$nextTick()
 
     // We should start in light mode, so clicking will put us into dark mode
-    console.log(wrapper.html())
     wrapper.find('a.p-menuitem-link').trigger('click')
     await wrapper.vm.$nextTick()
 
@@ -89,7 +82,6 @@ describe('ThemeToggle.vue', () => {
     await wrapper.vm.$nextTick()
 
     // We should start in light mode, so clicking will put us into dark mode
-    console.log(wrapper.html())
     wrapper.find('a.p-menuitem-link').trigger('click')
     await wrapper.vm.$nextTick()
 
@@ -127,9 +119,6 @@ describe('ThemeToggle.vue', () => {
     const wrapper = mount(ThemeToggle)
     await wrapper.vm.$nextTick()
 
-    console.log("local storage dark", global.localStorage.getItem('user-theme'))
-    console.log("html", wrapper.html())
-
     // Should render the sun icon, as we are in dark mode
     const toggle = wrapper.find('span.pi-sun')
     expect(toggle.exists()).toBe(true)
@@ -154,9 +143,6 @@ describe('ThemeToggle.vue', () => {
 
     const wrapper = mount(ThemeToggle)
     await wrapper.vm.$nextTick()
-
-    console.log("local storage dark", global.localStorage.getItem('user-theme'))
-    console.log("html", wrapper.html())
 
     // Should render the moon icon, as we are in light mode
     const toggle = wrapper.find('span.pi-moon')
@@ -184,9 +170,6 @@ describe('ThemeToggle.vue', () => {
 
     const wrapper = mount(ThemeToggle)
     await wrapper.vm.$nextTick()
-
-    console.log("local storage dark", global.localStorage.getItem('user-theme'))
-    console.log("html", wrapper.html())
 
     // Should render the moon icon, as we are in light mode
     const toggle = wrapper.find('span.pi-moon')
