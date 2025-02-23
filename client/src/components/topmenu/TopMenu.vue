@@ -65,12 +65,14 @@ const testCanvasAPI = async () => {
       severity: 'error',
       summary: 'Canvas is NOT enabled!', 
       detail: 'Canvas API must be defined and enabled in the environment variables.',
+      life: 3000
     })
   } else {
     toast.add({
       severity: 'error',
       summary: 'API Connection Failed',
-      detail: 'Unable to communicate with Canvas.'
+      detail: 'Unable to communicate with Canvas.',
+      life: 3000
     })
   }
 
