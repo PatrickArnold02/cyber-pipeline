@@ -13,8 +13,19 @@ export const useCanvasStore = defineStore('canvas', {
             try{
                 const response = await api.get('/api/v1/canvas/courses');
                 this.courses = response.data;
+
+                return response;
             } catch(error){
-                Logger.error('Failed to get courses: ', error);
+                if(error.response.status === 401){
+                    return {status: 401, data: {message: 'Canvas API is not configured.'}};
+                } else if(error.response.status === 503){
+                    return {status: 503, data: {message: 'Failed to get courses (check api connection?)'}};
+                } else if(error.response.status === 500){
+                    return {status: 500, data: {message: 'Canvas API disabled, see server/.env'}};
+                }
+                else{
+                    return {status: 500, data: {message: 'Failed to get courses'}};
+                }
             }
         }
     }

@@ -37,33 +37,43 @@ const rolesStore = useRolesStore()
 const canvasStore = useCanvasStore()
 
 const testCanvasAPI = async () => {
-  try {
+  toast.add({
+    severity: 'info',
+    summary: 'Testing API Connection',
+    detail: 'Trying to pull all courses from the Canvas API',
+    life: 3000
+  })
+
+  const response = await canvasStore.getCourses()
+
+  if(response.status == 200){
     toast.add({
-      severity: 'info',
-      summary: 'Testing API Connection',
-      detail: 'Trying to pull all courses from the Canvas API',
+      severity: 'success',
+      summary: 'API Connection Successful',
+      detail: 'Successfully pulled all courses from the Canvas API',
       life: 3000
     })
-
-    await canvasStore.getCourses()
-    if (canvasStore.courses.length > 0) {
-      toast.add({
-        severity: 'success',
-        summary: 'API Connection Successful',
-        detail: `Successfully pulled courses from the Canvas API`,
-        life: 3000
-      })
-    } else {
-      throw new Error("Couldn't pull courses from the Canvas API")
-    }
-  } catch (error) {
+  } else if(response.status == 401) {
     toast.add({
       severity: 'error',
-      summary: error.message,
-      detail: 'Unable to communicate with the Canvas API',
+      summary: 'Canvas Token not defined.',
+      detail: 'See README for instructions on configuring server/.env',
       life: 3000
     })
+  } else if(response.status == 500){
+    toast.add({
+      severity: 'error',
+      summary: 'Canvas is NOT enabled!', 
+      detail: 'Canvas API must be defined and enabled in the environment variables.',
+    })
+  } else {
+    toast.add({
+      severity: 'error',
+      summary: 'API Connection Failed',
+      detail: 'Unable to communicate with Canvas.'
+    })
   }
+
 }
 
 /**
