@@ -17,6 +17,16 @@
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// This can be used to network with other containers or with the host.
 	"forwardPorts": [3001, 3000],
+	"portsAttributes": {
+    "3001": {
+        "label": "Express API",
+        "visibility": "public"
+    },
+    "3000": {
+        "label": "Vue App",
+        "visibility": "public"
+    }
+},
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "cd server && npm install && cd ../client && npm install",
