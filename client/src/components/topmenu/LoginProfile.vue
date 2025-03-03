@@ -50,7 +50,7 @@ const toggle = (event) => {
     >
       <a
         class="p-menuitem-link"
-        @click="tokenStore.getToken()"
+        @click="router.push({ name: 'loginpage' })"
       >
         <span class="p-menuitem-icon pi pi-sign-in" />
         <span class="p-menuitem-text">Login</span>

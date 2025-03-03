@@ -11,6 +11,7 @@ import CohortView from '../views/CohortView.vue'
 import CourseView from '../views/CourseView.vue'
 import MailingView from '../views/MailingView.vue'
 import AnalyticsView from '../views/AnalyticsView.vue'
+import LoginView from '@/views/LoginView.vue'
 
 // Stores
 import { useTokenStore } from '@/stores/Token'
@@ -52,6 +53,11 @@ export const routes = [
     path: '/profile',
     name: 'profile',
     component: ProfileView
+  },
+  {
+    path: '/loginpage',
+    name: 'loginpage',
+    component: LoginView,
   },
 
   // Teachers page
@@ -106,7 +112,7 @@ export const routes = [
     name: 'analytics',
     component: AnalyticsView,
     beforeEnter: requireAdmin
-  }
+  },
 ]
 /**
  * Router factory method
@@ -121,7 +127,7 @@ const router = createRouter({
  * Global route guard - user must be logged in to view any page other than home
  */
 router.beforeEach(async function (to) {
-  if (to.name !== 'home') {
+  if (to.name !== 'home' && to.name !== 'loginpage') {
     const tokenStore = useTokenStore()
     if (!tokenStore.token) {
       await tokenStore.getToken()
