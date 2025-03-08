@@ -75,6 +75,30 @@ export const useTokenStore = defineStore('token', {
       } else {
         return false
       }
+    },
+    /**
+     * Gets the user's guest status
+     * 
+     * @returns Boolean: true if the user is a guest, otherwise false
+     */
+    is_guest() {
+      if(this.token){
+        return jwtDecode(this.token)['roles'].includes('guest')
+      } else {
+        return false
+      }
+    },
+    /**
+     * Gets the user's student admin status
+     * 
+     * @returns Boolean: true if the user is a student admin, otherwise false 
+     */
+    is_student_admin() {
+      if(this.token){
+        return jwtDecode(this.token)['roles'].includes('student_admin')
+      } else {
+        return false
+      }
     }
   },
   actions: {

@@ -128,7 +128,19 @@ const items = ref([
  */
 tokenStore.$subscribe(() => {
   // All users render these fields
-  if (tokenStore.is_user || tokenStore.is_admin) {
+  if(tokenStore.is_guest){
+    items.value = [
+      {
+        label: 'Home',
+        icon: 'pi pi-home',
+        command: () => {
+          router.push({ name: 'home' })
+        }
+      }
+    ]
+  }
+
+  if (tokenStore.is_user || tokenStore.is_admin || tokenStore.is_student_admin) {
     items.value = [
       {
         label: 'Home',
@@ -153,7 +165,7 @@ tokenStore.$subscribe(() => {
       }
     ]
   }
-  if (tokenStore.is_admin) {
+  if (tokenStore.is_admin || tokenStore.is_student_admin) {
     items.value.push(
       {
         label: 'Cohorts',
@@ -174,13 +186,6 @@ tokenStore.$subscribe(() => {
         icon: 'pi pi-user-edit',
         command: () => {
           router.push({ name: 'users' })
-        }
-      },
-      {
-        label: 'Mailing',
-        icon: 'pi pi-envelope',
-        command: () => {
-          router.push({ name: 'mailing'})
         }
       },
       {
@@ -205,6 +210,19 @@ tokenStore.$subscribe(() => {
         }
       }
     )
+  }
+
+  if(tokenStore.is_admin){
+    items.value.push(
+      {
+        label: 'Mailing',
+        icon: 'pi pi-envelope',
+        command: () => {
+          router.push({ name: 'mailing'})
+        }
+      },
+    )
+    
   }
 })
 </script>

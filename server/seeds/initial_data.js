@@ -99,7 +99,9 @@ export async function seed (knex) {
   //#region Roles
   const initialRoles = [
     { id: 1, name: 'admin', created_at: now, updated_at: now, created_by: 'test-admin', updated_by: 'test-admin' },
-    { id: 2, name: 'user', created_at: now, updated_at: now, created_by: 'test-admin', updated_by: 'test-admin' }
+    { id: 2, name: 'student_admin', created_at: now, updated_at: now, created_by: 'test-admin', updated_by: 'test-admin' },
+    { id: 3, name: 'user', created_at: now, updated_at: now, created_by: 'test-admin', updated_by: 'test-admin' },
+    { id: 4, name: 'guest', created_at: now, updated_at: now, created_by: 'test-admin', updated_by: 'test-admin' },
   ]
 
   if (showData) console.log("Roles: ", initialRoles);
@@ -120,7 +122,7 @@ export async function seed (knex) {
     initialUserRoles.push(
     { 
       user_id: local_user_id, 
-      role_id: 2, 
+      role_id: 3, 
       created_at: now, updated_at: now, 
       created_by: 'test-admin', updated_by: 'test-admin' 
     })
