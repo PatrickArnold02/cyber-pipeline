@@ -11,7 +11,6 @@ import CohortView from '../views/CohortView.vue'
 import CourseView from '../views/CourseView.vue'
 import MailingView from '../views/MailingView.vue'
 import AnalyticsView from '../views/AnalyticsView.vue'
-import LoginView from '@/views/LoginView.vue'
 
 // Stores
 import { useTokenStore } from '@/stores/Token'
@@ -54,12 +53,6 @@ export const routes = [
     name: 'profile',
     component: ProfileView
   },
-  {
-    path: '/loginpage',
-    name: 'loginpage',
-    component: LoginView,
-  },
-
   // Teachers page
   {
     path: '/teachers',
