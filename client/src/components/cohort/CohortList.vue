@@ -38,9 +38,9 @@ import { useTeachersStore } from '@/stores/Teachers'
 const teachersStore = useTeachersStore()
 
 // Setup Stores
-// cohortsStore.hydrate()
+cohortsStore.hydrate()
 const { cohorts } = storeToRefs(cohortsStore)
-// teachersStore.hydrate()
+teachersStore.hydrate()
 const { teachers } = storeToRefs(teachersStore)
 
 // Variables

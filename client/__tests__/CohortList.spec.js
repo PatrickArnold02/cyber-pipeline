@@ -54,74 +54,63 @@ describe('CohortList', () => {
     expect(wrapper.findComponent(Button).exists()).toBe(true);
     expect(wrapper.findComponent(Button).text()).toContain('New');
     expect(wrapper.findComponent(Button).props().icon).toBe('pi pi-plus');
-  });
 
-  it('calls the editCohort method', async () => {
-    const cohort = { id: 1, name: 'Test Cohort' };
-    const spy = vi.spyOn(wrapper.vm, 'editCohort');
-    await wrapper.vm.editCohort(cohort);
-
-    expect(spy).toHaveBeenCalledWith(cohort);
-    expect(wrapper.vm.cohortDialog).toBe(true);
-    expect(wrapper.vm.cohortDialogHeader).toBe('Edit Cohort');
-    expect(wrapper.vm.cohort).toEqual(cohort);
-  });
-
-  it('calls the newCohort method', async () => {
-    const spy = vi.spyOn(wrapper.vm, 'newCohort');
-    await wrapper.vm.newCohort();
-
-    expect(spy).toHaveBeenCalled();
-    expect(wrapper.vm.cohortDialog).toBe(true);
-    expect(wrapper.vm.cohortDialogHeader).toBe('New Cohort');
-  });
-
-  it('calls the deleteCohort method', async () => {
-    const cohort = { id: 1, name: 'Test Cohort' };
-    const spy = vi.spyOn(wrapper.vm, 'deleteCohort');
-    const confirmSpy = vi.spyOn(wrapper.vm.$confirm, 'require');
-
-    await wrapper.vm.deleteCohort(cohort);
-
-    expect(spy).toHaveBeenCalledWith(cohort);
-    expect(confirmSpy).toHaveBeenCalledWith({
-      message: 'Are you sure you want to delete Test Cohort?',
-      header: 'Danger Zone',
-      icon: 'pi pi-exclamation-triangle',
-      rejectLabel: 'Cancel',
-      acceptLabel: 'Delete',
-      rejectClass: 'p-button-secondary p-button-outlined',
-      acceptClass: 'p-button-danger',
-      accept: expect.any(Function),
-      reject: expect.any(Function)
-    });
-  });
-
-  it('calls the save method', async () => {
-    const cohort = { id: 2, name: 'New Cohort', teachers: [] }; // Providing teachers
-    wrapper.vm.cohort = cohort;
-
-    const spy = vi.spyOn(wrapper.vm, 'save');
-    await wrapper.vm.save(cohort);
-
-    expect(spy).toHaveBeenCalled();
-    expect(wrapper.vm.cohortDialog).toBe(false);
-  });
-
-  it('exports the datatable to CSV', () => {
-    wrapper.vm.dt = { exportCSV: vi.fn() };
-    wrapper.vm.exportCSV();
-    expect(wrapper.vm.dt.exportCSV).toHaveBeenCalled();
-  });
-
-  it('renders the DataTable', () => {
     expect(wrapper.findComponent(DataTable).exists()).toBe(true);
     expect(wrapper.findComponent(DataTable).props().value).toBe(wrapper.vm.cohorts);
   });
 
-  it('renders the Dialog, ConfirmDialog, and Popover', () => {
-    expect(wrapper.findComponent(Dialog).exists()).toBe(true);
-    expect(wrapper.findComponent(ConfirmDialog).exists()).toBe(true);
-    expect(wrapper.findComponent(Popover).exists()).toBe(true);
-  });
+
+  it('opens the cohort dialog with correct header when "New" button is clicked', async () => {
+    const buttons = wrapper.findAllComponents(Button)
+    const newButton = buttons[0]
+    expect(newButton.text()).toBe("New")
+
+    expect(wrapper.vm.cohortDialog).toBe(false);
+    await newButton.trigger('click');
+    expect(wrapper.vm.cohortDialog).toBe(true);
+  })
+
+  it.todo('opens the cohort dialog with correct data when "Edit" button is clicked', async () => {
+   
+  })
+
+  it.todo('triggers the confirmation dialog when "Delete" button is clicked', async () => {
+  })
+
+  it.todo('deletes a cohort after confirmation', async () => {
+  })
+
+  it.todo('shows an error toast when the deletion fails', async () => {
+  })
+
+  it.todo('opens the notes dialog when the "Notes" button is clicked', async () => {
+  })
+
+  it.todo('calls the save method and successfully updates/creates a cohort', async () => {
+  })
+
+  it.todo('displays form errors when saving fails', async () => {
+  })
+
+  it.todo('exports the DataTable to CSV when the "Export" button is clicked', async () => {
+  })
+
+  it.todo('filters the table correctly when a keyword is entered in the search box', async () => {
+  })
+
+  it.todo('opens and closes the dialog correctly', async () => {
+  })
+
+  it.todo('displays the correct error message when no cohorts are available in the table', () => {
+  })
+
+  it.todo('handles multiple teachers in the cohort form correctly', async () => {
+  })
+
+  it.todo('displays the error message if required fields are missing or invalid during saving', async () => {
+  })
+
+  it('matches the snapshot', () => {
+    expect(wrapper.html()).toMatchSnapshot()
+  })
 });

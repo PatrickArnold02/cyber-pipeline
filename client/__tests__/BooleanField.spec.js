@@ -15,43 +15,60 @@ describe('BooleanField', () => {
     }
   }
 
-  it('should have toggleswitch render correctly', () => {
+  let wrapper;
+  beforeEach(() => {
+      wrapper = mount(BooleanField, {
+      props
+    })
+  })
+
+  // Test: Renders correctly with given props
+  it('renders correctly with given props', () => {
+    const label = wrapper.get('label')
+    const labelText = label.text()
+
+    // Check the label text
+    expect(labelText).toBe(props.label)
+  })
+
+  // Test: Binds v-model correctly to ToggleSwitch
+  it('binds v-model correctly to ToggleSwitch', async () => {
+    const toggleSwitch = wrapper.findComponent(ToggleSwitch)
+
+    //true works
+    await toggleSwitch.vm.$emit('update:modelValue', true)
+    expect(wrapper.emitted()['update:modelValue'][0]).toEqual([true])
+
+    //false works
+    await toggleSwitch.vm.$emit('update:modelValue', false)
+    expect(wrapper.emitted()['update:modelValue'][1]).toEqual([false])
+  })
+
+  // Test: Disables the switch when the disabled prop is true
+  it('disables the switch when the disabled prop is true', async() => {
+    await wrapper.setProps({ disabled: true })
+    const toggleSwitch = wrapper.findComponent(ToggleSwitch)
+    expect(toggleSwitch.props().disabled).toBe(true)
+  })
+
+  // Test: Displays error messages correctly when validation fails
+  it('displays error messages correctly when validation fails', () => {
+    const errorMessage = wrapper.find('small')
+    expect(errorMessage.text()).toBe('Field is required')
+  })
+
+  // Test: Associates label correctly with the input
+  it('associates label correctly with the input', () => {
+    const label = wrapper.find('label')
+    expect(label.exists()).toBe(true)
+    expect(label.attributes('for')).toBe(props.field)
+  })
+
+
+  it('matches the snapshot', () => {
     const wrapper = mount(BooleanField, {
       props
-    });
-
-    const toggleSwitch = wrapper.getComponent(ToggleSwitch);
-
-    expect(toggleSwitch).toBeDefined();
-
-    wrapper.unmount();
-  })
-
-  it('disables ToggleSwitch when disabled prop is true', () => {
-    const wrapper = mount(BooleanField, {
-      props: {
-        ...props,
-        disabled: true
-      }
-    });
-
-    const toggleSwitch = wrapper.findComponent(ToggleSwitch);
-    expect(toggleSwitch.props('disabled')).toBe(true);
-
-    wrapper.unmount();
-  })
-
-  it('enables InputSwitch when disabled prop is false', () => {
-    const wrapper = mount(BooleanField, {
-      props: {
-        ...props,
-        disabled: false
-      }
-    });
-
-    const toggleSwitch = wrapper.findComponent(ToggleSwitch)
-    expect(toggleSwitch.props('disabled')).toBe(false);
-
-    wrapper.unmount();
+    })
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })

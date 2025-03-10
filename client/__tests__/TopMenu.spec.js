@@ -27,10 +27,6 @@ describe('MyComponent', () => {
     //patch the token so that $subscibe listener is triggered
     tokenStore.$patch({ token: ''})
 
-    // await wrapper.vm.$nextTick();
-
-    console.log(wrapper.vm.items)
-
     // Assert that the admin menu items are rendered
     expect(wrapper.vm.items).toHaveLength(10);
   });
