@@ -53,7 +53,6 @@ export const routes = [
     name: 'profile',
     component: ProfileView
   },
-
   // Teachers page
   {
     path: '/teachers',
@@ -106,7 +105,7 @@ export const routes = [
     name: 'analytics',
     component: AnalyticsView,
     beforeEnter: requireAdmin
-  }
+  },
 ]
 /**
  * Router factory method
@@ -121,7 +120,7 @@ const router = createRouter({
  * Global route guard - user must be logged in to view any page other than home
  */
 router.beforeEach(async function (to) {
-  if (to.name !== 'home') {
+  if (to.name !== 'home' && to.name !== 'loginpage') {
     const tokenStore = useTokenStore()
     if (!tokenStore.token) {
       await tokenStore.getToken()
