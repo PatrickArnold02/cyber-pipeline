@@ -4,7 +4,7 @@ import FloatLabel from 'primevue/floatlabel'
 import IconField from 'primevue/iconfield'
 import InputIcon from 'primevue/inputicon'
 import InputText from 'primevue/inputtext'
-// import IftaLabel  from 'primevue/iftalabel'
+import IftaLabel  from 'primevue/iftalabel'
 
 // Props
 const props = defineProps({
