@@ -45,12 +45,12 @@ const visible = ref(false);
 
 <template>
   <div class="p-menuitem">
-    <!-- If no token present, show login button -->
+    <!-- If no token present, show apply now button -->
     <div
       v-if="tokenStore.token == ''"
       class="p-menuitem-content"
     >
-      <Button label="Apply Now" icon="pi pi-check" severity="info" class="p-button-lg text-lg" />
+      <Button label="Apply Now" icon="pi pi-check" class="p-button-lg text-lg bg-primary-contrast" />
     </div>
   </div>
 </template>

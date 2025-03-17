@@ -1,17 +1,7 @@
 <template>
   <div class="p-layout">
-    <!-- <aside class="p-sidebar">
+    <aside class="p-sidebar">
       <Menu :model="items" class="w-full md:w-50">
-        <template #start>
-            <span class="inline-flex items-center gap-1 px-2 py-2">
-              <img
-                src="../assets/logo.png"
-                height="20px"
-                alt="CyberPipeline Logo"
-              />
-                <span class="text-xl">Cyber <span class="text-primary">Pipeline</span></span>
-            </span>
-        </template>
         <template #submenulabel="{ item }">
             <span class="text-primary font-bold">{{ item.label }}</span>
         </template>
@@ -24,128 +14,94 @@
             </a>
         </template>
       </Menu>
-    </aside> -->
+    </aside>
     <main class="p-main-content">
       <header class="mb-2">
         <h1 id="top" class="p-title">Kansas State University: Cyber Pipeline Program</h1>
         <h2>
           Learn and Teach Computer Science
         </h2>
-        <p class="p-text">
-          The Cyber Pipeline program, a part of the larger K-State Computational Core program, 
-          has the goal of making quality computer science education available to all high school 
-          students at little or no cost to them. The Cyber Pipeline curriculum uses the basic Computational 
-          Core state-of-the-art curriculum with the latest technologies and educational practices. 
-          And best of all, the curriculum is completely free.
-        </p>
-        <p class="p-text">
-          However, the Cyber Pipeline program also provides innovative online instruction that includes 
-          video, text, and automatically graded hands-on exercises and projects. The curriculum is designed 
-          to use lectures and text from K-State faculty, as well as in-class activities and examples led by 
-          high school teachers.
-        </p>
-        <p class="p-text">
-          Since qualified computer science teachers are hard to find, the Cyber Pipeline program also provides 
-          a teacher training program. This includes a five- to six-week program where high school teachers go through 
-          the course material individually and have weekly interactive sessions where they can discuss the material, 
-          and share teaching strategies and more with K-State faculty and other teachers. There will also be a 
-          teacher's guide with additional instructional strategies and examples that teachers can use in the classroom.
-        </p>
-          <div v-if="svgUrl" class="map-container">
-            <img id="svg-image" :src="svgUrl" alt="Failed font-semiboldto load map" />
-            <div>
-              <label class="label-text">Map of districts involved in the Cyber Pipeline Program</label>
-            </div>
-          <section id="curriculum" class="p-section">
-            <h2 class="p-subtitle">Curriculum</h2>
-            <p class="p-text">
-              The Cyber Pipeline Curriculum contains several courses from K-State's Computational Core that have been aligned with AP curriculum standards. 
-              These are the same courses we use in our Computer Science Certificate and Integrated Computer Science degree programs, 
-              so students are getting the real college experience!
-            </p>
-          </section>
-          <section id="online-instruction" class="p-section">
-            <h2 class="p-subtitle">Online Instruction</h2>
-            <p class="p-text">
-              Innovative online instruction that includes video, text, and automatically graded hands-on exercises and projects. The curriculum is designed to use lectures and text from K-State faculty, as well as in-class activities and examples led by high school teachers.
-            </p>
-          </section>
-          <section id="teacher-training" class="p-section">
-            <h2 class="p-subtitle">Teacher Training</h2>
-            <p class="p-text">
-              The Cyber Pipeline program includes an engaging and robust professional development program designed to prepare a teacher with no background in computer science to teach the CC 110 and/or CC 210 courses in under a year. 
-              The training is delivered asynchronously online, allowing you to fit it into your schedule. 
-              Additionally, there is a synchronous (but also available as a recording) online seminar series held the first Friday of each month. 
-              Finally, teachers engaging in the program have continuous access to mentoring by Computer Science and Pedagogy experts drawn from K-State faculty through instant messaging, email, and video collaboration.
-            </p>
-          </section> 
-        </div>      
-     </header>
+      </header>
+      <Divider />
+      <Tabs value="0">
+          <TabList>
+              <Tab value="0">Header I</Tab>
+              <Tab value="1">Header II</Tab>
+              <Tab value="2">Header III</Tab>
+          </TabList>
+          <TabPanels>
+              <TabPanel value="0">
+                <p class="p-text">
+                  The Cyber Pipeline program, a part of the larger K-State Computational Core program, 
+                  has the goal of making quality computer science education available to all high school 
+                  students at little or no cost to them. The Cyber Pipeline curriculum uses the basic Computational 
+                  Core state-of-the-art curriculum with the latest technologies and educational practices. 
+                  And best of all, the curriculum is completely free.
+                </p>
+                <p class="p-text">
+                  However, the Cyber Pipeline program also provides innovative online instruction that includes 
+                  video, text, and automatically graded hands-on exercises and projects. The curriculum is designed 
+                  to use lectures and text from K-State faculty, as well as in-class activities and examples led by 
+                  high school teachers.
+                </p>
+                <p class="p-text">
+                  Since qualified computer science teachers are hard to find, the Cyber Pipeline program also provides 
+                  a teacher training program. This includes a five- to six-week program where high school teachers go through 
+                  the course material individually and have weekly interactive sessions where they can discuss the material, 
+                  and share teaching strategies and more with K-State faculty and other teachers. There will also be a 
+                  teacher's guide with additional instructional strategies and examples that teachers can use in the classroom.
+                </p>  
+              </TabPanel>
+              <TabPanel value="1">
+                  <p class="m-0">
+                      Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
+                      ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
+                  </p>
+              </TabPanel>
+              <TabPanel value="2">
+                  <p class="m-0">
+                      ro tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
+                  </p>
+              </TabPanel>
+          </TabPanels>
+      </Tabs>
+      <div>
+        
+      </div>
     </main>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue';
-import { useDistrictsStore } from '../stores/Districts.js'
-import { storeToRefs } from 'pinia'
+import { onMounted, ref } from 'vue';
 import Menu from 'primevue/menu';
 import Badge from 'primevue/badge';
+import Tabs from 'primevue/tabs';
+import TabList from 'primevue/tablist';
+import Tab from 'primevue/tab';
+import TabPanels from 'primevue/tabpanels';
+import TabPanel from 'primevue/tabpanel';
 
 const items = ref([])
-
-const districtsStore = useDistrictsStore()
-
-const { getAllDistrictsUsd } = storeToRefs(districtsStore)
-
-const districts = ref('');
-const svgUrl = ref('');
-
-const getDistrictList = async () => {
-  districts.value = getAllDistrictsUsd.value
-  svgUrl.value = 'https://k12map.cs.ksu.edu/Map?districts=' + districts.value
-  console.log(svgUrl.value)
-}
-
-const scrollToSection = (sectionId) => {
-  const element = document.getElementById(sectionId)
-  element.scrollIntoView({ behavior: 'smooth' })
-}
-
 
 onMounted(() => {
   items.value = [
     {
-      label: 'Home',
-      icon: 'pi pi-fw pi-home',
-      command: () => window.scrollTo({ top: 0, behavior: 'smooth' })
-    },
-    {
       label: 'Curriculum',
       icon: 'pi pi-fw pi-book',
-      command: () => scrollToSection('curriculum')
+      command: () => alert('Curriculum page coming soon!')
     },
     {
-      label: 'Online Instruction',
+      label: 'Teacher Support',
       icon: 'pi pi-fw pi-video',
-      command: () => scrollToSection('online-instruction')
+      command:  () => alert('Curriculum page coming soon!')
     },
     {
-      label: 'Teacher Training',
+      label: 'How To Join',
       icon: 'pi pi-fw pi-users',
-      command: () => scrollToSection('teacher-training')
+      command:  () => alert('Curriculum page coming soon!')
     }
   ]
-
-  watch(
-    () => districtsStore.districts,
-    (newDistricts) => {
-      if(newDistricts.length > 0) {
-        getDistrictList()
-      }
-    },
-    { immediate: true }
-  )
 })
 
 </script>
