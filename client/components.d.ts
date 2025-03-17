@@ -37,6 +37,7 @@ declare module 'vue' {
     ReachTable: typeof import('./src/components/analytics/ReachTable.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SignUp: typeof import('./src/components/topmenu/SignUp.vue')['default']
     Tag: typeof import('primevue/tag')['default']
     TeacherColumn: typeof import('./src/components/teacher/TeacherColumn.vue')['default']
     TeacherDashboard: typeof import('./src/components/teacher/TeacherDashboard.vue')['default']
