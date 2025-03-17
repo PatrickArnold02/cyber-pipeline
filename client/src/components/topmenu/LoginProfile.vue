@@ -50,7 +50,7 @@ const visible = ref(false);
       v-if="tokenStore.token == ''"
       class="p-menuitem-content"
     >
-      <Button @click="visible = true" label="Login" icon="pi pi-sign-in"/>
+      <Button @click="visible = true" label="Login" icon="pi pi-sign-in text-lg"/>
     </div>
 
     <!-- If token present, assume user is logged in -->

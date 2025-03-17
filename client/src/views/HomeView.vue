@@ -1,6 +1,6 @@
 <template>
   <div class="p-layout">
-    <aside class="p-sidebar">
+    <!-- <aside class="p-sidebar">
       <Menu :model="items" class="w-full md:w-50">
         <template #start>
             <span class="inline-flex items-center gap-1 px-2 py-2">
@@ -24,11 +24,33 @@
             </a>
         </template>
       </Menu>
-    </aside>
+    </aside> -->
     <main class="p-main-content">
       <header class="mb-2">
         <h1 id="top" class="p-title">Kansas State University: Cyber Pipeline Program</h1>
-        <p class="p-text-secondary">Making quality computer science education available to all high school students at little or no cost.</p>
+        <h2>
+          Learn and Teach Computer Science
+        </h2>
+        <p class="p-text">
+          The Cyber Pipeline program, a part of the larger K-State Computational Core program, 
+          has the goal of making quality computer science education available to all high school 
+          students at little or no cost to them. The Cyber Pipeline curriculum uses the basic Computational 
+          Core state-of-the-art curriculum with the latest technologies and educational practices. 
+          And best of all, the curriculum is completely free.
+        </p>
+        <p class="p-text">
+          However, the Cyber Pipeline program also provides innovative online instruction that includes 
+          video, text, and automatically graded hands-on exercises and projects. The curriculum is designed 
+          to use lectures and text from K-State faculty, as well as in-class activities and examples led by 
+          high school teachers.
+        </p>
+        <p class="p-text">
+          Since qualified computer science teachers are hard to find, the Cyber Pipeline program also provides 
+          a teacher training program. This includes a five- to six-week program where high school teachers go through 
+          the course material individually and have weekly interactive sessions where they can discuss the material, 
+          and share teaching strategies and more with K-State faculty and other teachers. There will also be a 
+          teacher's guide with additional instructional strategies and examples that teachers can use in the classroom.
+        </p>
           <div v-if="svgUrl" class="map-container">
             <img id="svg-image" :src="svgUrl" alt="Failed font-semiboldto load map" />
             <div>
