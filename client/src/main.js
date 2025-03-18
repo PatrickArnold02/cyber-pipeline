@@ -21,8 +21,6 @@ console.log('Log Level: ' + Logger.getLevel().name)
 // CSS
 import 'primeicons/primeicons.css'
 
-// Themes are controlled in ThemeToggle.vue
-import 'primeflex/primeflex.css'
 import Aura from '@primevue/themes/aura'
 import Material from '@primevue/themes/material'
 import Lara from '@primevue/themes/lara'

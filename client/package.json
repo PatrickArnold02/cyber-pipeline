@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@primevue/themes": "^4.2.5",
+    "@tailwindcss/vite": "^4.0.14",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vueuse/core": "^12.7.0",
     "axios": "^1.7.9",
@@ -29,6 +30,8 @@
     "primeicons": "^7.0.0",
     "primevue": "^4.2.5",
     "quill": "^2.0.3",
+    "tailwindcss": "^4.0.14",
+    "tailwindcss-primeui": "^0.5.1",
     "unplugin-vue-components": "^28.1.0",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"

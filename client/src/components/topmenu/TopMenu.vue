@@ -234,7 +234,8 @@ tokenStore.$subscribe(() => {
       <RouterLink :to="{ name: 'home' }">
         <img
           src="../../assets/logo.png"
-          height="46px"
+          height="45px"
+          width="55px"
           alt="CyberPipeline Logo"
         />
       </RouterLink>

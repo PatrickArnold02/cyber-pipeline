@@ -97,7 +97,7 @@ const search = (event) => { //right now this is case sensitive
       <!-- Label -->
       <label
         :for="field"
-        class="ml-5"
+        class="ml-20"
         >{{ props.label }}</label
       >
     </FloatLabel>

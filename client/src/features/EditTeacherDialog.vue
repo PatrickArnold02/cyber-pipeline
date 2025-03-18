@@ -42,7 +42,7 @@
       >{{ message }}
     </Message>
     <div
-      class="flex flex-column align-items-center row-gap-5 w-full pt-3 mt-1"
+      class="flex flex-col items-center gap-y-8 w-full pt-6 mt-1"
       v-focustrap
       v-on:keyup.enter="save"
     >
@@ -74,8 +74,8 @@
           icon="pi pi-key"
           :errors="errors"
         />
-      <div class="flex flex-row flex-wrap align-items-center row-gap-5 w-full">
-        <div class="w-6 pr-1">
+      <div class="flex flex-row flex-wrap items-center gap-y-8 w-full">
+        <div class="w-6/12 pr-1">
           <DropDownField
             v-model="teacher.status"
             field="status"
@@ -86,7 +86,7 @@
             valueLabel="label"
           />
         </div>
-        <div class="w-6 pl-1">
+        <div class="w-6/12 pl-1">
           <DropDownField
             v-model="teacher.pd_status"
             field="pd_status"
@@ -97,7 +97,7 @@
             valueLabel="label"
           />
         </div>
-        <div class="w-6 pr-1">
+        <div class="w-6/12 pr-1">
           <DropDownField
             v-model="teacher.cert_status"
             field="cert_status"
@@ -108,7 +108,7 @@
             valueLabel="label"
           />
         </div>
-        <div class="w-6 pl-1">
+        <div class="w-6/12 pl-1">
           <DropDownField
             v-model="teacher.ms_status"
             field="ms_status"
@@ -127,9 +127,9 @@
         icon="pi pi-globe"
         :errors="errors"
       />
-      <div class="w-full flex flex-column row-gap-5 -mt-3">
-        <div class="w-full flex flex-row align-items-center">
-          <label class="w-11 flex-grow-1 text-center">School Districts</label>
+      <div class="w-full flex flex-col gap-y-8 -mt-6">
+        <div class="w-full flex flex-row items-center">
+          <label class="w-11/12 grow text-center">School Districts</label>
             <div class="pl-1">
               <Button
                 icon="pi pi-plus"
@@ -139,11 +139,11 @@
             </div>
         </div>
         <div
-            class="w-full flex flex-row align-items-center"
+            class="w-full flex flex-row items-center"
             v-for="(item, index) in teacher.districts"
             :key="item.id"
         >
-          <div class="w-4 pr-1">
+          <div class="w-4/12 pr-1">
             <DropDownField
               v-model="teacher.districts[index].id"
               field="id"
@@ -154,7 +154,7 @@
               valueLabel="usdName"
             />
           </div>
-          <div class="w-5 flex-grow-1 px-1">
+          <div class="w-5/12 grow px-1">
             <TextField
               v-model="teacher.districts[index].notes"
               field="notes"
@@ -163,7 +163,7 @@
               :errors="errors"
             />
           </div>
-          <div class="w-1 pl-1">
+          <div class="w-1/12 pl-1">
             <!-- This check box is to clarify what district is primary district but it probably needs to be more clear -->
             <BooleanField
               v-model="teacher.districts[index].primary"
@@ -181,9 +181,9 @@
           </div>
         </div>
       </div>
-      <div class="w-full flex flex-column row-gap-5 -mt-3">
-        <div class="w-full flex flex-row align-items-center">
-          <label class="w-11 flex-grow-1 text-center">Cohorts</label>
+      <div class="w-full flex flex-col gap-y-8 -mt-6">
+        <div class="w-full flex flex-row items-center">
+          <label class="w-11/12 grow text-center">Cohorts</label>
           <div class="pl-1">
             <Button
               icon="pi pi-plus"
@@ -193,11 +193,11 @@
           </div>
         </div>
         <div
-            class="w-full flex flex-row align-items-center"
+            class="w-full flex flex-row items-center"
             v-for="(item, index) in teacher.cohorts"
             :key="item.id"
         >
-          <div class="w-5 pr-1">
+          <div class="w-5/12 pr-1">
             <DropDownField
               v-model="teacher.cohorts[index].id"
               field="id"
@@ -208,7 +208,7 @@
               valueLabel="name"
             />
           </div>
-          <div class="w-5 flex-grow-1 px-1">
+          <div class="w-5/12 grow px-1">
             <TextField
               v-model="teacher.cohorts[index].notes"
               field="notes"
@@ -226,9 +226,9 @@
           </div>
         </div>
       </div>
-      <div class="w-full flex flex-column row-gap-5 -mt-3">
-        <div class="w-full flex flex-row align-items-center">
-          <label class="w-11 flex-grow-1 text-center">Courses</label>
+      <div class="w-full flex flex-col gap-y-8 -mt-6">
+        <div class="w-full flex flex-row items-center">
+          <label class="w-11/12 grow text-center">Courses</label>
             <div class="pl-1">
               <Button
                 icon="pi pi-plus"
@@ -238,11 +238,11 @@
             </div>
         </div>
         <div
-            class="w-full flex flex-row align-items-center"
+            class="w-full flex flex-row items-center"
             v-for="(item, index) in teacher.courses"
             :key="item.id"
         >
-          <div class="w-4 pr-1">
+          <div class="w-4/12 pr-1">
             <DropDownField
               v-model="teacher.courses[index].id"
               field="id"
@@ -253,7 +253,7 @@
               valueLabel="name"
             />
           </div>
-          <div class="w-3 px-1">
+          <div class="w-3/12 px-1">
             <DropDownField
               v-model="teacher.courses[index].status"
               field="status"
@@ -264,7 +264,7 @@
               valueLabel="label"
             />
           </div>
-          <div class="w-4 flex-grow-1 px-1">
+          <div class="w-4/12 grow px-1">
             <TextField
               v-model="teacher.courses[index].notes"
               field="notes"

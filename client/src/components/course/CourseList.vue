@@ -263,7 +263,7 @@ const exportFunction = (row) => {
             />
           </template>
           <template #end>
-            <div class="flex justify-content-end gap-4">
+            <div class="flex justify-end gap-12">
               <IconField iconPosition="left">
                 <InputIcon>
                   <i class="pi pi-search" />
@@ -368,7 +368,7 @@ const exportFunction = (row) => {
 
   <!-- Notes dialog -->
   <Popover ref="notesDialog">
-    <div class="flex flex-column gap-1 w-25rem">
+    <div class="flex flex-col gap-1 w-[25rem]">
       <div class="w-full">
         <span>Notes</span>
         <hr class="w-full" />
@@ -392,7 +392,7 @@ const exportFunction = (row) => {
       >{{ message }}</Message
     >
     <div
-      class="flex flex-column align-items-center row-gap-5 w-full pt-3 mt-1"
+      class="flex flex-col items-center gap-y-8 w-full pt-6 mt-1"
       v-focustrap
       v-on:keyup.enter="save"
     >
@@ -412,9 +412,9 @@ const exportFunction = (row) => {
         :values="teachers"
         valueLabel="name"
       />-->
-      <div class="w-full flex flex-column row-gap-5 -mt-3">
-        <div class="w-full flex flex-row align-items-center">
-          <label class="w-11 flex-grow-1 text-center">Teachers</label>
+      <div class="w-full flex flex-col gap-y-8 -mt-6">
+        <div class="w-full flex flex-row items-center">
+          <label class="w-11/12 grow text-center">Teachers</label>
           <div class="pl-1">
             <Button
               icon="pi pi-plus"
@@ -424,11 +424,11 @@ const exportFunction = (row) => {
           </div>
         </div>
         <div
-          class="w-full flex flex-row flex-wrap row-gap-5 align-items-center"
+          class="w-full flex flex-row flex-wrap gap-y-8 items-center"
           v-for="(item, index) in course.teachers"
           :key="item.id"
         >
-          <div class="w-4 pr-1">
+          <div class="w-4/12 pr-1">
             <DropDownField
               v-model="course.teachers[index].id"
               field="id"
@@ -439,7 +439,7 @@ const exportFunction = (row) => {
               valueLabel="name"
             />
           </div>
-          <div class="w-3 px-1">
+          <div class="w-3/12 px-1">
             <DropDownField
               v-model="course.teachers[index].status"
               field="status"
@@ -450,7 +450,7 @@ const exportFunction = (row) => {
               valueLabel="label"
             />
           </div>
-          <div class="w-4 flex-grow-1 px-1">
+          <div class="w-4/12 grow px-1">
             <TextField
               v-model="course.teachers[index].notes"
               field="notes"
@@ -468,7 +468,7 @@ const exportFunction = (row) => {
           </div>
         </div>
       </div>
-      <label class="w-11 flex-grow-1 text-center">Academic Year</label>
+      <label class="w-11/12 grow text-center">Academic Year</label>
       <Select 
         v-model="course.academic_year"
         field="academic_year"
@@ -479,7 +479,7 @@ const exportFunction = (row) => {
         placeholder="Academic Year"
       />
       
-      <label class="w-11 flex-grow-1 text-center">Canvas Course ID</label>
+      <label class="w-11/12 grow text-center">Canvas Course ID</label>
       <InputText 
         v-model="course.course_id"
         field="course_id"
