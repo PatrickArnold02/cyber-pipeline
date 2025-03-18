@@ -69,7 +69,7 @@ console.log(model.value)
       <!-- Label -->
       <label
         :for="field"
-        class="ml-5"
+        class="ml-20"
         >{{ props.label }}</label
       >
     </IftaLabel>

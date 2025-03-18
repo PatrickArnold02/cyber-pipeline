@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     ActionsColumn: typeof import('./src/components/ActionsColumn.vue')['default']
     AutocompleteMultiple: typeof import('./src/components/forms/AutocompleteMultiple.vue')['default']
+    Avatar: typeof import('primevue/avatar')['default']
     BooleanField: typeof import('./src/components/forms/BooleanField.vue')['default']
     Button: typeof import('primevue/button')['default']
     CohortDashboard: typeof import('./src/components/cohort/CohortDashboard.vue')['default']

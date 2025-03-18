@@ -299,7 +299,7 @@ const exportFunction = (row) => {
       >{{ message }}</Message
     >
     <div
-      class="flex flex-column align-items-center row-gap-5 w-full pt-3 mt-1"
+      class="flex flex-col items-center gap-y-8 w-full pt-6 mt-1"
       v-focustrap
       v-on:keyup.enter="save"
     >

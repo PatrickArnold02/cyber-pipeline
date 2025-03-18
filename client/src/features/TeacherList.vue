@@ -289,7 +289,7 @@ const exportFunction = (row) => {
             />
           </template>
           <template #end>
-            <div class="flex justify-content-end">
+            <div class="flex justify-end">
               <IconField iconPosition="left">
                 <InputIcon>
                   <i class="pi pi-search" />
@@ -441,7 +441,7 @@ const exportFunction = (row) => {
 
   <!-- Notes dialog -->
   <Popover ref="notesDialog">
-    <div class="flex flex-column gap-1 w-25rem">
+    <div class="flex flex-col gap-1 w-[25rem]">
       <div class="w-full">
         <span>Notes</span>
         <hr class="w-full" />
