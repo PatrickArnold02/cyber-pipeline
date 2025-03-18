@@ -406,7 +406,7 @@ const exportFunction = (row) => {
       >{{ message }}</Message
     >
     <div
-      class="flex flex-col items-center gap-y-8 w-full pt-4 mt-1"
+      class="flex flex-col items-center gap-y-8 w-full pt-6 mt-1"
       v-focustrap
       v-on:keyup.enter="save"
     >

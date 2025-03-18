@@ -53,7 +53,7 @@ const save = async () => {
       >{{ message }}</Message
     >
     <div
-      class="flex flex-col items-center gap-y-8 w-full pt-4"
+      class="flex flex-col items-center gap-y-8 w-full pt-6"
       v-focustrap
       v-on:keyup.enter="save"
     >

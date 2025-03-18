@@ -233,16 +233,17 @@ tokenStore.$subscribe(() => {
       <RouterLink :to="{ name: 'home' }">
         <img
           src="../../assets/logo.png"
-          height="46px"
+          height="45px"
+          width="55px"
           alt="CyberPipeline Logo"
         />
       </RouterLink>
     </template>
     <template #end>
-      <div class="flex items-center gap-2">
-        <ThemeToggle /> 
-        <LoginProfile />
-      </div>
+        <div class="flex items-center gap-2">
+            <ThemeToggle/>
+            <LoginProfile/>
+        </div>
     </template>
   </Menubar>
 </template>

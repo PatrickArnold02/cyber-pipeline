@@ -263,7 +263,7 @@ const exportFunction = (row) => {
             />
           </template>
           <template #end>
-            <div class="flex justify-end gap-6">
+            <div class="flex justify-end gap-12">
               <IconField iconPosition="left">
                 <InputIcon>
                   <i class="pi pi-search" />
@@ -392,7 +392,7 @@ const exportFunction = (row) => {
       >{{ message }}</Message
     >
     <div
-      class="flex flex-col items-center gap-y-8 w-full pt-4 mt-1"
+      class="flex flex-col items-center gap-y-8 w-full pt-6 mt-1"
       v-focustrap
       v-on:keyup.enter="save"
     >
@@ -412,7 +412,7 @@ const exportFunction = (row) => {
         :values="teachers"
         valueLabel="name"
       />-->
-      <div class="w-full flex flex-col gap-y-8 -mt-4">
+      <div class="w-full flex flex-col gap-y-8 -mt-6">
         <div class="w-full flex flex-row items-center">
           <label class="w-11/12 grow text-center">Teachers</label>
           <div class="pl-1">

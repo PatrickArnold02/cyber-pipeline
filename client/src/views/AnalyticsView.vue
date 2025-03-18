@@ -2,16 +2,6 @@
   <div class="p-layout">
     <aside class="p-sidebar">
       <Menu :model="items" class="w-full md:w-60">
-        <template #start>
-            <span class="inline-flex items-center gap-1 px-2 py-2">
-              <img
-                src="../assets/logo.png"
-                height="20px"
-                alt="CyberPipeline Logo"
-              />
-                <span class="text-xl">Cyber <span class="text-primary">Pipeline</span></span>
-            </span>
-        </template>
         <template #submenulabel="{ item }">
             <span class="text-primary font-bold">{{ item.label }}</span>
         </template>

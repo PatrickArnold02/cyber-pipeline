@@ -20,12 +20,7 @@ console.log('Log Level: ' + Logger.getLevel().name)
 
 // CSS
 import 'primeicons/primeicons.css'
-import '../public/styles/style.css'
 
-// Themes are controlled in ThemeToggle.vue
-// import 'primevue/resources/themes/aura-light-purple/theme.css'
-// import 'primevue/resources/themes/aura-dark-purple/theme.css'
-import 'primeflex/primeflex.css'
 import Aura from '@primevue/themes/aura'
 
 
@@ -33,7 +28,6 @@ import Aura from '@primevue/themes/aura'
 // App and Vue Router
 import App from './App.vue'
 import router from './router'
-import { Theme } from '@primevue/themes'
 
 // Setup Axios Interceptors
 setupInterceptors()

@@ -99,7 +99,7 @@ onMounted(async () => {
                         />
                     </template>
                     <template #end>
-                        <div class="flex justify-end gap-6">
+                        <div class="flex justify-end gap-12">
                             <IconField iconPosition="left">
                             <InputIcon>
                                 <i class="pi pi-search"/>
