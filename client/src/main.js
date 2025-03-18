@@ -20,6 +20,7 @@ console.log('Log Level: ' + Logger.getLevel().name)
 
 // CSS
 import 'primeicons/primeicons.css'
+import '../public/styles/style.css'
 
 // Themes are controlled in ThemeToggle.vue
 // import 'primevue/resources/themes/aura-light-purple/theme.css'

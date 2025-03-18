@@ -67,7 +67,7 @@ const model = defineModel()
       <!-- Label -->
       <label
         :for="field"
-        class="ml-5"
+        class="ml-8"
         >{{ props.label }}</label
       >
     </FloatLabel>
