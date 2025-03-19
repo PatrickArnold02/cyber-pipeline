@@ -16,58 +16,109 @@
       </Menu>
     </aside>
     <main class="p-main-content">
-      <header class="mb-2">
-        <h1 id="top" class="p-title">Kansas State University: Cyber Pipeline Program</h1>
-        <h2>
-          Learn and Teach Computer Science
+      <!-- Dynamically show content based on selectedContent -->
+      <div v-if="selectedContent === 'info'">
+        <header class="mb-2">
+          <h1 id="top" class="p-title">Kansas State University: Cyber Pipeline Program</h1>
+          <h2 class="text-lg">
+            Learn and Teach Computer Science
+          </h2>
+        </header>
+        <Divider />
+        <p class="mt-4 p-text">
+          The Cyber Pipeline program, a part of the larger K-State Computational Core program, 
+          has the goal of making quality computer science education available to all high school 
+          students at little or no cost to them. The Cyber Pipeline curriculum uses the basic Computational 
+          Core state-of-the-art curriculum with the latest technologies and educational practices. 
+          And best of all, the curriculum is completely free.
+        </p>
+        <p class="mt-4 p-text">
+          However, the Cyber Pipeline program also provides innovative online instruction that includes 
+          video, text, and automatically graded hands-on exercises and projects. The curriculum is designed 
+          to use lectures and text from K-State faculty, as well as in-class activities and examples led by 
+          high school teachers.
+        </p>
+        <p class="mt-4 p-text">
+          Since qualified computer science teachers are hard to find, the Cyber Pipeline program also provides 
+          a teacher training program. This includes a five- to six-week program where high school teachers go through 
+          the course material individually and have weekly interactive sessions where they can discuss the material, 
+          and share teaching strategies and more with K-State faculty and other teachers. There will also be a 
+          teacher's guide with additional instructional strategies and examples that teachers can use in the classroom.
+        </p>
+        <p class="mt-8 p-text">
+          To learn more about the Cyber Pipeline program, watch our video and please contact us using the form below. 
+          We will send you a packet on how to get the Cyber Pipeline courses up and running at your school. In addition, 
+          we can also set you up with a trial version of a few modules from one of our Cyber Pipeline courses.
+        </p>
+        <div class="mt-6 flex justify-center">
+          <iframe 
+            width="560" 
+            height="315" 
+            src="https://www.youtube.com/embed/xx4M6WRxjrQ" 
+            title="Cyber Pipeline Program Video"
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+          </iframe>
+        </div>
+        <h2 class="text-xl mt-4">
+          Contact Us:
         </h2>
-      </header>
-      <Divider />
-      <Tabs value="0">
-          <TabList>
-              <Tab value="0">Header I</Tab>
-              <Tab value="1">Header II</Tab>
-              <Tab value="2">Header III</Tab>
-          </TabList>
-          <TabPanels>
-              <TabPanel value="0">
-                <p class="p-text">
-                  The Cyber Pipeline program, a part of the larger K-State Computational Core program, 
-                  has the goal of making quality computer science education available to all high school 
-                  students at little or no cost to them. The Cyber Pipeline curriculum uses the basic Computational 
-                  Core state-of-the-art curriculum with the latest technologies and educational practices. 
-                  And best of all, the curriculum is completely free.
-                </p>
-                <p class="p-text">
-                  However, the Cyber Pipeline program also provides innovative online instruction that includes 
-                  video, text, and automatically graded hands-on exercises and projects. The curriculum is designed 
-                  to use lectures and text from K-State faculty, as well as in-class activities and examples led by 
-                  high school teachers.
-                </p>
-                <p class="p-text">
-                  Since qualified computer science teachers are hard to find, the Cyber Pipeline program also provides 
-                  a teacher training program. This includes a five- to six-week program where high school teachers go through 
-                  the course material individually and have weekly interactive sessions where they can discuss the material, 
-                  and share teaching strategies and more with K-State faculty and other teachers. There will also be a 
-                  teacher's guide with additional instructional strategies and examples that teachers can use in the classroom.
-                </p>  
-              </TabPanel>
-              <TabPanel value="1">
-                  <p class="m-0">
-                      Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
-                      ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
-                  </p>
-              </TabPanel>
-              <TabPanel value="2">
-                  <p class="m-0">
-                      ro tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
-                  </p>
-              </TabPanel>
-          </TabPanels>
-      </Tabs>
-      <div>
-        
+        <form>TODO: add form to contact us</form>
       </div>
+
+      <div v-if="selectedContent === 'curriculum'">
+        <div class="p-8">
+
+        <!-- Course List Section -->
+        <section>
+          <h2 class="text-2xl font-semibold text-gray-800 mb-4">Course List</h2>
+          <p class="text-lg text-gray-700 mb-4">The Cyber Pipeline Curriculum contains several courses from K-State's Computational Core that have been aligned with AP curriculum standards. These are the same courses we use in our Computer Science Certificate and Integrated Computer Science degree programs, so students are getting the real college experience! Currently available courses include:</p>
+
+          <ul class="list-disc pl-8 space-y-2">
+            <li class="text-lg text-gray-700">CC 110 – Introduction to Computing</li>
+            <li class="text-lg text-gray-700">CC 210 – Fundamental Computer Programming Concepts</li>
+          </ul>
+
+          <p class="text-lg text-gray-700 mt-4">Beyond the introductory courses, many advanced courses are also available for schools wanting to go further or bolster their existing curricula. These include:</p>
+
+          <ul class="list-disc pl-8 space-y-2">
+            <li class="text-lg text-gray-700">CC 120 – Web Page Design</li>
+            <li class="text-lg text-gray-700">CC 310 – Data Structures & Algorithms I</li>
+            <li class="text-lg text-gray-700">CC 310 – Data Structures & Algorithms II</li>
+            <li class="text-lg text-gray-700">CC 410 – Advanced Programming</li>
+          </ul>
+        </section>
+
+        <!-- College Credit Options Section -->
+        <section class="mb-12">
+          <h2 class="text-2xl font-semibold text-gray-800 mb-4">College Credit Options</h2>
+          <p class="text-lg text-gray-700">Students taking these courses may choose to take the associated AP exam to gain college credit that is accepted nationwide. We can also work with your local community or technical college to explore options for college credit through the Kansas Career and Technical Education (CTE) program. Finally, any students who attend K-State in a CS degree or certificate program may also earn credit by examination for many of these courses, jumpstarting their college career.</p>
+        </section>
+
+        <!-- Courses Section -->
+        <section>
+          <h2 class="text-2xl font-semibold text-gray-800 mb-4">Courses</h2>
+
+          <div class="mb-8">
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">CC 110 – Introduction to Computing</h3>
+            <p class="text-lg text-gray-700 mb-2">CC 110 is the first course in our sequence, primarily for students with little to no experience in programming or computer science. The target audience is students in high school with at least some experience in Algebra.</p>
+            <p class="text-lg text-gray-700 mb-2">The course serves as a broad introduction to the field of computer science, covering many of the big ideas and innovators throughout history, as well as the various subfields of computer science such as artificial intelligence, cybersecurity, and more.</p>
+            <p class="text-lg text-gray-700 mb-2">In addition, students will learn the basics of programming in both pseudocode and Python, preparing them for future courses that dive deeper into the core concepts of programming.</p>
+            <p class="text-lg text-gray-700">This course is targeted to align with the AP Computer Science Principles (CS P) curriculum. See the AP Syllabus for a detailed overview of how the CC 110 course aligns with AP CS P.</p>
+          </div>
+
+          <div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">CC 210 – Fundamental Computer Programming Concepts</h3>
+            <p class="text-lg text-gray-700 mb-2">CC 210 is intended to be the second course in the sequence, but it can also be used with students who have prior programming experience.</p>
+            <p class="text-lg text-gray-700 mb-2">This course introduces programming concepts in-depth using Java, starting with basic data types and variables, conditional and loop statements, functions, strings, and aggregate data types (arrays and lists). Students then shift to object-oriented programming, learning about classes, objects, and inheritance to set the stage for future coursework in data structures and algorithms.</p>
+            <p class="text-lg text-gray-700 mb-2">This course is targeted to align with the AP Computer Science A (CS A) curriculum. See the AP Syllabus (link coming soon) for a detailed overview of how the CC 210 course aligns with AP CS A.</p>
+          </div>
+        </section>
+
+        </div>
+      </div>
+
     </main>
   </div>
 </template>
@@ -76,34 +127,39 @@
 import { onMounted, ref } from 'vue';
 import Menu from 'primevue/menu';
 import Badge from 'primevue/badge';
-import Tabs from 'primevue/tabs';
-import TabList from 'primevue/tablist';
-import Tab from 'primevue/tab';
-import TabPanels from 'primevue/tabpanels';
-import TabPanel from 'primevue/tabpanel';
+import { useRouter } from 'vue-router';
 
-const items = ref([])
+const selectedContent = ref('info'); // Default content is 'info'
+const items = ref([]);
 
 onMounted(() => {
   items.value = [
     {
+      label: 'Info',
+      icon: 'pi pi-fw pi-info-circle',
+      command: () => {
+        selectedContent.value = 'info'; // Show the info content
+      }
+    },
+    {
       label: 'Curriculum',
       icon: 'pi pi-fw pi-book',
-      command: () => alert('Curriculum page coming soon!')
+      command: () => {
+        selectedContent.value = 'curriculum'; // Show the curriculum content
+      }
     },
     {
       label: 'Teacher Support',
       icon: 'pi pi-fw pi-video',
-      command:  () => alert('Curriculum page coming soon!')
+      command: () => alert('Teacher Support page coming soon!')
     },
     {
       label: 'How To Join',
       icon: 'pi pi-fw pi-users',
-      command:  () => alert('Curriculum page coming soon!')
+      command: () => alert('How To Join page coming soon!')
     }
-  ]
-})
-
+  ];
+});
 </script>
 
 <style scoped>

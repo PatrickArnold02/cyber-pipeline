@@ -22,10 +22,6 @@ console.log('Log Level: ' + Logger.getLevel().name)
 import 'primeicons/primeicons.css'
 
 import Aura from '@primevue/themes/aura'
-import Material from '@primevue/themes/material'
-import Lara from '@primevue/themes/lara'
-
-
 
 // App and Vue Router
 import App from './App.vue'

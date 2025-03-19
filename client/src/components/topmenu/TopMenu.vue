@@ -241,7 +241,7 @@ tokenStore.$subscribe(() => {
       </RouterLink>
     </template>
     <template #end>
-      <div class="flex align-items-center gap-2">
+      <div class="flex items-center gap-2">
         <ThemeToggle /> 
         <LoginProfile />
         <SignUp />

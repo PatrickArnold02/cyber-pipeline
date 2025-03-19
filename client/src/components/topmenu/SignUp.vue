@@ -50,7 +50,7 @@ const visible = ref(false);
       v-if="tokenStore.token == ''"
       class="p-menuitem-content"
     >
-      <Button label="Apply Now" icon="pi pi-check" class="p-button-lg text-lg bg-primary-contrast" />
+      <Button label="Apply Now" icon="pi pi-check" class="p-button-lg text-lg" />
     </div>
   </div>
 </template>

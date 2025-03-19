@@ -50,7 +50,7 @@ const visible = ref(false);
       v-if="tokenStore.token == ''"
       class="p-menuitem-content"
     >
-      <Button @click="visible = true" label="Login" icon="pi pi-sign-in text-lg"/>
+      <Button @click="visible = true" label="Login" icon="pi pi-sign-in text-lg" variant="outlined"/>
     </div>
 
     <!-- If token present, assume user is logged in -->
@@ -80,7 +80,7 @@ const visible = ref(false);
 
   <Dialog :draggable="false" v-model:visible="visible" modal header="Log-in/Sign-up" :style="{ width: '25rem' }">
       <div class="flex items-center gap-12 mb-12">
-          <Button label="Log-in" @click="tokenStore.getToken()"/>
+          <Button label="Log-in" @click="tokenStore.getToken()" />
       </div>
       <div class="flex items-center gap-12 mb-12">
           <Button label="Create an account"/>
