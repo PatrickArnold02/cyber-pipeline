@@ -9,24 +9,46 @@ export const useCanvasStore = defineStore('canvas', {
         }
     },
     actions: {
-        async getCourses(){
+        async getCourse(teacherID){
             try{
-                const response = await api.get('/api/v1/canvas/courses');
+                const response = await api.get('/api/v1/canvas/courses/' + teacherID);
                 this.courses = response.data;
 
                 return response;
-            } catch(error){
+            }catch (error){
                 if(error.response.status === 401){
-                    return {status: 401, data: {message: 'Canvas API is not configured.'}};
-                } else if(error.response.status === 503){
-                    return {status: 503, data: {message: 'Failed to get courses (check api connection?)'}};
-                } else if(error.response.status === 500){
-                    return {status: 500, data: {message: 'Canvas API disabled, see server/.env'}};
-                }
-                else{
-                    return {status: 500, data: {message: 'Failed to get courses'}};
+                    if(error.response.status === 401){
+                        return {status: 401, data: {message: 'Canvas API is not configured.'}};
+                    } else if(error.response.status === 503){
+                        return {status: 503, data: {message: 'Failed to get courses (check api connection?)'}};
+                    } else if(error.response.status === 500){
+                        return {status: 500, data: {message: 'Canvas API disabled, see server/.env'}};
+                    } else{
+                        return {status: 500, data: {message: 'Failed to get courses'}};
+                    }
                 }
             }
         }
     }
+    // actions: {
+    //     async getCourses(){
+    //         try{
+    //             const response = await api.get('/api/v1/canvas/courses');
+    //             this.courses = response.data;
+
+    //             return response;
+    //         } catch(error){
+    //             if(error.response.status === 401){
+    //                 return {status: 401, data: {message: 'Canvas API is not configured.'}};
+    //             } else if(error.response.status === 503){
+    //                 return {status: 503, data: {message: 'Failed to get courses (check api connection?)'}};
+    //             } else if(error.response.status === 500){
+    //                 return {status: 500, data: {message: 'Canvas API disabled, see server/.env'}};
+    //             }
+    //             else{
+    //                 return {status: 500, data: {message: 'Failed to get courses'}};
+    //             }
+    //         }
+    //     }
+    // }
 })

@@ -37,8 +37,9 @@ const router = express.Router();
  *                 message:
  *                   type: string
  */
-router.get('/courses', async function (req, res){
-    const response = await canvasService.getCourses();
+router.get('/courses/:id', async function (req, res){
+    const teacherID = req.params.id;
+    const response = await canvasService.getCourses(teacherID);
     
     if(response.status === 200){
         res.json(response.data);

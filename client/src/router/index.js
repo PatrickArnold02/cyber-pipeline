@@ -11,6 +11,7 @@ import CohortView from '../views/CohortView.vue'
 import CourseView from '../views/CourseView.vue'
 import MailingView from '../views/MailingView.vue'
 import AnalyticsView from '../views/AnalyticsView.vue'
+import CanvasView from '../views/CanvasView.vue'
 
 // Stores
 import { useTokenStore } from '@/stores/Token'
@@ -104,6 +105,13 @@ export const routes = [
     path: '/analytics',
     name: 'analytics',
     component: AnalyticsView,
+    beforeEnter: requireAdmin
+  },
+  // Canvas (test) page
+  {
+    path: '/canvas',
+    name: 'canvas',
+    component: CanvasView,
     beforeEnter: requireAdmin
   },
 ]

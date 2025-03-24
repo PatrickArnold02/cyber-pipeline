@@ -456,6 +456,7 @@ export async function seed (knex) {
   //#endregion
   //#region Teachers
   const initialTeachers = [];
+  initialTeachers.push({id: 1000, name: 'Jake', email: 'jake@ksu.edu', eid: '187238', wid: '1000', status: 0, pd_status: 0, cert_status: 0, ms_status: 0, grade_level: 'Freshman', num_students: 5});
   const maxTeachers = Math.min(numTeachers, fakeFN.length, fakeLN.length);
 
   for (let i = 0; i < maxTeachers; i++) {
