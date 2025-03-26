@@ -4,10 +4,10 @@ import logger from '../configs/logger.js';
 import { response } from 'express';
 
 const canvasService = {
-    async getCourses(teacherID){
+    async getCourseProgress(courseID, teacherID){
         if (process.env.CANVAS_ENABLED) {
             try{
-                const response = await axios.get(`${process.env.CANVAS_URL}/api/v1/users/:${teacherID}/courses`, {
+                const response = await axios.get(`${process.env.CANVAS_URL}/api/v1/courses/${courseID}/users/${teacherID}/progress`, {
                     headers: { Authorization: `Bearer ${process.env.CANVAS_TOKEN}`}
                 });
                 return response;

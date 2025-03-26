@@ -103,7 +103,7 @@
               class="flex items-center gap-12 mb-12"
               label="View Courses"
               outlined
-              @click="showCourses(slotProps.data)"
+              @click="showCourseProgress(slotProps.data)"
               v-tooltip.bottom="'View Courses'"
             />
           </template>
@@ -123,8 +123,12 @@ import AutoComplete from 'primevue/autocomplete';
 import Button from 'primevue/button';
 import { FilterMatchMode } from '@primevue/core/api';
 import ConfirmDialog from 'primevue/confirmdialog';
+import { useCoursesStore } from '../stores/Courses.js';
 
+const coursesStore = useCoursesStore();
 const teachersStore = useTeachersStore();
+
+const { courses } = storeToRefs(coursesStore);
 const { teachers } = storeToRefs(teachersStore);
 const searchQuery = ref('');
 
@@ -134,7 +138,6 @@ const canvasStore = useCanvasStore();
 const selectedTeacher = ref(null);
 const filteredTeachers = ref([]);
 const teacherEid = ref('');
-const courses = ref([]);
 
 const filters = ref({
   global: {
@@ -151,15 +154,21 @@ const filters = ref({
  * Called when user selects View Courses on a teacher
  * Fetch the teacher's courses from the Canvas store.
  */
-async function showCourses(teacher) {
+async function showCourseProgress(teacher) {
   teacherEid.value = teacher.eid;
+  const teacher_courses = coursesStore.courses.filter(course => course.teachers.name === teacher.name);
+
+
+  // ADD SOMETHING TO ITERATIVELY QUERY THE TEACHERS PROGRESS IN ALL COURSES IN TEACHER_COURSES 
+  // NEXT, CONFIGURE DATATABLE TO DISPLAY THE TEACHERS COURSE LIST AND PROGRESS FOR RESPECTIVE COURSES 
   try {
-    const response = await canvasStore.getCourse(teacherEid);
+    const response = await canvasStore.getCourseProgress(teacherEid);
     courses.value = response.data;
   } catch (error) {
     console.error('Error fetching courses:', error);
   }
 }
+
 </script>
 
 <style scoped>
