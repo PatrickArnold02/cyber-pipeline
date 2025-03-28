@@ -11,7 +11,7 @@ export const useCanvasStore = defineStore('canvas', {
     actions: {
         async getCourseProgress(courseID, teacherID){
             try{
-                const response = await api.get('/api/v1/canvas/courses/progress/' + courseID + '/' + teacherID);
+                const response = await api.get(`/api/v1/canvas/courses/progress/${courseID}/${teacherID}`);
                 this.courses = response.data;
 
                 return response;

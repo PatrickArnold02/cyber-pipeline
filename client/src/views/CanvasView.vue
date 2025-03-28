@@ -100,20 +100,49 @@
         >
           <template #body="slotProps">
             <Button
-              class="flex items-center gap-12 mb-12"
-              label="View Courses"
+              label="Show Courses"
               outlined
-              @click="showCourseProgress(slotProps.data)"
-              v-tooltip.bottom="'View Courses'"
+              @click="showCourses(slotProps.data)"
             />
           </template>
         </Column>
       </DataTable>
     </Panel>
+
+    <!-- Dialog for showing courses -->
+    <Dialog
+      v-model:visible="dialogVisible"
+      :header="'Courses for ' + (selectedTeacher?.name || '')"
+      :style="{ width: '50vw' }"
+      modal
+      draggable
+      resizable
+    >
+      <DataTable :value="teacherCourses" stripedRows>
+        <Column 
+          field="name" 
+          header="Course Name">
+        </Column>
+        <Column 
+          header="Course Progress">
+          <template #body="slotProps">
+            <div>
+              <ProgressBar
+                :value="getProgress(slotProps.data)"
+                showValue
+            />
+            </div>
+          </template>
+        </Column>
+      </DataTable>
+      <template #footer>
+        <Button label="Close" icon="pi pi-times" @click="dialogVisible = false" />
+      </template>
+    </Dialog>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useCanvasStore } from '../stores/Canvas.js';
 import { useTeachersStore } from '../stores/Teachers.js';
@@ -124,6 +153,13 @@ import Button from 'primevue/button';
 import { FilterMatchMode } from '@primevue/core/api';
 import ConfirmDialog from 'primevue/confirmdialog';
 import { useCoursesStore } from '../stores/Courses.js';
+import ProgressBar from 'primevue/progressbar';
+import Dialog from 'primevue/dialog';
+import Tag from 'primevue/tag';
+import IconField from 'primevue/iconfield';
+import InputIcon from 'primevue/inputicon';
+import InputText from 'primevue/inputtext';
+import Toolbar from 'primevue/toolbar';
 
 const coursesStore = useCoursesStore();
 const teachersStore = useTeachersStore();
@@ -150,23 +186,56 @@ const filters = ref({
   ms_status: { value: null, matchMode: FilterMatchMode.IN }
 });
 
+const dialogVisible = ref(false);
+const teacherCourses = ref([]);
+const teacherProgress = ref([]);
+
 /**
- * Called when user selects View Courses on a teacher
- * Fetch the teacher's courses from the Canvas store.
+ * Show courses for the selected teacher in a dialog.
  */
-async function showCourseProgress(teacher) {
-  teacherEid.value = teacher.eid;
-  const teacher_courses = coursesStore.courses.filter(course => course.teachers.name === teacher.name);
+function showCourses(teacher) {
+  selectedTeacher.value = teacher;
+  dialogVisible.value = true;
 
-
-  // ADD SOMETHING TO ITERATIVELY QUERY THE TEACHERS PROGRESS IN ALL COURSES IN TEACHER_COURSES 
-  // NEXT, CONFIGURE DATATABLE TO DISPLAY THE TEACHERS COURSE LIST AND PROGRESS FOR RESPECTIVE COURSES 
   try {
-    const response = await canvasStore.getCourseProgress(teacherEid);
-    courses.value = response.data;
+    // Fetch courses for the selected teacher
+    const filteredCourses = courses.value.filter(course => 
+      teacher.courses.some(teacherCourse => teacherCourse.id === course.id));
+
+    if (filteredCourses.length === 0) {
+      teacherCourses.value = [{ courseName: 'No courses found', courseProgress: 0 }];
+      return;
+    }
+
+    // For each course in teacherCourses, fetch the progress from the canvas api and append it to the course
+    const updatedCourses = [];
+    for (const course of filteredCourses) {
+      const progress = canvasStore.getCourseProgress(course.course_id, teacher.eid);
+
+      updatedCourses.push({
+        ...course,
+        progress: {
+          requirement_count: progress.requirement_count,
+          requirement_completed_count: progress.requirement_completed_count,
+        }
+      })
+    }
+
+
+    teacherCourses.value = updatedCourses;
   } catch (error) {
     console.error('Error fetching courses:', error);
   }
+}
+
+function getProgress(course){
+  console.log(course);
+
+  if(!course.progress.requirement_count || course.progress.requirement_count === 0){
+    return 0;
+  }
+
+  return Math.round(course.progress.requirement_completed_count / course.progress.requirement_count * 100);
 }
 
 </script>

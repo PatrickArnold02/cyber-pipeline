@@ -40,7 +40,12 @@ const router = express.Router();
 router.get('/courses/progress/:course_id/:teacher_id', async function (req, res){
     const teacherID = req.params.teacher_id;
     const courseID = req.params.course_id;
+
+    console.log('Recieved request for: ', {courseID, teacherID});
+
     const response = await canvasService.getCourseProgress(courseID, teacherID);
+
+    
     
     if(response.status === 200){
         res.json(response.data);
