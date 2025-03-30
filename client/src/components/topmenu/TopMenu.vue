@@ -196,6 +196,13 @@ tokenStore.$subscribe(() => {
         }
       },
       {
+        label: 'Canvas (Test)',
+        icon: 'pi pi-book',
+        command: () => {
+          router.push({ name: 'canvas' })
+        }
+      },
+      {
         label: 'Sync',
         icon: 'pi pi-refresh',
         command: () => {
@@ -208,7 +215,7 @@ tokenStore.$subscribe(() => {
         command: () => {
           testCanvasAPI()
         }
-      }
+      },
     )
   }
 

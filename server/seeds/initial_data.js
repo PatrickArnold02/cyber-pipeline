@@ -456,6 +456,7 @@ export async function seed (knex) {
   //#endregion
   //#region Teachers
   const initialTeachers = [];
+  initialTeachers.push({id: 1000, name: 'Patrick', email: 'patrick@ksu.edu', eid: '159643', wid: '1000', status: 0, pd_status: 0, cert_status: 0, ms_status: 0, grade_level: 'Freshman', num_students: 5});
   const maxTeachers = Math.min(numTeachers, fakeFN.length, fakeLN.length);
 
   for (let i = 0; i < maxTeachers; i++) {
@@ -557,16 +558,33 @@ export async function seed (knex) {
       local_notes = `Course ${i} notes`;
     }
 
-    initialCourses.push({
-      id: i+1,
-      name: local_name,
-      notes: local_notes,
-      created_at: now,
-      updated_at: now,
-      created_by: 'test-admin',
-      updated_by: 'test-admin',
-      academic_year: 2018+(i%7) + "-" + (2018+(i%7)+1),  
-    });
+    if(local_name === 'CC 710'){
+      initialCourses.push({
+        id: i+1,
+        name: local_name,
+        notes: local_notes,
+        created_at: now,
+        updated_at: now,
+        created_by: 'test-admin',
+        updated_by: 'test-admin',
+        academic_year: 2018+(i%7) + "-" + (2018+(i%7)+1),  
+        course_id: 175999
+      });
+    }
+    else{
+      initialCourses.push({
+        id: i+1,
+        name: local_name,
+        notes: local_notes,
+        created_at: now,
+        updated_at: now,
+        created_by: 'test-admin',
+        updated_by: 'test-admin',
+        academic_year: 2018+(i%7) + "-" + (2018+(i%7)+1),  
+      });
+    }
+
+    
   }
 
   if (showData) console.log("Courses: ", initialCourses);

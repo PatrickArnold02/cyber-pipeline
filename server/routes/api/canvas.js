@@ -7,7 +7,7 @@ const router = express.Router();
  * @swagger
  * /courses:
  *   get:
- *     summary: Retrieve a list of courses
+ *     summary: Retrieve course progress for the teacher in the specified course
  *     description: Fetches the list of courses from the Canvas API.
  *     responses:
  *       200:
@@ -37,8 +37,15 @@ const router = express.Router();
  *                 message:
  *                   type: string
  */
-router.get('/courses', async function (req, res){
-    const response = await canvasService.getCourses();
+router.get('/courses/progress/:course_id/:teacher_id', async function (req, res){
+    const teacherID = req.params.teacher_id;
+    const courseID = req.params.course_id;
+
+    console.log('Recieved request for: ', {courseID, teacherID});
+
+    const response = await canvasService.getCourseProgress(courseID, teacherID);
+
+    
     
     if(response.status === 200){
         res.json(response.data);
@@ -50,6 +57,8 @@ router.get('/courses', async function (req, res){
         res.status(503).json({message: 'Failed to get courses (check api connection?)'});
         logger.error('Failed to get courses');
     }
+
+    return response;
 })
 
 export default router;
