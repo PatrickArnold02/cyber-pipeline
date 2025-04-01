@@ -19,11 +19,13 @@
       <header class="mb-2">
         <h1 id="top" class="p-title">Kansas State University: Cyber Pipeline Program</h1>
         <p class="p-text-secondary">Making quality computer science education available to all high school students at little or no cost.</p>
-          <div v-if="svgUrl" class="map-container">
-            <img id="svg-image" :src="svgUrl" alt="Failed font-semiboldto load map" />
-            <div>
-              <label class="label-text">Map of districts involved in the Cyber Pipeline Program</label>
-            </div>
+        <div v-if="svgUrl" class="map-container">
+          <img id="svg-image" :src="svgUrl" alt="Failed to load map" />
+          <div>
+            <label class="label-text">Map of districts involved in the Cyber Pipeline Program</label>
+          </div>
+        </div>
+        <div>
           <section id="curriculum" class="p-section">
             <h2 class="p-subtitle">Curriculum</h2>
             <p class="p-text">
@@ -59,11 +61,11 @@ import { useDistrictsStore } from '../stores/Districts.js'
 import { storeToRefs } from 'pinia'
 import Menu from 'primevue/menu';
 import Badge from 'primevue/badge';
+import axios from 'axios';
 
 const items = ref([])
 
 const districtsStore = useDistrictsStore()
-
 const { getAllDistrictsUsd } = storeToRefs(districtsStore)
 
 const districts = ref('');
@@ -71,8 +73,14 @@ const svgUrl = ref('');
 
 const getDistrictList = async () => {
   districts.value = getAllDistrictsUsd.value
-  svgUrl.value = 'https://k12map.cs.ksu.edu/Map?districts=' + districts.value
-  console.log(svgUrl.value)
+
+  const response = await axios.post('/api/map', {districts: districts.value });
+
+  svgUrl.value = response.data.svgUrl;
+
+
+  //*svgUrl.value = 'https://k12map.cs.ksu.edu/Map?districts=' + districts.value
+  //*console.log(svgUrl.value)
 }
 
 const scrollToSection = (sectionId) => {
