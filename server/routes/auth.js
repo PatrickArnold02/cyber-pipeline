@@ -59,6 +59,7 @@ router.get('/login', async function (req, res, next) {
       if (req.session[cas.session_name] === undefined) {
         // CAS is not authenticated, so redirect
         // Hack to fix redirects
+        console.log("req session: ", req.session)
         req.url = req.originalUrl
         cas.bounce_redirect(req, res, next)
         return
@@ -69,6 +70,8 @@ router.get('/login', async function (req, res, next) {
     }
     if (eid && eid.length != 0) {
       // Find or Create User for eID
+      console.log("eid2: ", eid)
+      console.log("req session: ", req.session)
       let user = await User.findOrCreate(eid)
       // Store User ID in session
       req.session.user_id = user.id
