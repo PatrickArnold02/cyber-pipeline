@@ -46,7 +46,7 @@ const adminUser = {
         .set('Authorization', `Bearer ${adminUser.token}`)
         .expect(200)
          expect(res.body).toBeInstanceOf(Array)
-         expect(res.body.length).toBe(2)
+         expect(res.body.length).toBe(4)
     })
   }
   
