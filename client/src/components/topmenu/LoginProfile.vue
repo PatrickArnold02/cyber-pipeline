@@ -78,12 +78,15 @@ const visible = ref(false);
     </div>
   </div>
 
-  <Dialog :draggable="false" v-model:visible="visible" modal header="Log-in/Sign-up" :style="{ width: '25rem' }">
+  <!-- <Dialog :draggable="false" v-model:visible="visible" modal header="Log-in/Sign-up" :style="{ width: '25rem' }">
       <div class="flex items-center gap-12 mb-12">
           <Button label="Log-in" @click="tokenStore.getToken()" />
       </div>
       <div class="flex items-center gap-12 mb-12">
           <Button label="Create an account"/>
       </div>
-  </Dialog>
+  </Dialog> -->
+
+  <LoginDialog v-model:visible="visible">
+  </LoginDialog>
 </template>

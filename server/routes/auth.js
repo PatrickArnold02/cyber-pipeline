@@ -35,6 +35,52 @@ import User from '../models/user.js'
 // Configure Logging
 router.use(requestLogger)
 
+import crypto from 'crypto'
+
+// Temporary in-memory token store (use Redis/DB in production)
+const tokenStore = new Map()
+
+// 1. Send Magic Login Link (logs it to console)
+router.post('/magic-link', async (req, res) => {
+  const { email } = req.body
+  if (!email) return res.status(400).json({ error: 'Missing email' })
+
+  // Generate a secure, time-limited token
+  const token = crypto.randomBytes(32).toString('hex')
+  const expiresAt = Date.now() + 15 * 60 * 1000 // 15 minutes
+
+  tokenStore.set(token, { email, expiresAt })
+
+  const magicLink = `${process.env.CODESPACE_NAME}-3001.app.github.dev/auth/magic-login/verify?token=${token}`
+
+  // Log link instead of emailing
+  console.log(`🔗 Magic login link for ${email}: ${magicLink}`)
+
+  res.sendStatus(200)
+})
+
+router.get('/magic-login/verify', async (req, res) => {
+  console.log('Magic login route hit'); // Add this for debugging
+  const { token } = req.query
+  const data = tokenStore.get(token)
+  const eid = 'test-user';
+
+  if (!data || Date.now() > data.expiresAt) {
+    return res.status(401).send('Invalid or expired magic link')
+  }
+
+  tokenStore.delete(token)
+
+  const user = await User.findOrCreate(eid)
+
+  req.session.user_id = user.id
+  req.session.user_eid = eid
+  console.log("Session after login:", req.session);
+
+  res.redirect('/')
+})
+
+
 /**
  * @swagger
  * /auth/login:
