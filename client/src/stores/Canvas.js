@@ -28,6 +28,15 @@ export const useCanvasStore = defineStore('canvas', {
                     }
                 }
             }
+        },
+        async enrollTeacherInCourse(courseID, teacherID){
+            try{
+                const response = await api.get(`/api/v1/canvas/courses/enrollment/${courseID}/${teacherID}`);
+                
+                return true;
+            } catch(error){
+                return false;
+            }
         }
     }
     // actions: {

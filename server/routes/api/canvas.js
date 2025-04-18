@@ -5,7 +5,7 @@ import logger from '../../configs/logger.js';
 const router = express.Router();
 /**
  * @swagger
- * /courses:
+ * /courses/progress:
  *   get:
  *     summary: Retrieve course progress for the teacher in the specified course
  *     description: Fetches the list of courses from the Canvas API.
@@ -59,6 +59,21 @@ router.get('/courses/progress/:course_id/:teacher_id', async function (req, res)
     }
 
     return response;
+})
+
+/**
+ * @swagger
+ * /courses/enrollment:
+ * post:
+ *      summary: Enrolls a teacher in to a course, based off of teacher ID and course ID. 
+ */
+router.post('/courses/enrollment/:course_id/:teacher_id', async function (req, res){
+    const teacherID = req.params.teacher_id;
+    const courseID = req.params.course_id;
+
+    logger.log('info', 'Requested course enrollment for teacher ' + teacherID + ' in to course ' + courseID);
+
+    const response = await canvasService.enrollTeacherInCourse(courseID, teacherID);
 })
 
 export default router;
