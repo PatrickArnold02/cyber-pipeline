@@ -130,8 +130,22 @@
               <ProgressBar
                 :value="getProgress(slotProps.data)"
                 showValue
-            />
+              ></ProgressBar>
+              <div>
+                {{  getRawProgress(slotProps.data) }}
+              </div>
             </div>
+          </template>
+        </Column>
+        <Column 
+          header="Grades">
+          <template #body="slotProps">
+            <Button
+              label="View Grades"
+              icon="pi pi-external-link"
+              class="p-button-outlined"
+              @click="redirectToGrades(slotProps.data)"
+            />
           </template>
         </Column>
       </DataTable>
@@ -160,6 +174,7 @@ import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import InputText from 'primevue/inputtext';
 import Toolbar from 'primevue/toolbar';
+import Logger from 'js-logger';
 
 const coursesStore = useCoursesStore();
 const teachersStore = useTeachersStore();
@@ -189,6 +204,14 @@ const filters = ref({
 const dialogVisible = ref(false);
 const teacherCourses = ref([]);
 const teacherProgress = ref([]);
+
+function getRawProgress(course) {
+  if (!course.progress || !course.progress.requirement_count) {
+    return '0 / 0'; // Handle missing or zero requirement_count
+  }
+
+  return `${course.progress.requirement_completed_count || 0} / ${course.progress.requirement_count}`;
+}
 
 /**
  * Show courses for the selected teacher in a dialog.
@@ -228,9 +251,19 @@ function showCourses(teacher) {
   }
 }
 
-function getProgress(course){
-  console.log(course);
+function redirectToGrades(course){
+  if(!course || !course.course_id || !selectedTeacher.value?.eid){
+    return;
+  }
 
+  const courseID = course.course_id;
+  const userID = selectedTeacher.value.eid;
+  const gradesUrl = `https://k-state.instructure.com/courses/${courseID}/grades/${userID}`
+
+  window.open(gradesUrl, '_blank');
+}
+
+function getProgress(course){
   if(!course.progress.requirement_count || course.progress.requirement_count === 0){
     return 0;
   }
