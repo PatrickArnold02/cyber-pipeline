@@ -63,7 +63,7 @@ router.get('/magic-login/verify', async (req, res) => {
   console.log('Magic login route hit'); // Add this for debugging
   const { token } = req.query
   const data = tokenStore.get(token)
-  const eid = 'test-user';
+  const eid = data.email
 
   if (!data || Date.now() > data.expiresAt) {
     return res.status(401).send('Invalid or expired magic link')
