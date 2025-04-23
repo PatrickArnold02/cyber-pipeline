@@ -28,6 +28,6 @@ describe('MyComponent', () => {
     tokenStore.$patch({ token: ''})
 
     // Assert that the admin menu items are rendered
-    expect(wrapper.vm.items).toHaveLength(10);
+    expect(wrapper.vm.items).toHaveLength(11);
   });
 });

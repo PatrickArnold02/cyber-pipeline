@@ -13,5 +13,5 @@ exports[`AutoCompleteMultiple > matches the snapshot 1`] = `
     <!--teleport start-->
     <!--teleport end-->
   </div>
-</div><!-- Label --><label data-v-8f5fbc77="" for="testField" class="ml-5">Test Label</label></span><!-- Error Text--><small data-v-8f5fbc77="" id="testField-help" class="w-full text-red-600">Field is required</small></div>"
+</div><!-- Label --><label data-v-8f5fbc77="" for="testField" class="ml-20">Test Label</label></span><!-- Error Text--><small data-v-8f5fbc77="" id="testField-help" class="w-full text-red-600">Field is required</small></div>"
 `;

@@ -51,7 +51,7 @@ router.post('/magic-link', async (req, res) => {
 
   tokenStore.set(token, { email, expiresAt })
 
-  const magicLink = `${process.env.CODESPACE_NAME}-3001.app.github.dev/auth/magic-login/verify?token=${token}`
+  const magicLink = `${process.env.APP_HOSTNAME}/auth/magic-login/verify?token=${token}`
 
   // Log link instead of emailing
   console.log(`🔗 Magic login link for ${email}: ${magicLink}`)
@@ -60,14 +60,14 @@ router.post('/magic-link', async (req, res) => {
 })
 
 router.get('/magic-login/verify', async (req, res) => {
-  console.log('Magic login route hit'); // Add this for debugging
   const { token } = req.query
   const data = tokenStore.get(token)
-  const eid = data.email
 
   if (!data || Date.now() > data.expiresAt) {
     return res.status(401).send('Invalid or expired magic link')
   }
+
+  const eid = data.emailu
 
   tokenStore.delete(token)
 
