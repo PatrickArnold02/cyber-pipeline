@@ -128,7 +128,7 @@ const router = createRouter({
  * Global route guard - user must be logged in to view any page other than home
  */
 router.beforeEach(async function (to) {
-  if (to.name !== 'home' && to.name !== 'loginpage') {
+  if (to.name !== 'home') {
     const tokenStore = useTokenStore()
     if (!tokenStore.token) {
       await tokenStore.getToken()

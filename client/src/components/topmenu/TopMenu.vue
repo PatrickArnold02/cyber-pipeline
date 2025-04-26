@@ -11,6 +11,7 @@ import Menubar from 'primevue/menubar'
 // Custom Components
 import ThemeToggle from '@/components/topmenu/ThemeToggle.vue'
 import LoginProfile from '@/components/topmenu/LoginProfile.vue'
+import SignUp from '@/components/topmenu/SignUp.vue'
 import { useToast } from 'primevue/usetoast'
 const toast = useToast()
 
@@ -247,10 +248,11 @@ tokenStore.$subscribe(() => {
       </RouterLink>
     </template>
     <template #end>
-        <div class="flex items-center gap-2">
-            <ThemeToggle/>
-            <LoginProfile/>
-        </div>
+      <div class="flex items-center gap-2">
+        <ThemeToggle /> 
+        <LoginProfile />
+        <SignUp />
+      </div>
     </template>
   </Menubar>
 </template>

@@ -23,8 +23,6 @@ import 'primeicons/primeicons.css'
 
 import Aura from '@primevue/themes/aura'
 
-
-
 // App and Vue Router
 import App from './App.vue'
 import router from './router'
