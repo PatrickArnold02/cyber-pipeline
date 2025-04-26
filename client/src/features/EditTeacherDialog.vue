@@ -1,4 +1,15 @@
 <script setup>
+import { useCanvasStore } from '../stores/Canvas.js';
+const canvasStore = useCanvasStore();
+
+
+  function enrollTeacher(courseID, teacherID){
+    if(canvasStore.enrollTeacherInClass(courseID, teacherID)){
+      return true;
+    }
+
+    return false;
+  }
 
   const emit = defineEmits(["close-modal", "save"]);
 
@@ -278,6 +289,14 @@
               icon="pi pi-trash"
               class="p-button-danger"
               @click="teacher.courses.splice(index, 1)"
+            />
+          </div>
+          <div class="pl-1">
+            <Button 
+              icon="pi pi-plus"
+              class="p-button-success"
+              @click="enrollTeacher(teacher.courses[index].id, teacher.eid)"
+              v-tooltip.bottom="'Enrolls the teacher in Canvas'"
             />
           </div>
         </div>

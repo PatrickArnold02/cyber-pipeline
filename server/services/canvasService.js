@@ -27,6 +27,36 @@ const canvasService = {
             logger.error('Canvas Token NOT defined in server/.env, Canvas API disabled');
             return response.status(500).json({message: 'Canvas API disabled'});
         }
+    },
+    async enrollTeacherInCourse(courseID, teacherID){
+        if(process.env.CANVAS_ENABLED){
+            try{
+                const response = await axios.post(
+                    `${process.env.CANVAS_URL}/api/v1/courses/${courseID}/enrollments`,
+                    {
+                        enrollment:{
+                            user_id: teacherID,
+                            type: 'StudentEnrollment',
+                            enrollment_state: 'active'
+                        },
+                        headers:{
+                            Authorization: `Bearer ${process.env.CANVAS_TOKEN}`
+                        }
+                        
+                    }
+                );
+
+                return response;
+            } catch(error){
+                if(error.response.status === 401){
+                    logger.error('Canvas API is not configured in server/.env')
+                    return;
+                }
+                else{
+                    logger.error(`Failed to enroll user ${teacherID} into course ${courseID}`);
+                }
+            }
+        }
     }
 }
 
