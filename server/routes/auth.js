@@ -49,7 +49,7 @@ setInterval(() => {
   });
 }, 24 * 60 * 60 * 1000); // Run once a day
 
-// 1. Send Magic Login Link (logs it to console)
+// 1. Send Magic Login Link
 router.post('/magic-link', async (req, res) => {
   const { email } = req.body
   if (!email) return res.status(400).json({ error: 'Missing email' })
@@ -62,10 +62,14 @@ router.post('/magic-link', async (req, res) => {
 
   const magicLink = `${process.env.APP_HOSTNAME}/auth/magic-login/verify?token=${token}`
 
-  // Log link instead of emailing
-  // console.log(`🔗 Magic login link for ${email}: ${magicLink}`)
-
-  res.status(200).json({ magicLink });
+  if (process.env.EMAIL_ENABLED) {
+    // Email is enabled, return the magic link in the response
+    res.status(200).json({ magicLink });
+  } else {
+    // Email is not enabled, log the magic link
+    console.log(`🔗 Magic login link for ${email}: ${magicLink}`);
+    res.status(200).json({ message: 'Email not enabled. Magic link logged to console.' });
+  }
 })
 
 router.get('/magic-login/verify', async (req, res) => {
@@ -76,7 +80,7 @@ router.get('/magic-login/verify', async (req, res) => {
     return res.status(401).send('Invalid or expired magic link')
   }
 
-  const eid = data.emailu
+  const eid = data.email
 
   tokenStore.delete(token)
 
