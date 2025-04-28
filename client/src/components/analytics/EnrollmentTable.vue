@@ -15,16 +15,23 @@ const enrollmentStore = useEnrollmentStore();
 
 // Current year used to generate academic years
 const currentYear = new Date().getFullYear()
+
+// Initial academic year, with the 'All' option
 const academicYears = ref([
   'All',
 ]);
+
+// The selected academic year for filtering, null initially
 const selectedAcademicYear = ref(null);
+
+// Get all courses from the enrollment store
 const { getAllCourses } = storeToRefs(enrollmentStore);
 
-
-
+// The data table reference used for exporting to CSV
 const dataTableRef = ref(null)
 
+// Populates the academicYears array with AY from courses
+// also adds the 'All' option (no filtering)
 const populateAcademicYears = () => {
   const uniqueYears = new Set();
   getAllCourses.value.forEach((course) => {
@@ -41,6 +48,8 @@ const populateAcademicYears = () => {
   })];
 };
 
+// Filters the courses based on the selected academic year,
+// 'All' returns all courses 
 const filteredCourses = computed(() => {
   if (!selectedAcademicYear.value || selectedAcademicYear.value === 'All') {
     return getAllCourses.value;
@@ -62,6 +71,7 @@ const exportCSV = () => {
     dataTableRef.value.exportCSV();
 }
 
+// After mounting, hydrate the enrollment store and populate the academic years array
 onMounted(async () => {
   // Ensure data is loaded into the store
   await enrollmentStore.hydrate();

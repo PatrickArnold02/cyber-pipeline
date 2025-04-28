@@ -4,6 +4,12 @@ import logger from '../configs/logger.js';
 import { response } from 'express';
 
 const canvasService = {
+    /**
+     * Gets course progress for a specific teacher in a course
+     * @param {string} courseID 
+     * @param {string} teacherID 
+     * @returns 
+     */
     async getCourseProgress(courseID, teacherID){
         if (process.env.CANVAS_ENABLED) {
             try{
@@ -28,6 +34,12 @@ const canvasService = {
             return response.status(500).json({message: 'Canvas API disabled'});
         }
     },
+    /**
+     * Enrolls a teacher in a course 
+     * @param {string} courseID 
+     * @param {string} teacherID 
+     * @returns 
+     */
     async enrollTeacherInCourse(courseID, teacherID){
         if(process.env.CANVAS_ENABLED){
             try{
@@ -39,10 +51,11 @@ const canvasService = {
                             type: 'StudentEnrollment',
                             enrollment_state: 'active'
                         },
+                    },
+                    {
                         headers:{
                             Authorization: `Bearer ${process.env.CANVAS_TOKEN}`
-                        }
-                        
+                        },
                     }
                 );
 

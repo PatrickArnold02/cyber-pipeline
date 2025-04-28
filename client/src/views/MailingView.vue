@@ -132,6 +132,7 @@
 </template>
 
 <script setup>
+// Imports and setup
 import { ref, onMounted } from 'vue'
 import { useEmailsStore } from '../stores/Emails.js'
 import { useTeachersStore } from '@/stores/Teachers.js'
@@ -147,11 +148,13 @@ import TextField from '@/components/forms/TextField.vue'
 import Editor from 'primevue/editor'
 import Select from 'primevue/select'
 
+// Store initialization 
 const emailStore = useEmailsStore()
 const teachersStore = useTeachersStore()
 const cohortsStore = useCohortsStore()
 const coursesStore = useCoursesStore()
 
+// Variables
 const recipient = ref([]) // Array of recipients email addresses
 const recipientDisplay = ref('') 
 const subject = ref('') // Email subject

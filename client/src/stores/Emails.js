@@ -12,6 +12,16 @@ export const useEmailsStore = defineStore('emails', {
         }
     },
     actions: {
+        /*  Sends an email using the data from the emailData object
+        *   @param {object} emailData -
+        *       {
+        *          to: 'recipient email address',
+        *          subject: 'email subject',
+        *          body: 'email body',
+        *          attachments: [ 'attachment1', 'attachment2' ]
+        *       }
+        *
+        */
         async sendEmail(emailData){
             try {
                 await api.post('/api/v1/emails', emailData)

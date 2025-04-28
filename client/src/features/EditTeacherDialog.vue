@@ -1,15 +1,25 @@
 <script setup>
 import { useCanvasStore } from '../stores/Canvas.js';
+import { useCoursesStore } from '../stores/Courses.js';
+import { computed } from 'vue';
 const canvasStore = useCanvasStore();
+const coursesStore = useCoursesStore();
 
+// A master list of courses used to obtain the course_id of a new course when enrolling a teacher via the canvas api
+const allCourses = computed(() => {
+  return coursesStore.courses;
+});
 
-  function enrollTeacher(courseID, teacherID){
-    if(canvasStore.enrollTeacherInClass(courseID, teacherID)){
-      return true;
-    }
-
-    return false;
+// This function enrolls a teacher in a course using the CanvasStore
+// It takes the courseID and teacherID as parameters, currently 
+// returns true if successful, false otherwise, can add a toast for visual feedback
+function enrollTeacher(courseID, teacherID){
+  if(canvasStore.enrollTeacherInCourse(courseID, teacherID)){
+    return true;
   }
+
+  return false;
+}
 
   const emit = defineEmits(["close-modal", "save"]);
 
@@ -295,7 +305,7 @@ const canvasStore = useCanvasStore();
             <Button 
               icon="pi pi-plus"
               class="p-button-success"
-              @click="enrollTeacher(teacher.courses[index].id, teacher.eid)"
+              @click="enrollTeacher(allCourses.find(c => teacher.courses[index].id === c.id).course_id, teacher.eid)"
               v-tooltip.bottom="'Enrolls the teacher in Canvas'"
             />
           </div>

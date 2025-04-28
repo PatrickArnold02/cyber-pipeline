@@ -83,10 +83,12 @@ const filters = ref({
   ms_status: { value: null, matchMode: FilterMatchMode.IN }
 })
 
+// Opens the EditTeacherDialog
 const openEditModal = () => {
   teacherDialog.value = true;
 };
-    
+
+// Closes the EditTeacherDialog
 const closeModal = () => {
   teacherDialog.value = false;
 };

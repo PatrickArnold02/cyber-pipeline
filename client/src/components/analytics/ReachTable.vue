@@ -17,13 +17,14 @@ const dataTableRef = ref(null)
 const districts = districtStore.districts
 const teachers = teacherStore.teachers
 
+// Determines how many teachers passed at least one class
 const teachersPassedOneClass = (computed(() => {
     return teachers.filter(teacher => 
         teacher.courses.some(course => 
             course.status === 1)).length
 }))
 
-
+// Determines how many teachers passed all courses required for certification
 const teachersPassedCertClasses = (computed(() => {
     const requiredCourses = ['CC 710', 'CC 711', 'CC 730', 'EDCI 765']
 
@@ -36,10 +37,12 @@ const teachersPassedCertClasses = (computed(() => {
     ).length
 }))
 
+// Determines the amount of districts with an active teacher in the program
 const districtCount = (computed(() => {
     return districts.length
 }))
 
+// Determines the amount of active districts that are considered rural
 const townRuralDistricts = (computed(() => {
     return districts.filter(district => 
         district.locale === 31 || 
@@ -51,6 +54,7 @@ const townRuralDistricts = (computed(() => {
     ).length
 }))
 
+// Determines the amount of active districts that are considered urban/suburban
 const urbanSuburbanDistricts = (computed(() => {
     return districts.filter(district => 
         district.locale === 11 || 
@@ -62,6 +66,7 @@ const urbanSuburbanDistricts = (computed(() => {
     ).length
 }))
 
+// Exports the data table to a CSV file 
 const exportCSV = () => {
     dataTableRef.value.exportCSV();
 }
@@ -73,6 +78,7 @@ const filters = ref({
     }
 });
 
+// Data used within the DataTable
 const tableData = computed(() => [
   { label: 'Teachers that passed one class', count: teachersPassedOneClass.value },
   { label: 'Teachers that completed 10 credit hours', count: teachersPassedCertClasses.value },

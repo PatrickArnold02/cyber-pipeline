@@ -56,7 +56,10 @@ const dt = ref() // datatable reference
 const notesDialog = ref(false) // controls notes dialog
 const notes = ref('') // notes for selected item
 
+// The current academic year, used to generate the other academic years  
 const currentYear = new Date().getFullYear()
+
+// 'All', the previous academic year, the current academic year, and the next two academic years
 const academicYears = ref([
     'All',
     `${currentYear - 1}-${currentYear}`,
@@ -74,8 +77,11 @@ const filters = ref({
   }
 })
 
+// Sets the selectedAcademicYear to 'All' by default for no filtering 
 const selectedAcademicYear = ref(`All`)
 
+// Filters the courses based on the selected academic year,
+// 'All' returns all courses 
 const filteredCourses = computed(() => {
   if (!selectedAcademicYear.value || selectedAcademicYear.value === 'All') return courses.value
   return courses.value.filter(course => course.academic_year === selectedAcademicYear.value)

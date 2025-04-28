@@ -9,6 +9,12 @@ export const useCanvasStore = defineStore('canvas', {
         }
     },
     actions: {
+        /* Gets course progress for a specific course and teacher 
+        *  @param {string} courseID - the CANVAS id of the course 
+        *  @param {string} teacherID - the CANVAS id of the teacher 
+        *  NOTE: teacherID is currently being stored in the eid field in the database
+        *        in the future, this should either be changed or swapped to a SIS ID
+        */
         async getCourseProgress(courseID, teacherID){
             try{
                 const response = await api.get(`/api/v1/canvas/courses/progress/${courseID}/${teacherID}`);
@@ -29,9 +35,13 @@ export const useCanvasStore = defineStore('canvas', {
                 }
             }
         },
+        /*  Enrolls a teacher in a course 
+        *  @param {string} courseID - the CANVAS id of the course
+        *  @param {string} teacherID - the CANVAS id of the teacher
+        */
         async enrollTeacherInCourse(courseID, teacherID){
             try{
-                const response = await api.get(`/api/v1/canvas/courses/enrollment/${courseID}/${teacherID}`);
+                const response = await api.post(`/api/v1/canvas/courses/enrollment/${courseID}/${teacherID}`);
                 
                 return true;
             } catch(error){

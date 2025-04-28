@@ -74,6 +74,8 @@ router.post('/courses/enrollment/:course_id/:teacher_id', async function (req, r
     logger.log('info', 'Requested course enrollment for teacher ' + teacherID + ' in to course ' + courseID);
 
     const response = await canvasService.enrollTeacherInCourse(courseID, teacherID);
+
+    return response;
 })
 
 export default router;

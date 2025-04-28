@@ -2,6 +2,7 @@ import 'dotenv/config';
 import nodemailer from 'nodemailer';
 import logger from '../configs/logger.js';
 
+// Create a Nodemailer transporter with the SMTP config from the .env 
 const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: process.env.SMTP_PORT,
@@ -12,6 +13,7 @@ const transporter = nodemailer.createTransport({
     },
 });
 
+// Sends an email via the Nodemail transporter with the provided data 
 const sendEmail = async (to, subject, text, html) => {
     try{
         const mailOptions = {

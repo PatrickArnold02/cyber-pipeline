@@ -36,6 +36,8 @@ const enrollmentStore = useEnrollmentStore()
 const rolesStore = useRolesStore()
 const canvasStore = useCanvasStore()
 
+// Can likely be removed in prod, but for now, will perform a query on the canvas API to test the status of 
+// the api connection 
 const testCanvasAPI = async () => {
   toast.add({
     severity: 'info',
