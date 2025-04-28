@@ -56,7 +56,7 @@ router.post('/', async function (req, res) {
     // TODO: Add CreatedBy to this for logging within the database
     const {to, subject, text, html} = req.body;
 
-    logger(6, 'Request body: ' + req.body);
+    logger.log('email', 'Request body: ' + req.body);
 
     try{
         await sendEmail(to, subject, text, html);

@@ -2,6 +2,7 @@
 // Libraries
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
+import Logger from 'js-logger'
 
 // PrimeVue Components
 import ConfirmDialog from 'primevue/confirmdialog'
