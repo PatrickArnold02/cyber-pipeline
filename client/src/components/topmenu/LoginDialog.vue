@@ -20,18 +20,24 @@ const resetForm = () => {
 // Function to handle the email form submission
 // Send email to backend to get magic link
 const submitEmail = async () => {
-  magicLink  = await tokenStore.requestMagicLink(email.value)
-  try {
-    await emailStore.sendEmail({
-      to: email.value,
-      subject: "Log-in To CyberPipeline",
-      text: `Here is your link to login to CyberPipeline: ${magicLink}`,
-      html: `<p>Here is your <strong>link</strong> to login to <em>CyberPipeline</em>: <a href="${magicLink}">${magicLink}</a></p>`,
-    })
-    message.value = 'Email sent successfully'
-  } catch (error) {
-    message.value = 'Failed to send email'
-    console.error('Failed to send email', error)
+  const { magicLink, emailEnabled } = await tokenStore.requestMagicLink(email.value)
+
+  if (emailEnabled) {
+    try {
+      await emailStore.sendEmail({
+        to: email.value,
+        subject: "Log-in To CyberPipeline",
+        text: `Here is your link to login to CyberPipeline: ${magicLink}`,
+        html: `<p>Here is your <strong>link</strong> to login to <em>CyberPipeline</em>: <a href="${magicLink}">${magicLink}</a></p>`,
+      })
+      message.value = 'Email sent successfully'
+    } catch (error) {
+      message.value = 'Failed to send email'
+      console.error('Failed to send email', error)
+    }
+  } else {
+    console.log(`🔗 Magic login link: ${magicLink}`)
+    message.value = 'Email disabled, link logged to console.'
   }
 }
 </script>

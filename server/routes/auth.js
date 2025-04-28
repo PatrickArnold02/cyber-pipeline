@@ -62,13 +62,11 @@ router.post('/magic-link', async (req, res) => {
 
   const magicLink = `${process.env.APP_HOSTNAME}/auth/magic-login/verify?token=${token}`
 
-  if (process.env.EMAIL_ENABLED) {
-    // Email is enabled, return the magic link in the response
-    res.status(200).json({ magicLink });
+  if (process.env.EMAIL_ENABLED === 'true') {
+    res.status(200).json({ magicLink, emailEnabled: true })
   } else {
-    // Email is not enabled, log the magic link
     console.log(`🔗 Magic login link for ${email}: ${magicLink}`);
-    res.status(200).json({ message: 'Email not enabled. Magic link logged to console.' });
+    res.status(200).json({ magicLink, emailEnabled: false })
   }
 })
 
