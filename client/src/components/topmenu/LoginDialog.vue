@@ -1,10 +1,12 @@
 <script setup>
 import { ref } from 'vue'
 import { useTokenStore } from '@/stores/Token'
+import { useEmailsStore } from '@/stores/Emails'
 import { IftaLabel } from 'primevue'
-import { FloatLabel } from 'primevue'
+
 
 const tokenStore = useTokenStore()
+const emailStore = useEmailsStore()
 const showDialog = ref(false)  // Show/Hide dialog
 const showEmailForm = ref(false) // Toggle between K-State login and email form
 const email = ref('') // Store email input
@@ -18,7 +20,19 @@ const resetForm = () => {
 // Function to handle the email form submission
 // Send email to backend to get magic link
 const submitEmail = async () => {
-  await tokenStore.requestMagicLink(email.value)
+  magicLink  = await tokenStore.requestMagicLink(email.value)
+  try {
+    await emailStore.sendEmail({
+      to: email.value,
+      subject: "Log-in To CyberPipeline",
+      text: `Here is your link to login to CyberPipeline: ${magicLink}`,
+      html: `<p>Here is your <strong>link</strong> to login to <em>CyberPipeline</em>: <a href="${magicLink}">${magicLink}</a></p>`,
+    })
+    message.value = 'Email sent successfully'
+  } catch (error) {
+    message.value = 'Failed to send email'
+    console.error('Failed to send email', error)
+  }
 }
 </script>
 
@@ -38,7 +52,7 @@ const submitEmail = async () => {
     <div v-else>
       <form @submit.prevent="submitEmail">
         <IftaLabel class="mb-2">
-            <InputText id="email" v-model="email" variant="filled" />
+            <InputText type="email" id="email" v-model="email" variant="filled" />
             <label for="email">Email</label>
         </IftaLabel>
         <div class="flex justify-between">

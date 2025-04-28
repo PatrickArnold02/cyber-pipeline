@@ -37,8 +37,17 @@ router.use(requestLogger)
 
 import crypto from 'crypto'
 
-// Temporary in-memory token store (use Redis/DB in production)
 const tokenStore = new Map()
+setInterval(() => {
+  const now = Date.now();
+
+  tokenStore.forEach((value, token) => {
+    if (value.expiresAt < now) {
+      console.log(`Token expired and removed: ${token}`);
+      tokenStore.delete(token);  // Remove expired token
+    }
+  });
+}, 24 * 60 * 60 * 1000); // Run once a day
 
 // 1. Send Magic Login Link (logs it to console)
 router.post('/magic-link', async (req, res) => {
@@ -54,9 +63,9 @@ router.post('/magic-link', async (req, res) => {
   const magicLink = `${process.env.APP_HOSTNAME}/auth/magic-login/verify?token=${token}`
 
   // Log link instead of emailing
-  console.log(`🔗 Magic login link for ${email}: ${magicLink}`)
+  // console.log(`🔗 Magic login link for ${email}: ${magicLink}`)
 
-  res.sendStatus(200)
+  res.status(200).json({ magicLink });
 })
 
 router.get('/magic-login/verify', async (req, res) => {
