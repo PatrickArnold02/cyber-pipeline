@@ -7,6 +7,7 @@ import Logger from 'js-logger'
 // Services
 import api from '@/services/api'
 
+
 export const useTokenStore = defineStore('token', {
   state: () => {
     return {
@@ -202,6 +203,15 @@ export const useTokenStore = defineStore('token', {
     async logout() {
       this.token = ''
       window.location.href = '/auth/logout'
+    },
+
+    async requestMagicLink(email) {
+      Logger.info(`token:requestMagicLink for ${email}`)
+      await api.post('/auth/magic-link', { email })
+    },
+    async verifyMagicLink(link){
+      Logger.info(`token:verifyMagicLink for ${link}`)
+      await api.post('/auth/magic-link/verify', { link })
     }
   }
 })

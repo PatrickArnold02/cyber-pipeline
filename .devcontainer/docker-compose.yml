@@ -13,6 +13,7 @@ services:
       MYSQL_USER: cyberpipeline
       MYSQL_PASSWORD: password
       MYSQL_RANDOM_ROOT_PASSWORD: fact
+      APP_HOSTNAME: localhost
 
     volumes:
       - ../..:/workspaces:cached

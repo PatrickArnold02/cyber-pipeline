@@ -35,6 +35,63 @@ import User from '../models/user.js'
 // Configure Logging
 router.use(requestLogger)
 
+import crypto from 'crypto'
+
+const tokenStore = new Map()
+setInterval(() => {
+  const now = Date.now();
+
+  tokenStore.forEach((value, token) => {
+    if (value.expiresAt < now) {
+      console.log(`Token expired and removed: ${token}`);
+      tokenStore.delete(token);  // Remove expired token
+    }
+  });
+}, 24 * 60 * 60 * 1000); // Run once a day
+
+// 1. Send Magic Login Link
+router.post('/magic-link', async (req, res) => {
+  const { email } = req.body
+  if (!email) return res.status(400).json({ error: 'Missing email' })
+
+  // Generate a secure, time-limited token
+  const token = crypto.randomBytes(32).toString('hex')
+  const expiresAt = Date.now() + 15 * 60 * 1000 // 15 minutes
+
+  tokenStore.set(token, { email, expiresAt })
+
+  const magicLink = `${process.env.APP_HOSTNAME}/auth/magic-login/verify?token=${token}`
+
+  if (process.env.EMAIL_ENABLED === 'true') {
+    res.status(200).json({ magicLink, emailEnabled: true })
+  } else {
+    console.log(`🔗 Magic login link for ${email}: ${magicLink}`);
+    res.status(200).json({ magicLink, emailEnabled: false })
+  }
+})
+
+router.get('/magic-login/verify', async (req, res) => {
+  const { token } = req.query
+  const data = tokenStore.get(token)
+
+  if (!data || Date.now() > data.expiresAt) {
+    return res.status(401).send('Invalid or expired magic link')
+  }
+
+  const eid = data.email
+
+  tokenStore.delete(token)
+
+  const user = await User.findOrCreate(eid)
+
+  req.session.user_id = user.id
+  req.session.user_eid = eid
+  console.log("Session after login:", req.session);
+
+  res.redirect('/')
+})
+
+
 /**
  * @swagger
  * /auth/login:
