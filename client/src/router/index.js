@@ -12,6 +12,7 @@ import CourseView from '../views/CourseView.vue'
 import MailingView from '../views/MailingView.vue'
 import AnalyticsView from '../views/AnalyticsView.vue'
 import CanvasView from '../views/CanvasView.vue'
+import MagicLoginView from '@/views/MagicLoginView.vue'
 
 // Stores
 import { useTokenStore } from '@/stores/Token'
@@ -46,6 +47,12 @@ export const routes = [
     path: '/',
     name: 'home',
     component: HomeView
+  },
+
+  {
+    path: '/magic-login/verify',
+    name: 'magic-login',
+    component: MagicLoginView, // Create this component
   },
 
   // Profile page
@@ -114,6 +121,7 @@ export const routes = [
     component: CanvasView,
     beforeEnter: requireAdmin
   },
+  
 ]
 /**
  * Router factory method
@@ -128,7 +136,7 @@ const router = createRouter({
  * Global route guard - user must be logged in to view any page other than home
  */
 router.beforeEach(async function (to) {
-  if (to.name !== 'home' && to.name !== 'loginpage') {
+  if (to.name !== 'home' && to.name !== 'magic-login') {
     const tokenStore = useTokenStore()
     if (!tokenStore.token) {
       await tokenStore.getToken()

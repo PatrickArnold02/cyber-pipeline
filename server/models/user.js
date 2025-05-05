@@ -69,24 +69,25 @@ class User extends Model {
     let user = await User.query().where('eid', eid).limit(1)
     // user not found - create user
     if (user.length === 0) {
+      console.log("eid: ",eid);
       var name = eid
-      try {
-        logger.debug('Looking up ' + eid + ' in K-State directory')
-        const response = await axios.get(
-          'https://k-state.edu/People/filter/eid=' + eid
-        )
-        const jsonstring = await parseStringPromise(response.data)
-        for (const result of jsonstring.results.result) {
-          if (eid == result.eid) {
-            name = result.fn + ' ' + result.ln
-            logger.debug('Match Found! ' + name)
-            break
-          }
-        }
-      } catch (error) {
-        logger.error('Unable to query name from K-State directory!')
-        logger.error(util.inspect(error))
-      }
+      // try {
+      //   logger.debug('Looking up ' + eid + ' in K-State directory')
+      //   const response = await axios.get(
+      //     'https://k-state.edu/People/filter/eid=' + eid
+      //   )
+      //   const jsonstring = await parseStringPromise(response.data)
+      //   for (const result of jsonstring.results.result) {
+      //     if (eid == result.eid) {
+      //       name = result.fn + ' ' + result.ln
+      //       logger.debug('Match Found! ' + name)
+      //       break
+      //     }
+      //   }
+      // } catch (error) {
+      //   logger.error('Unable to query name from K-State directory!')
+      //   logger.error(util.inspect(error))
+      // }
       user = [
         await User.query().insert({
           eid: eid,
