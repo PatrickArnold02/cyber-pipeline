@@ -27,10 +27,32 @@ const sendEmail = async (to, subject, text, html) => {
         logger.email('Email sent: '+ result.messageId);
 
     } catch(error){
-        console.info('Failed to send email: ' + error);
+        logger.error('Failed to send email: ' + error);
 
         throw error;
     }
 }
 
+const sendMagicLink = async (emailData) => {
+    console.log(emailData)
+
+    try{
+        const mailOptions = {
+            from: process.env.SMTP_FROM,
+            to: emailData.to,
+            subject: emailData.subject,
+            text: emailData.text,
+            html: emailData.html,
+        };
+
+        logger.email('Sending email to: ' + emailData.to);
+        const result = await transporter.sendMail(mailOptions);
+        logger.email('Email sent: ' + result.messageId);
+    } catch(error) {
+        logger.error('Failed to send email: ' + error);
+        throw error;
+    }
+}
+
 export default sendEmail;
+export { sendMagicLink };
