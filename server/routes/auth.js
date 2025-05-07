@@ -32,10 +32,13 @@ import requestLogger from '../middlewares/request-logger.js'
 //const User = require('../models/user')
 import User from '../models/user.js'
 
+import sendMagicLink from '../services/emailService.js'
+
 // Configure Logging
 router.use(requestLogger)
 
 import crypto from 'crypto'
+import logger from '../configs/logger.js'
 
 const tokenStore = new Map()
 setInterval(() => {
@@ -50,23 +53,53 @@ setInterval(() => {
 }, 24 * 60 * 60 * 1000); // Run once a day
 
 // 1. Send Magic Login Link
+// router.post('/magic-link', async (req, res) => {
+//   const { email } = req.body
+//   if (!email) return res.status(400).json({ error: 'Missing email' })
+
+//   // Generate a secure, time-limited token
+//   const token = crypto.randomBytes(32).toString('hex')
+//   const expiresAt = Date.now() + 15 * 60 * 1000 // 15 minutes
+
+//   tokenStore.set(token, { email, expiresAt })
+
+//   const magicLink = `${process.env.APP_HOSTNAME}/auth/magic-login/verify?token=${token}`
+
+//   if (process.env.EMAIL_ENABLED === 'true') {
+//     res.status(200).json({ magicLink, emailEnabled: true })
+//   } else {
+//     console.log(`🔗 Magic login link for ${email}: ${magicLink}`);
+//     res.status(200).json({ magicLink, emailEnabled: false })
+//   }
+// })
+
 router.post('/magic-link', async (req, res) => {
   const { email } = req.body
-  if (!email) return res.status(400).json({ error: 'Missing email' })
 
-  // Generate a secure, time-limited token
-  const token = crypto.randomBytes(32).toString('hex')
-  const expiresAt = Date.now() + 15 * 60 * 1000 // 15 minutes
+  if(!email || !email.includes('@')){
+    return res.status(400).json({ message: 'Invalid email address'})
+  }
 
-  tokenStore.set(token, { email, expiresAt })
+  try{
+    const token = crypto.randomBytes(32).toString('hex')
+    const expiresAt = Date.now() + 15 * 60 * 1000
 
-  const magicLink = `${process.env.APP_HOSTNAME}/auth/magic-login/verify?token=${token}`
+    tokenStore.set(token, {email, expiresAt})
 
-  if (process.env.EMAIL_ENABLED === 'true') {
-    res.status(200).json({ magicLink, emailEnabled: true })
-  } else {
-    console.log(`🔗 Magic login link for ${email}: ${magicLink}`);
-    res.status(200).json({ magicLink, emailEnabled: false })
+    const magicLink = `${process.env.APP_HOSTNAME}/auth/magic-login/verify?token=${token}`
+
+    const emailData = {
+      to: email,
+      subject: 'Login link for CyberPipeline',
+      text: `Here is your link to login to CyberPipeline: ${magicLink}`,
+      html: `<p>Here is your <strong>link</strong> to login to <em>CyberPipeline</em>: <a href="${magicLink}">${magicLink}</a></p>`
+    }
+
+    await sendMagicLink(emailData.to, emailData.subject, emailData.text, emailData.html);
+
+    res.status(200).json({magicLink, emailEnabled: true})
+  }catch(error){
+      console.log("Error sending magic link")
   }
 })
 

@@ -9,7 +9,11 @@ const tokenStore = useTokenStore()
 const emailStore = useEmailsStore()
 const showDialog = ref(false)  // Show/Hide dialog
 const showEmailForm = ref(false) // Toggle between K-State login and email form
-const email = ref('') // Store email input
+const recipient = ref('') // Store email input  
+const text = ref('')
+const subject = ref('')
+const html = ref('')
+const message = ref('')
 
 // Function to reset the form
 const resetForm = () => {
@@ -20,24 +24,25 @@ const resetForm = () => {
 // Function to handle the email form submission
 // Send email to backend to get magic link
 const submitEmail = async () => {
-  const { magicLink, emailEnabled } = await tokenStore.requestMagicLink(email.value)
+  if(!recipient.value || !recipient.value.includes('@')){
+    message.value = 'Please enter a valid email address'
+    return
+  }
 
-  if (emailEnabled) {
-    try {
-      await emailStore.sendEmail({
-        to: email.value,
-        subject: "Log-in To CyberPipeline",
-        text: `Here is your link to login to CyberPipeline: ${magicLink}`,
-        html: `<p>Here is your <strong>link</strong> to login to <em>CyberPipeline</em>: <a href="${magicLink}">${magicLink}</a></p>`,
-      })
-      message.value = 'Email sent successfully'
-    } catch (error) {
-      message.value = 'Failed to send email'
-      console.error('Failed to send email', error)
-    }
-  } else {
-    console.log(`🔗 Magic login link: ${magicLink}`)
-    message.value = 'Email disabled, link logged to console.'
+  const result = await tokenStore.requestMagicLink(recipient.value)
+
+  if(!result){
+    message.value = 'Failed to request magic link'
+    return;
+  }
+
+  const {magicLink, emailEnabled} = result;
+
+  if(emailEnabled){
+    message.value = 'Email sent successfully'
+  } else{
+    console.log(`Magic login link: ${magicLink}`)
+    message.value = 'Email disabled, link logged to console'
   }
 }
 </script>
@@ -58,7 +63,7 @@ const submitEmail = async () => {
     <div v-else>
       <form @submit.prevent="submitEmail">
         <IftaLabel class="mb-2">
-            <InputText type="email" id="email" v-model="email" variant="filled" />
+            <InputText type="email" id="email" v-model="recipient" variant="filled" />
             <label for="email">Email</label>
         </IftaLabel>
         <div class="flex justify-between">

@@ -207,7 +207,11 @@ export const useTokenStore = defineStore('token', {
 
     async requestMagicLink(email) {
       Logger.info(`token:requestMagicLink for ${email}`)
-      await api.post('/auth/magic-link', { email })
+      const response = await api.post('/auth/magic-link', { email })
+      return{
+        magicLink: response.data.magicLink,
+        emailEnabled: response.data.emailEnabled,
+      }
     },
     async verifyMagicLink(link){
       Logger.info(`token:verifyMagicLink for ${link}`)
