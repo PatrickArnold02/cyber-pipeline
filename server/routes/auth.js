@@ -76,53 +76,53 @@ setInterval(() => {
 /**
  * @swagger
  * /post:
- * *   post:
- * *     summary: Send a magic link to the user
- * *     description: Sends a magic link to the user for login
- * *     tags: [Auth]
- * *     requestBody:
- * *       required: true
- * *       content:
- * *         application/json:
- * *           schema:
- * *             type: object
- * *             properties:
- * *               email:
- * *                 type: string
- * *                 description: The email address of the user
- * *     responses:
- * *       200:
- * *         description: Magic link sent successfully
- * *         content:
- * *           application/json:
- * *             schema:
- * *               type: object
- * *               properties:
- * *                 magicLink:
- * *                   type: string
- * *                 emailEnabled:
- * *                   type: boolean
- * *       400:
- * *         description: Invalid email address
- * *         content:
- * *           application/json:
- * *             schema:
- * *               type: object
- * *               properties:
- * *                 message:
- * *                   type: string
- * *                   description: Error message
- * *       500:
- * *         description: Internal server error
- * *         content:
- * *           application/json:
- * *             schema:
- * *               type: object
- * *               properties:
- * *                 message:
- * *                   type: string
- * *                   description: Error message
- * * 
+ *    post:
+ *      summary: Send a magic link to the user
+ *      description: Sends a magic link to the user for login
+ *      tags: [Auth]
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                email:
+ *                  type: string
+ *                  description: The email address of the user
+ *      responses:
+ *        200:
+ *          description: Magic link sent successfully
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  magicLink:
+ *                    type: string
+ *                  emailEnabled:
+ *                    type: boolean
+ *        400:
+ *          description: Invalid email address
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    description: Error message
+ *        500:
+ *          description: Internal server error
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  message:
+ *                    type: string
+ *                    description: Error message
+ *  
  * 
  */
 router.post('/magic-link', async (req, res) => {
