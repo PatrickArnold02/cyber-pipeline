@@ -183,7 +183,7 @@ class Teacher extends Model {
           maxLength: 255,
           format: 'email',
         },
-        eid: { type: 'string' },
+        eid: { type: 'string', maxLength: 120 },
         wid: { type: 'string' },
         status: { type: 'integer', minimum: 0, maximum: 3 },
         pd_status: { type: 'integer', minimum: 0, maximum: 3 },
