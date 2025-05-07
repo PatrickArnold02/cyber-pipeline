@@ -4,6 +4,12 @@ import logger from '../configs/logger.js';
 import { response } from 'express';
 
 const canvasService = {
+    /**
+     * Gets the course progress for a teacher in a course 
+     * @param {string} courseID 
+     * @param {string} teacherID 
+     * @returns {object} - The course progress option for the teacher, structure found here: https://lms.au.af.edu/doc/api/courses.html
+     */
     async getCourseProgress(courseID, teacherID){
         if (process.env.CANVAS_ENABLED) {
             try{
@@ -28,6 +34,14 @@ const canvasService = {
             return response.status(500).json({message: 'Canvas API disabled'});
         }
     },
+    /**
+     * Enrolls a teacher in a course
+     * @param {string} courseID 
+     * @param {string} teacherID 
+     * @returns An enrollment object (https://lms.au.af.edu/doc/api/enrollments.html) which can be used to check the status of the enrollment
+     * @throws {Error} - If the enrollment fails
+     * @throws {Error} - If the Canvas API is not configured
+     */
     async enrollTeacherInCourse(courseID, teacherID){
         if(process.env.CANVAS_ENABLED){
             try{

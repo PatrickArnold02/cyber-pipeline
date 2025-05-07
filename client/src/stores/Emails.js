@@ -12,6 +12,14 @@ export const useEmailsStore = defineStore('emails', {
         }
     },
     actions: {
+        /**
+         * Sends an email using the SMTP transporter on the backend.
+         * @param {object} emailData
+         * @param {string} emailData.to - The recipient(s) email address(es) NOTE: When sending a magic link, this should be a single email address
+         * @param {string} emailData.subject - The subject of the email
+         * @param {string} emailData.text - The plain text version of the email
+         * @param {string} emailData.html - The HTML version of the email 
+         */
         async sendEmail(emailData){
             try {
                 await api.post('/api/v1/emails', emailData)

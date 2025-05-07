@@ -2,6 +2,7 @@ import 'dotenv/config';
 import nodemailer from 'nodemailer';
 import logger from '../configs/logger.js';
 
+// Pulls SMTP configuration from the environment vars
 const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: process.env.SMTP_PORT,
@@ -12,6 +13,14 @@ const transporter = nodemailer.createTransport({
     },
 });
 
+/**
+ * Sends an email using the SMTP transporter.
+ * 'to' can be a single email address or an array of email addresses.
+ * @param {string|array} to - The recipient(s) email address(es). 
+ * @param {string} subject - The subject of the email.
+ * @param {string} text - The plain text version of the email.
+ * @param {string} html - The HTML version of the email.
+ */
 const sendEmail = async (to, subject, text, html) => {
     try{
         const mailOptions = {
@@ -33,6 +42,14 @@ const sendEmail = async (to, subject, text, html) => {
     }
 }
 
+/**
+ * Sends a magic link email to the user
+ * @param {object} emailData 
+ * @param {string} emailData.to - The recipient's email address
+ * @param {string} emailData.subject - The subject of the email
+ * @param {string} emailData.text - The plain text version of the email
+ * @param {string} emailData.html - The HTML version of the email
+ */
 const sendMagicLink = async (emailData) => {
     console.log(emailData)
 
