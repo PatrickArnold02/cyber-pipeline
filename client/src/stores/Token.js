@@ -205,6 +205,11 @@ export const useTokenStore = defineStore('token', {
       window.location.href = '/auth/logout'
     },
 
+    /**
+     * Sends a magic link to the user via email 
+     * @param {string} email - The user's email address, note: this should be a single email address unlike the sendEmail function 
+     * @returns 
+     */
     async requestMagicLink(email) {
       Logger.info(`token:requestMagicLink for ${email}`)
       const response = await api.post('/auth/magic-link', { email })
@@ -213,6 +218,10 @@ export const useTokenStore = defineStore('token', {
         emailEnabled: response.data.emailEnabled,
       }
     },
+    /**
+     * Verifies the magic link to establish a session 
+     * @param {string} link 
+     */
     async verifyMagicLink(link){
       Logger.info(`token:verifyMagicLink for ${link}`)
       await api.post('/auth/magic-link/verify', { link })

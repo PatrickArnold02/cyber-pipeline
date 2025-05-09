@@ -88,6 +88,13 @@ class User extends Model {
       //   logger.error('Unable to query name from K-State directory!')
       //   logger.error(util.inspect(error))
       // }
+
+      // remove "@gmail.com" or other domain from email address
+      if (eid.includes('@')){
+        const atIndex = eid.indexOf('@');
+        eid = eid.substring(0, atIndex);
+      }
+      
       user = [
         await User.query().insert({
           eid: eid,
@@ -172,7 +179,7 @@ class User extends Model {
       required: ['eid', 'name'],
 
       properties: {
-        eid: { type: 'string', minLength: 3, maxLength: 20 },
+        eid: { type: 'string', minLength: 3, maxLength: 100 },
         name: { type: 'string', minLength: 1, maxLength: 255 },
       },
     }
