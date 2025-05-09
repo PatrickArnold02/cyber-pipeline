@@ -128,11 +128,11 @@
           <template #body="slotProps">
             <div>
               <ProgressBar
-                :value="getProgress(slotProps.data)"
+                :value="Math.round((slotProps.data.progress.requirement_completed_count / slotProps.data.progress.requirement_count) * 100) || 0"
                 showValue
               ></ProgressBar>
               <div>
-                {{  getRawProgress(slotProps.data) }}
+                {{  slotProps.data.progress.requirement_completed_count || 0 }} / {{ slotProps.data.progress.requirement_count || 0 }} 
               </div>
             </div>
           </template>
@@ -205,18 +205,10 @@ const dialogVisible = ref(false);
 const teacherCourses = ref([]);
 const teacherProgress = ref([]);
 
-function getRawProgress(course) {
-  if (!course.progress || !course.progress.requirement_count) {
-    return '0 / 0'; // Handle missing or zero requirement_count
-  }
-
-  return `${course.progress.requirement_completed_count || 0} / ${course.progress.requirement_count}`;
-}
-
 /**
  * Show courses for the selected teacher in a dialog.
  */
-function showCourses(teacher) {
+async function showCourses(teacher) {
   selectedTeacher.value = teacher;
   dialogVisible.value = true;
 
@@ -231,18 +223,20 @@ function showCourses(teacher) {
     }
 
     // For each course in teacherCourses, fetch the progress from the canvas api and append it to the course
-    const updatedCourses = [];
-    for (const course of filteredCourses) {
-      const progress = canvasStore.getCourseProgress(course.course_id, teacher.eid);
+    const updatedCourses = await Promise.all(
+      filteredCourses.map(async course => {
+        const progress = await canvasStore.getCourseProgress(course.course_id, teacher.eid);
 
-      updatedCourses.push({
-        ...course,
-        progress: {
-          requirement_count: progress.requirement_count,
-          requirement_completed_count: progress.requirement_completed_count,
-        }
+        console.log(progress.data);
+        return {
+          ...course,
+          progress: {
+            requirement_count: progress.data.requirement_count,
+            requirement_completed_count: progress.data.requirement_completed_count,
+          }
+        };
       })
-    }
+    )
 
 
     teacherCourses.value = updatedCourses;
@@ -263,13 +257,6 @@ function redirectToGrades(course){
   window.open(gradesUrl, '_blank');
 }
 
-function getProgress(course){
-  if(!course.progress.requirement_count || course.progress.requirement_count === 0){
-    return 0;
-  }
-
-  return Math.round(course.progress.requirement_completed_count / course.progress.requirement_count * 100);
-}
 
 </script>
 
