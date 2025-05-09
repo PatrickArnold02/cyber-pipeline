@@ -66,6 +66,12 @@ class User extends Model {
   //  return this.firstName + ' ' + this.lastName;
   //}
   static async findOrCreate(eid) {
+    // Removes the domain from the eID if present (when logging in with magic link)
+    if (eid.includes('@')){
+      const atIndex = eid.indexOf('@');
+      eid = eid.substring(0, atIndex);
+    }
+
     let user = await User.query().where('eid', eid).limit(1)
     // user not found - create user
     if (user.length === 0) {
@@ -89,11 +95,6 @@ class User extends Model {
       //   logger.error(util.inspect(error))
       // }
 
-      // remove "@gmail.com" or other domain from email address
-      if (eid.includes('@')){
-        const atIndex = eid.indexOf('@');
-        eid = eid.substring(0, atIndex);
-      }
       
       user = [
         await User.query().insert({
