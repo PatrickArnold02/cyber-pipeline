@@ -41,17 +41,17 @@ const testCanvasAPI = async () => {
   toast.add({
     severity: 'info',
     summary: 'Testing API Connection',
-    detail: 'Trying to pull all courses from the Canvas API',
+    detail: 'Testing connection to Canvas API...',
     life: 3000
   })
 
-  const response = await canvasStore.getCourses()
+  const response = await canvasStore.getCourseProgress(175999, 159643);
 
   if(response.status == 200){
     toast.add({
       severity: 'success',
       summary: 'API Connection Successful',
-      detail: 'Successfully pulled all courses from the Canvas API',
+      detail: 'Successfully obtained response from the Canvas API',
       life: 3000
     })
   } else if(response.status == 401) {
