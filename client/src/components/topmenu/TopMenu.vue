@@ -197,7 +197,7 @@ tokenStore.$subscribe(() => {
         }
       },
       {
-        label: 'Canvas (Test)',
+        label: 'Canvas',
         icon: 'pi pi-book',
         command: () => {
           router.push({ name: 'canvas' })
